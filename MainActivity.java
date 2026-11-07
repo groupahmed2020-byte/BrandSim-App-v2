@@ -143,47 +143,64 @@ public class MainActivity extends Activity {
             menu.add(0, 5, 4, (aiOn ? "✅ " : "❌ ") + "موظف الدعم الذكي");
             menu.add(0, 6, 5, "🚫 استثناء أرقام ومجموعات (عدم الرد)");
             menu.add(0, 7, 6, "🏷️ إدارة الأسعار والباقات");
-            menu.add(0, 8, 7, "🔑 تعديل مفتاح GEMINI API");
-            menu.add(0, 9, 8, "🛠️ الإعدادات المقيدة");
+            menu.add(0, 8, 7, "🔑 تعديل أو إضافة GEMINI API");
+            menu.add(0, 9, 8, "🛠️ التحكم الشامل والصلاحيات المقيدة");
 
             popup.setOnMenuItemClickListener(item -> {
+                boolean s = isChannelEnabled(this, "enable_sms");
+                boolean w = isChannelEnabled(this, "enable_whatsapp");
+                boolean t = isChannelEnabled(this, "enable_telegram");
+                boolean m = isChannelEnabled(this, "enable_messenger");
+                boolean a = isChannelEnabled(this, "enable_ai_agent");
+
                 int id = item.getItemId();
-                if (id == 6) {
+                if (id == 1) {
+                    s = !s;
+                    Toast.makeText(this, s ? "✅ تم تشغيل SMS" : "⛔ تم إيقاف SMS", Toast.LENGTH_SHORT).show();
+                } else if (id == 2) {
+                    w = !w;
+                    Toast.makeText(this, w ? "✅ تم تشغيل واتساب" : "⛔ تم إيقاف واتساب", Toast.LENGTH_SHORT).show();
+                } else if (id == 3) {
+                    t = !t;
+                    Toast.makeText(this, t ? "✅ تم تشغيل تيليجرام" : "⛔ تم إيقاف تيليجرام", Toast.LENGTH_SHORT).show();
+                } else if (id == 4) {
+                    m = !m;
+                    Toast.makeText(this, m ? "✅ تم تشغيل مسنجر" : "⛔ تم إيقاف مسنجر", Toast.LENGTH_SHORT).show();
+                } else if (id == 5) {
+                    a = !a;
+                    Toast.makeText(this, a ? "✅ تم تشغيل الدعم الذكي" : "⛔ تم إيقاف الدعم الذكي", Toast.LENGTH_SHORT).show();
+                } else if (id == 6) {
                     openBlacklistDialog();
                     return true;
-                }
-                if (id == 7) {
+                } else if (id == 7) {
                     openPriceManagerInWeb();
                     return true;
-                }
-                if (id == 8) {
+                } else if (id == 8) {
                     showGeminiApiKeyDialog();
                     return true;
-                }
-                if (id == 9) {
+                } else if (id == 9) {
                     showChannelsConfigDialog();
                     return true;
                 }
 
-                if(id == 1) saveAllChannelsState(this, !smsOn, waOn, tgOn, msgOn, aiOn);
-                if(id == 2) saveAllChannelsState(this, smsOn, !waOn, tgOn, msgOn, aiOn);
-                if(id == 3) saveAllChannelsState(this, smsOn, waOn, !tgOn, msgOn, aiOn);
-                if(id == 4) saveAllChannelsState(this, smsOn, waOn, tgOn, !msgOn, aiOn);
-                if(id == 5) saveAllChannelsState(this, smsOn, waOn, tgOn, msgOn, !aiOn);
-
+                saveAllChannelsState(this, s, w, t, m, a);
                 syncWebUiState();
                 ensureWaListenerAlive(this, true);
-                
-                String statusMsg = "تم تحديث الإعدادات";
-                if(id >= 1 && id <= 5) statusMsg = "تم حفظ الإعدادات بنجاح!";
-                Toast.makeText(this, statusMsg, Toast.LENGTH_SHORT).show();
-                
                 return true;
             });
+
             popup.show();
         } catch (Exception e) {
             showChannelsConfigDialog();
         }
+    }
+
+    public void openPriceManagerInWeb() {
+        new Handler(Looper.getMainLooper()).post(() -> {
+            if (mainWebView != null) {
+                mainWebView.evaluateJavascript("javascript:if(window.openPricesModal){window.openPricesModal();}", null);
+            }
+        });
     }
 
     public void openBlacklistDialog() {
@@ -192,14 +209,6 @@ public class MainActivity extends Activity {
                 mainWebView.evaluateJavascript("javascript:if(window.openBlacklistModal){window.openBlacklistModal();}", null);
             } else {
                 showNativeBlacklistDialog();
-            }
-        });
-    }
-
-    public void openPriceManagerInWeb() {
-        new Handler(Looper.getMainLooper()).post(() -> {
-            if (mainWebView != null) {
-                mainWebView.evaluateJavascript("javascript:if(window.openPricesModal){window.openPricesModal();}", null);
             }
         });
     }
@@ -232,7 +241,7 @@ public class MainActivity extends Activity {
                 })
                 .setNeutralButton("استعادة الافتراضي", (d, w) -> {
                     saveBlacklist(this, DEFAULT_BLACKLIST);
-                    Toast.makeText(this, "🔄 تمت استعادة القائمة الافتراضية", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "🔄 تمت استعادة القائمة الافتراضية (كويك لاين، رامز)", Toast.LENGTH_SHORT).show();
                 })
                 .setNegativeButton("إلغاء", null)
                 .show();
@@ -939,6 +948,7 @@ public class MainActivity extends Activity {
         return text.replaceAll("(?i)Sky\\s*Telecom\\s*2", "Brand sim")
                    .replaceAll("(?i)Sky\\s*Telecom", "Brand sim")
                    .replace("أرقام سكاي", "ارقام براند سيم")
+                   .replace("ارقام سكاي", "ارقام براند سيم")
                    .replace("مركز الدعم الآلي لـ BRAND SIM", "مركز الدعم لـ BRAND SIM")
                    .replace("النظام الآلي", "فريق الدعم")
                    .replace("رد تلقائي", "رد الدعم");
@@ -1670,7 +1680,7 @@ public class MainActivity extends Activity {
                 Notification notif = sbn.getNotification();
                 if (notif == null || notif.extras == null || (notif.flags & Notification.FLAG_GROUP_SUMMARY) != 0) return;
 
-                // 1. فحص هل الإشعار من مجموعة عامة
+                // فحص المجموعات العامة في الإشعارات
                 boolean isGroupConversation = false;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     isGroupConversation = notif.extras.getBoolean(Notification.EXTRA_IS_GROUP_CONVERSATION, false);
@@ -1699,12 +1709,12 @@ public class MainActivity extends Activity {
                 }
                 if (body.isEmpty() || isIgnoredSystemSms(body)) return;
 
-                // 2. فحص قائمة الاستثناءات والمحظورين (كويك لاين، رامز، إلخ)
+                // فحص قائمة الاستثناءات (مثل كويك لاين، رامز، إلخ)
                 if (isTargetBlacklisted(this, title, "", body)) {
                     if (MainActivity.instance != null) {
                         MainActivity.instance.appendUiLog("⛔ تم تجاهل رسالة من القائمة المستثناة: " + title);
                     }
-                    return; // إيقاف وعدم الرد نهائياً
+                    return;
                 }
 
                 if (body.contains("SKY_WEB:")) {
@@ -1730,7 +1740,7 @@ public class MainActivity extends Activity {
                 }
                 String targetSender = replyAction != null ? senderKey : "";
 
-                // 3. تحليل الطلبات بالاستعانة بموظف الدعم
+                // 1. إذا كانت الرسالة تحتوي على رقم هاتف (تحديث أو استعلام حزمة أو ضعف نت)
                 String mode = detectMessageMode(body);
                 String extractedPhone = extractCleanPhone(body, false);
                 if (extractedPhone != null && !extractedPhone.isEmpty() && !isIgnoredPrefixPhone(extractedPhone)) {
@@ -1747,6 +1757,7 @@ public class MainActivity extends Activity {
                     return;
                 }
 
+                // 2. إذا لم يكن هناك رقم هاتف ولكن موظف الدعم مفعل
                 if (isChannelEnabled(this, "enable_ai_agent") && !targetSender.isEmpty()) {
                     String dedupKey = prefix + "AI:" + title + ":" + body;
                     long now = SystemClock.elapsedRealtime();
@@ -1833,7 +1844,7 @@ public class MainActivity extends Activity {
                     if (MainActivity.instance != null) {
                         MainActivity.instance.appendUiLog("⛔ تم استثناء وتجاهل SMS من: " + sender);
                     }
-                    return; // إيقاف وعدم الرد نهائياً
+                    return;
                 }
 
                 String mode = detectMessageMode(body);
