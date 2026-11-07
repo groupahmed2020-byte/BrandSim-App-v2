@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob:; img-src * data: blob:; style-src * 'unsafe-inline'; font-src * data:; script-src * 'unsafe-inline' 'unsafe-eval'; connect-src *;">
+<title>BRAND SIM | تحديث وتنشيط الشرائح ومركز الدعم</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Rubik:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Cairo',sans-serif;-webkit-tap-highlight-color:transparent}
+body{background-color:#04101c;color:#fff;min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:14px;overflow-x:hidden;position:relative}
+body[lang="he"]{font-family:'Rubik',sans-serif}
+body::before{content:"";position:fixed;inset:0;z-index:-1;background-image:linear-gradient(rgba(4,16,28,0.18),rgba(4,16,28,0.35)),url('tower-bg.jpg');background-position:center center;background-size:cover}
+.card{width:100%;max-width:480px;border:2px solid #00e5ff;border-radius:22px;padding:26px 18px 20px;background:rgba(4,18,31,0.65);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);box-shadow:0 0 25px rgba(0,229,255,0.35);text-align:center;position:relative}
+.logo-wrapper{display:inline-flex;align-items:center;justify-content:center;gap:12px;margin-bottom:12px;direction:ltr}
+.logo-icon{background:rgba(0,229,255,0.15);border:1.5px solid #00e5ff;color:#00e5ff;width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 0 12px rgba(0,229,255,0.35)}
+.logo-text{font-size:2.1rem;font-weight:900;letter-spacing:2px;color:#fff;text-shadow:0 0 12px #00e5ff,0 0 24px #00e5ff}
+.welcome-title{font-size:1.3rem;font-weight:800;margin-bottom:5px;color:#00e5ff;}
+.subtitle{font-size:.9rem;color:#e2f4fc;margin-bottom:14px;font-weight:700;}
+
+.quick-tools-bar{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.tool-btn{background:rgba(6,35,53,0.85);border:1.5px solid #00e5ff;border-radius:12px;color:#e0f7ff;padding:8px 6px;font-size:0.82rem;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:.2s;}
+.tool-btn:hover{background:rgba(0,229,255,0.2);color:#fff}
+.tool-btn.danger{border-color:#ff5252;color:#ffcdd2}
+.tool-btn.danger:hover{background:rgba(255,82,82,0.2);color:#fff}
+
+.ai-agent-panel{background:rgba(6,35,53,0.88);border:1.5px solid rgba(0,229,255,0.6);border-radius:14px;padding:10px 12px;margin-bottom:16px;text-align:right}
+.ai-agent-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:0.86rem;font-weight:800;color:#69f0ae;}
+.ai-agent-status{display:inline-flex;align-items:center;gap:6px;font-size:0.78rem;cursor:pointer;background:rgba(0,0,0,0.35);padding:4px 10px;border-radius:20px;border:1px solid rgba(255,255,255,0.15);}
+.status-dot{width:9px;height:9px;border-radius:50%;background:#00e676;box-shadow:0 0 8px #00e676}
+.status-dot.off{background:#ff5252;box-shadow:0 0 8px #ff5252}
+.ai-log-box{max-height:100px;overflow-y:auto;background:rgba(4,14,24,0.92);border:1px solid rgba(0,229,255,0.25);border-radius:8px;padding:8px;font-size:0.74rem;color:#e2f4fc;text-align:right;white-space:pre-wrap}
+.ai-log-actions{display:flex;justify-content:space-between;margin-top:6px;font-size:0.72rem;color:#94e2f7}
+.btn-mini{background:rgba(0,229,255,0.12);color:#00e5ff;border:1px solid rgba(0,229,255,0.4);padding:2px 8px;border-radius:6px;cursor:pointer;font-size:0.7rem;font-weight:700}
+
+.form-group{text-align:right;margin-bottom:16px}
+.form-group label{display:block;font-weight:800;font-size:.92rem;margin-bottom:8px;color:#00e5ff;}
+.form-control{width:100%;padding:13px 16px;font-size:1.25rem;font-weight:800;letter-spacing:1.5px;border:1.5px solid rgba(0,229,255,0.45);border-radius:12px;text-align:center;direction:ltr;color:#fff;background:rgba(4,21,35,0.75);outline:none;transition:.2s}
+.form-control:focus{border-color:#00e5ff;background:rgba(4,21,35,0.9);box-shadow:0 0 12px rgba(0,229,255,0.4)}
+.btn-submit{width:100%;padding:13px;font-size:1.05rem;font-weight:800;color:#001b29;background:linear-gradient(90deg,#00e5ff,#00a8cc);border:none;border-radius:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 0 15px rgba(0,229,255,0.45)}
+.btn-submit:active{transform:scale(0.98)}
+.btn-submit:disabled{background:rgba(148,163,184,0.4);color:#cbd5e1;cursor:not-allowed;box-shadow:none}
+.spinner{display:none}
+.btn-submit.loading .spinner{display:inline-block}
+.alert-box{margin-top:16px;padding:12px 14px;border-radius:12px;font-size:.88rem;font-weight:700;display:none;align-items:center;gap:10px;background:rgba(6,35,53,0.85);line-height:1.6;white-space:pre-line}
+.alert-box.success{display:flex;color:#69f0ae;border:1.5px solid #00c853;}
+.alert-box.warning{display:flex;color:#ffd740;border:1.5px solid #ffab00;}
+.alert-box.error{display:flex;color:#ff5252;border:1.5px solid #ff1744;}
+
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(2,10,18,0.88);backdrop-filter:blur(6px);z-index:3000;align-items:center;justify-content:center;padding:12px}
+.modal-overlay.active{display:flex}
+.modal-content{width:100%;max-width:460px;max-height:90vh;overflow-y:auto;background:radial-gradient(circle at top,#0a273d 0%,#04121f 100%);border:2px solid #00e5ff;border-radius:20px;padding:18px 14px;text-align:right}
+.modal-header{display:flex;justify-content:space-between;margin-bottom:14px;border-bottom:1px solid rgba(0,229,255,0.3);padding-bottom:10px}
+.modal-title{color:#00e5ff;font-size:1.15rem;font-weight:900}
+.modal-close-x{background:none;border:none;color:#ff5252;font-size:1.3rem;cursor:pointer;}
+.tabs-nav{display:flex;gap:8px;margin-bottom:12px}
+.tab-nav-btn{flex:1;background:rgba(6,27,43,0.6);border:1px solid rgba(0,229,255,0.4);color:#b0d7e8;padding:8px;border-radius:10px;font-weight:800;text-align:center;cursor:pointer}
+.tab-nav-btn.active{background:rgba(0,229,255,0.25);border-color:#00e5ff;color:#fff;}
+.items-list{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+.pkg-item-card{background:rgba(4,19,31,0.7);border:1px solid rgba(0,229,255,0.3);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:6px}
+.pkg-item-header{display:flex;justify-content:space-between;color:#fff;font-weight:800;font-size:0.9rem}
+.badge-status{font-size:0.7rem;padding:2px 8px;border-radius:10px;cursor:pointer;}
+.badge-status.on{background:rgba(0,200,83,0.2);color:#69f0ae;border:1px solid #00c853}
+.badge-status.off{background:rgba(255,82,82,0.2);color:#ff8a80;border:1px solid #ff5252}
+.field-row{display:flex;gap:8px;}
+.input-mini{background:#041523;border:1px solid rgba(0,229,255,0.4);border-radius:8px;padding:6px 10px;color:#fff;font-weight:700;width:100%}
+.btn-action-sm{background:rgba(0,229,255,0.2);border:1px solid #00e5ff;color:#fff;padding:6px 12px;border-radius:8px;cursor:pointer}
+.btn-del-sm{background:rgba(255,82,82,0.2);border:1px solid #ff5252;color:#ff8a80;padding:6px 10px;border-radius:8px;cursor:pointer}
+.modal-footer{display:flex;gap:10px;margin-top:14px;border-top:1px solid rgba(0,229,255,0.25);padding-top:12px}
+.btn-full-action{flex:1;background:linear-gradient(90deg,#00d2ff,#00a8cc);color:#001b29;border:none;border-radius:10px;padding:10px;font-weight:900;cursor:pointer}
+.btn-secondary{background:rgba(255,255,255,0.1);color:#cfe5f0;border:1px solid rgba(255,255,255,0.2);border-radius:10px;padding:10px;cursor:pointer}
+.switch-label{display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:800;color:#e0f7ff;margin-bottom:12px;background:rgba(6,35,53,0.5);padding:8px;border-radius:10px;border:1px solid rgba(0,229,255,0.3)}
+</style>
+</head>
+<body lang="ar">
+<div class="card">
+  <div class="logo-wrapper"><div class="logo-icon"><i class="fas fa-sim-card"></i></div><div class="logo-text">BRAND SIM</div></div>
+  <h2 class="welcome-title" id="ui-welcome">مرحباً بك في براند سيم</h2>
+  <p class="subtitle" id="ui-subtitle">أدخل رقم الهاتف لإجراء تحديث وتنشيط فوري</p>
+
+  <div class="quick-tools-bar">
+    <button type="button" class="tool-btn danger" id="btnOpenBlacklist"><i class="fas fa-user-slash"></i> 🚫 قائمة عدم الرد</button>
+    <button type="button" class="tool-btn" id="btnOpenPrices"><i class="fas fa-tags"></i> 🏷️ إدارة الأسعار</button>
+  </div>
+
+  <div class="ai-agent-panel">
+    <div class="ai-agent-header">
+      <span><i class="fas fa-headset"></i> مركز الدعم الذكي</span>
+      <div class="ai-agent-status" id="aiToggleBadge"><span id="aiStatusDot" class="status-dot"></span><span id="aiStatusText">يعمل 24/7</span></div>
+    </div>
+    <div id="aiLogBox" class="ai-log-box">🌟 الدعم جاهز للرد على الزبائن، تفاصيل الحزم، وتحديث الأرقام...</div>
+    <div class="ai-log-actions">
+      <span id="aiCounterSpan">العمليات المنفذة: 0</span>
+      <div style="display:flex;gap:6px;">
+        <button type="button" class="btn-mini" id="editApiKeyBtn">🔑 API</button>
+        <button type="button" class="btn-mini" id="clearAiLogBtn">مسح</button>
+      </div>
+    </div>
+  </div>
+
+  <form id="customer-refresh-number-form" novalidate>
+    <div class="form-group"><label for="customerPhone" id="ui-label">📱 رقم الهاتف:</label><input type="tel" id="customerPhone" class="form-control" placeholder="05XXXXXXXX" maxlength="10" required></div>
+    <button type="submit" id="customSubmitBtn" class="btn-submit"><span id="ui-btn">تحديث الرقم الآن</span><i class="fas fa-sync-alt fa-spin spinner"></i></button>
+  </form>
+  <div id="alertBox" class="alert-box" role="alert"></div>
+</div>
+
+<!-- Modal 1: Blacklist -->
+<div id="blacklistModal" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title"><i class="fas fa-ban"></i> أرقام ومجموعات (عدم الرد)</div>
+      <button type="button" class="modal-close-x" id="closeBlacklistBtn">&times;</button>
+    </div>
+    <label class="switch-label">
+      <input type="checkbox" id="chkIgnoreAllGroups" checked style="width:18px;height:18px;accent-color:#00e5ff;">
+      <span>تجاهل جميع مجموعات واتساب وتيليجرام تلقائياً</span>
+    </label>
+    <div style="font-size:0.8rem;color:#b0d7e8;margin-bottom:6px;font-weight:700;">📝 الأسماء المستثناة (كل اسم في سطر جديد):</div>
+    <textarea id="txtBlacklist" class="form-control" rows="6" style="text-align:right;font-size:0.95rem;" placeholder="كويك لاين&#10;رامز"></textarea>
+    <div class="modal-footer">
+      <button type="button" class="btn-full-action" id="saveBlacklistBtn">حفظ التعديلات</button>
+      <button type="button" class="btn-secondary" id="resetBlacklistBtn">الافتراضي</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal 2: Prices -->
+<div id="pricesModal" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title"><i class="fas fa-tags"></i> إدارة الأسعار والباقات</div>
+      <button type="button" class="modal-close-x" id="closePricesBtn">&times;</button>
+    </div>
+    <div class="tabs-nav">
+      <div class="tab-nav-btn active" id="tabEsimBtn">📲 إلكترونية (eSIM)</div>
+      <div class="tab-nav-btn" id="tabPlasticBtn">💳 بلاستيك عادية</div>
+    </div>
+    <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
+      <span style="font-size:0.8rem;color:#69f0ae;font-weight:800;" id="pricesSyncStatus">الأسعار جاهزة</span>
+      <button type="button" class="btn-action-sm" id="syncGithubPricesBtn"><i class="fas fa-sync-alt"></i> مزامنة المتجر</button>
+    </div>
+    <div id="packagesManagerContainer" class="items-list"></div>
+    <div style="background:rgba(6,35,53,0.7);padding:10px;border-radius:12px;margin-top:10px;">
+      <div style="font-size:0.85rem;font-weight:800;color:#00e5ff;margin-bottom:8px;">➕ إضافة باقة جديدة:</div>
+      <div class="field-row" style="margin-bottom:6px;">
+        <input type="text" id="newPkgCompany" class="input-mini" placeholder="اسم الشركة">
+        <input type="text" id="newPkgTitle" class="input-mini" placeholder="المدة/الحجم">
+      </div>
+      <div class="field-row">
+        <input type="number" id="newPkgPrice" class="input-mini" placeholder="السعر ₪" style="max-width:90px;">
+        <input type="text" id="newPkgDesc" class="input-mini" placeholder="الوصف">
+        <button type="button" class="btn-action-sm" id="addNewPkgBtn">إضافة</button>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn-full-action" id="savePricesToDeviceBtn">حفظ وتعميم الأسعار</button>
+      <button type="button" class="btn-secondary" id="closePricesModalBtn">إغلاق</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){"use strict";
+if(window.top!==window.self){try{window.top.location=window.self.location;}catch(e){}}
+
+const SKY_TELEGRAM_WORKER_URL="https://gentle-morning-4759.groupahmed2020.workers.dev/";
+const LAYAN_API_URL="https://api.layan-t.net/api/Subscribtions/CustomersRefreshNumber";
+const AREEN_GAS_URL="https://script.google.com/macros/s/AKfycbxidpoKH8PnhxSvKggQpI2K2BiQQLm7PJM2byXFxnJY1f2Iahqj4UdRfYFuECuqqoPK/exec";
+const QUICKLINE_GAS_URL="https://script.google.com/macros/s/AKfycbzoFY7vXfDNsMBieM33Ohym4o3oif6_hoc1FI0RFzKbEgvfALOVMBWQKNt14VOakcQg/exec";
+const AYLOL_WORKER_URL="https://steep-shadow-66a0.groupahmed2020.workers.dev/";
+const NETLIFY_QUERY_URL="https://incredible-crumble-58566c.netlify.app/.netlify/functions/query";
+const SKY_COOLDOWN_MS=20*60*1000;
+const GITHUB_STORE_API="https://api.github.com/repos/groupahmed2020-byte/BrandSim.com/contents/data.json?ref=main";
+const GITHUB_RAW_FALLBACK="https://raw.githubusercontent.com/groupahmed2020-byte/BrandSim.com/main/data.json";
+const DEFAULT_BLACKLIST_DATA="كويك لاين\nرامز";
+
+const DEFAULT_STORE_FALLBACK = {
+  esim: [
+    {name: "بارتنر", pkgs: [{d: "شهر", s: "شهر", p: "55", g: "بارتنر شهر مفتوح", available: true}, {d: "3 شهور", s: "3 شهور", p: "135", g: "بارتنر 3 شهور", available: true}]},
+    {name: "ويكوم", pkgs: [{d: "شهر", s: "شهر", p: "50", g: "ويكوم شهر مفتوح", available: true}, {d: "3 شهور", s: "3 شهور", p: "130", g: "ويكوم 3 شهور", available: true}]},
+    {name: "سلكوم", pkgs: [{d: "شهر", s: "شهر", p: "55", g: "سلكوم شهر مفتوح", available: true}, {d: "3 شهور", s: "3 شهور", p: "135", g: "سلكوم 3 شهور", available: true}]},
+    {name: "هوت موبايل", pkgs: [{d: "شهر", s: "شهر", p: "50", g: "هوت موبايل شهر", available: true}]}
+  ],
+  plastic: [
+    {name: "بارتنر", pkgs: [{d: "شهر", s: "شهر", p: "55", g: "بارتنر بلاستيك شهر", available: true}, {d: "3 شهور", s: "3 شهور", p: "135", g: "بارتنر بلاستيك 3 شهور", available: true}]},
+    {name: "ويكوم", pkgs: [{d: "شهر", s: "شهر", p: "50", g: "ويكوم بلاستيك شهر", available: true}]}
+  ]
+};
+
+let currentStoreData = {esim:[],plastic:[]};
+let activePriceTab = "esim";
+let isRefreshing = false;
+let lastSubmit = 0;
+let aiActionCount = Number(localStorage.getItem("bs_ai_count")||0);
+
+const form = document.getElementById("customer-refresh-number-form");
+const phoneInput = document.getElementById("customerPhone");
+const submitBtn = document.getElementById("customSubmitBtn");
+const btnText = document.getElementById("ui-btn");
+const alertBox = document.getElementById("alertBox");
+
+function decodeBase64Utf8(b64){
+  const bin=atob(String(b64||"").replace(/\s/g,""));
+  const bytes=new Uint8Array(bin.length);
+  for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);
+  return new TextDecoder("utf-8").decode(bytes);
+}
+
+function translateProviderMessage(rawMsg){
+  if(!rawMsg)return "";
+  let s=String(rawMsg).trim();
+  if(s.includes("חמש שעות")||s.includes("אפשרות לעשות רענון")||s.includes("רענון פעם אחת")){
+    return "⚠️ عذراً، يُسمح بتحديث هذا الرقم مرة واحدة فقط كل 5 ساعات.";
+  }
+  if(s.includes("בוצע בהצלחה")||s.includes("הרענון בוצע")||s.includes("עודכן בהצלחה")){
+    return "✅ تم تحديث وتنشيط الرقم بنجاح!";
+  }
+  if(s.includes("אינו תקין")||s.includes("לא תקין")||s.includes("לא קיים")||s.includes("לא נמצא")){
+    return "⚠️ عذراً، الرقم غير صحيح أو غير نشط في النظام.";
+  }
+  if(/[\u0590-\u05FF]/.test(s)){
+    if(s.includes("שעות")||s.includes("דקות")||s.includes("רענון")){
+      return "⚠️ عذراً، تم تحديث هذا الرقم مؤخراً. يرجى الانتظار والمحاولة بعد عدة ساعات.";
+    }
+    return "⚠️ تعذر تحديث الرقم حالياً من المصدر، يرجى المحاولة لاحقاً.";
+  }
+  return s;
+}
+
+function logAiAgent(msg){
+  const box=document.getElementById("aiLogBox");
+  if(!box)return;
+  const time=new Date().toLocaleTimeString("ar-EG",{hour:"2-digit",minute:"2-digit"});
+  const entry="["+time+"] "+msg;
+  try{
+    let saved=JSON.parse(localStorage.getItem("bs_ai_logs")||"[]");
+    saved.push(entry);
+    if(saved.length>40)saved=saved.slice(-40);
+    localStorage.setItem("bs_ai_logs",JSON.stringify(saved));
+    aiActionCount++;
+    localStorage.setItem("bs_ai_count",String(aiActionCount));
+    document.getElementById("aiCounterSpan").textContent="العمليات المنفذة: "+aiActionCount;
+    box.textContent=saved.join("\n");
+    box.scrollTop=box.scrollHeight;
+  }catch(e){}
+}
+window.logAiAgent=logAiAgent;
+
+const editApiBtnEl=document.getElementById("editApiKeyBtn");
+if(editApiBtnEl){
+  editApiBtnEl.addEventListener("click",()=>{
+    try{
+      if(window.AndroidBridge&&typeof window.AndroidBridge.openGeminiApiKeyDialog==="function"){
+        window.AndroidBridge.openGeminiApiKeyDialog();
+      }
+    }catch(e){}
+  });
+}
+const clearLogBtnEl=document.getElementById("clearAiLogBtn");
+if(clearLogBtnEl){
+  clearLogBtnEl.addEventListener("click",()=>{
+    try{
+      localStorage.removeItem("bs_ai_logs");
+      aiActionCount=0;
+      localStorage.setItem("bs_ai_count","0");
+      document.getElementById("aiCounterSpan").textContent="العمليات المنفذة: 0";
+      document.getElementById("aiLogBox").textContent="🌟 الدعم جاهز للرد على الزبائن، تفاصيل الحزم، وتحديث الأرقام...";
+    }catch(e){}
+  });
+}
+
+function syncAiStatusUi(){
+  let enabled=true;
+  try{
+    if(window.AndroidBridge&&typeof window.AndroidBridge.isAiAgentEnabled==="function"){
+      enabled=Boolean(window.AndroidBridge.isAiAgentEnabled());
+    }else{
+      enabled=localStorage.getItem("bs_ai_enabled")!=="0";
+    }
+  }catch(e){}
+  document.getElementById("aiStatusDot").className=enabled?"status-dot":"status-dot off";
+  document.getElementById("aiStatusText").textContent=enabled?"يعمل 24/7":"متوقف";
+  document.getElementById("aiStatusText").style.color=enabled?"#69f0ae":"#ff5252";
+}
+window.syncAiStatusUi=syncAiStatusUi;
+
+document.getElementById("aiToggleBadge").addEventListener("click",()=>{
+  try{
+    if(window.AndroidBridge&&typeof window.AndroidBridge.isAiAgentEnabled==="function"){
+      window.AndroidBridge.setAiAgentEnabled(!window.AndroidBridge.isAiAgentEnabled());
+    }else{
+      localStorage.setItem("bs_ai_enabled",localStorage.getItem("bs_ai_enabled")!=="0"?"0":"1");
+    }
+  }catch(e){}
+  syncAiStatusUi();
+});
+
+function showMessage(type,text){
+  const validType=["success","warning","error"].includes(type)?type:"error";
+  alertBox.className="alert-box "+validType;
+  alertBox.textContent=translateProviderMessage(text);
+  alertBox.style.display="flex";
+}
+window.showMessage=showMessage;
+
+function normalizePhoneNumber(rawInput){
+  if(!rawInput)return"";
+  let str=String(rawInput).replace(/[٠-٩]/g,d=>"٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/[۰-۹]/g,d=>"۰۱۲۳۴۵۶۷۸۹".indexOf(d));
+  if(str.includes("_"))str=str.split("_")[0];
+  str=str.replace(/[^0-9]/g,"");
+  if(str.startsWith("00972")||str.startsWith("00970"))str="0"+str.slice(5);
+  else if((str.startsWith("972")||str.startsWith("970"))&&str.length>=11)str="0"+str.slice(3);
+  else if(str.length===9&&str.startsWith("5"))str="0"+str;
+  else if(str.length>10&&str.startsWith("05"))str=str.slice(0,10);
+  return str;
+}
+
+function getExpiryDiffDays(expStr){
+  if(!expStr)return null;
+  const s=String(expStr).trim();
+  if(s==="موصول"||s==="-"||s==="مفتوح"||s==="دائم")return null;
+  const now=new Date();now.setHours(0,0,0,0);
+  let ex=new Date(s);
+  if(isNaN(ex.getTime())){
+    const parts=s.split(/[\/\-]/);
+    if(parts.length===3){
+      if(parts[0].length===4)ex=new Date(Number(parts[0]),Number(parts[1])-1,Number(parts[2]));
+      else ex=new Date(Number(parts[2]),Number(parts[1])-1,Number(parts[0]));
+    }
+  }
+  if(isNaN(ex.getTime()))return null;
+  ex.setHours(0,0,0,0);
+  return Math.ceil((ex-now)/86400000);
+}
+
+function formatCustomerDetailsMessage(customer,cleanPhone){
+  const pkg=String(customer.packageInfo||customer.package||customer.plan||customer.bundle||"باقة إنترنت").trim();
+  const exp=String(customer.expiryDate||customer.expiry||customer.endDate||"").trim();
+  const diff=getExpiryDiffDays(exp);
+  let remText="";
+  let expLine="";
+  if(!exp||exp==="موصول"||exp==="-"){
+    expLine="📅 حالة الاشتراك: موصول وفعّال";
+    remText="⏳ المتبقي بالحزمة: الاشتراك ساري المفعول";
+  }else if(diff===null){
+    expLine="📅 تاريخ انتهاء الحزمة: "+exp;
+  }else if(diff<0){
+    expLine="📅 تاريخ انتهاء الحزمة: "+exp;
+    remText="⚠️ المتبقي بالحزمة: منتهية منذ "+Math.abs(diff)+" يوم (يرجى التجديد)";
+  }else if(diff===0){
+    expLine="📅 تاريخ انتهاء الحزمة: "+exp+" (تنتهي اليوم)";
+    remText="⏳ المتبقي بالحزمة: أقل من يوم واحد (ينتهي اليوم)";
+  }else if(diff===1){
+    expLine="📅 تاريخ انتهاء الحزمة: "+exp;
+    remText="⏳ المتبقي بالحزمة: يوم واحد متبقي";
+  }else if(diff===2){
+    expLine="📅 تاريخ انتهاء الحزمة: "+exp;
+    remText="⏳ المتبقي بالحزمة: يومان متبقيان";
+  }else if(diff>=3&&diff<=10){
+    expLine="📅 تاريخ انتهاء الحزمة: "+exp;
+    remText="⏳ المتبقي بالحزمة: "+diff+" أيام متبقية";
+  }else{
+    expLine="📅 تاريخ انتهاء الحزمة: "+exp;
+    remText="⏳ المتبقي بالحزمة: "+diff+" يوماً متبقياً";
+  }
+  let lines=[
+    "📋 تفاصيل اشتراك الرقم: "+cleanPhone,
+    "📦 الباقة والبيانات: "+pkg,
+    expLine
+  ];
+  if(remText)lines.push(remText);
+  return lines.join("\n");
+}
+
+async function findCustomerInBackend(cleanPhone){
+  try{
+    const res=await fetch(NETLIFY_QUERY_URL,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({phone:cleanPhone})
+    });
+    const json=await res.json();
+    if(res.ok&&json.ok&&json.data)return json.data;
+  }catch(e){}
+  try{
+    const localRes=await fetch("https://incredible-crumble-58566c.netlify.app/custom.json?t="+Date.now());
+    if(localRes.ok){
+      const data=await localRes.json();
+      const list=Array.isArray(data)?data:(data.customers||data.data||[]);
+      if(Array.isArray(list)){
+        const found=list.find(c=>normalizePhoneNumber(c.simPhone||c.phone||c.number)===cleanPhone);
+        if(found)return found;
+      }
+    }
+  }catch(e){}
+  return null;
+}
+
+async function executeRefresh(rawNumber,senderPhone="",mode="refresh"){
+  if(isRefreshing)return;
+  if(!senderPhone&&Date.now()-lastSubmit<2000)return;
+  const cleanNumber=normalizePhoneNumber(rawNumber);
+  phoneInput.value=cleanNumber;
+  if(!/^05\d{8}$/.test(cleanNumber)){
+    showMessage("warning","يرجى إدخال رقم هاتف صحيح مكون من 10 أرقام ويبدأ بـ 05");
+    return;
+  }
+  
+  isRefreshing=true;
+  lastSubmit=Date.now();
+  submitBtn.disabled=true;
+  submitBtn.classList.add("loading");
+  btnText.textContent="جاري الفحص والتحديث...";
+  alertBox.style.display="none";
+  
+  try{
+    const customer=await findCustomerInBackend(cleanNumber);
+    if(!customer){
+      const notAuthMsg="عذراً، هذا الرقم ("+cleanNumber+") غير مسجل في منظومة براند سيم (BRAND SIM) ولا يمكن تحديثه.";
+      showMessage("error",notAuthMsg);
+      logAiAgent("❌ رقم غير مسجل: "+cleanNumber);
+      if(senderPhone&&window.AndroidBridge&&window.AndroidBridge.sendSmsReply){
+        window.AndroidBridge.sendSmsReply(senderPhone,notAuthMsg);
+      }
+      return;
+    }
+
+    if(mode==="details"){
+      const detailsReply=formatCustomerDetailsMessage(customer,cleanNumber);
+      showMessage("success",detailsReply);
+      logAiAgent("📋 استعلام حزمة للرقم: "+cleanNumber);
+      if(senderPhone&&window.AndroidBridge&&window.AndroidBridge.sendSmsReply){
+        window.AndroidBridge.sendSmsReply(senderPhone,detailsReply);
+      }
+      return;
+    }
+
+    const p=String(customer.sourceProvider||customer.company||customer.provider||"").trim().toLowerCase();
+    const pkg=String(customer.packageInfo||"").trim().toLowerCase();
+    const isSky=p.includes("سكاي")||p.includes("sky")||pkg.includes("سكاي")||pkg.includes("sky");
+
+    if(isSky&&window.AndroidBridge&&typeof window.AndroidBridge.autoRefreshSkyWithMode==="function"){
+      window.AndroidBridge.autoRefreshSkyWithMode(cleanNumber,senderPhone||"",mode||"refresh");
+      showMessage("success","⏳ جاري تحديث شريحة براند سيم ("+cleanNumber+") بالخلفية...");
+      logAiAgent("⏳ تحديث سكاي: "+cleanNumber);
+      return;
+    }
+
+    let res={ok:true,msg:"✅ تم إرسال طلب تحديث رقمك إلى النظام بنجاح!"};
+    if(p.includes("كويك")||p.includes("quick")){
+      const r=await fetch(QUICKLINE_GAS_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({phoneNumber:cleanNumber,provider:"quickline"})});
+      const data=await r.json();
+      res={ok:data.StatusCode>=200&&data.StatusCode<300,msg:(data.Message||"").replace(/^"|"$/g,"")};
+    }else if(p.includes("ارين")||p.includes("areen")){
+      const r=await fetch(AREEN_GAS_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({MobNumber:cleanNumber,provider:"areen"})});
+      const data=JSON.parse(await r.text());
+      res={ok:Boolean(data?.IsSuccess||data?.isSuccess),msg:data?.Message||data?.message};
+    }else if(p.includes("ايلول")||p.includes("aylol")){
+      const formData=new URLSearchParams();formData.append("phone",cleanNumber);
+      const r=await fetch(AYLOL_WORKER_URL,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:formData.toString()});
+      const data=await r.json();
+      res={ok:Boolean(data&&data.success),msg:data?.message};
+    }else{
+      const r=await fetch(LAYAN_API_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({number:cleanNumber,provider:"layan"})});
+      let txt=await r.text();
+      try{const j=JSON.parse(txt);txt=j.message||j.title||txt;}catch(_){}
+      res={ok:r.ok,msg:txt};
+    }
+
+    const translatedMsg=translateProviderMessage(res.msg);
+    const finalMsg=translatedMsg||"✅ تم تحديث وتنشيط الرقم بنجاح!";
+    const isRejected=finalMsg.includes("عذراً")||finalMsg.includes("تعذر")||finalMsg.includes("فشل")||finalMsg.includes("مرفوض");
+    showMessage((res.ok&&!isRejected)?"success":"warning",finalMsg);
+    logAiAgent("✅ تحديث ("+mode+"): "+cleanNumber);
+    if(senderPhone&&window.AndroidBridge&&window.AndroidBridge.sendSmsReply){
+      window.AndroidBridge.sendSmsReply(senderPhone,finalMsg);
+    }
+  }catch(e){
+    const errMsg="⚠️ تعذر تحديث الرقم حالياً، يرجى التأكد من الرقم أو المحاولة لاحقاً.";
+    showMessage("error",errMsg);
+    if(senderPhone&&window.AndroidBridge&&window.AndroidBridge.sendSmsReply){
+      window.AndroidBridge.sendSmsReply(senderPhone,errMsg);
+    }
+  }finally{
+    isRefreshing=false;
+    submitBtn.disabled=false;
+    submitBtn.classList.remove("loading");
+    btnText.textContent="تحديث الرقم الآن";
+  }
+}
+window.executeRefresh=executeRefresh;
+
+const bgSmsQueue=[];
+async function processBgSmsQueue(){
+  if(isRefreshing||bgSmsQueue.length===0)return;
+  const next=bgSmsQueue.shift();
+  if(next.mode==="ai_agent"){
+    await executeAiCustomerSupport(next.sender,next.rawBody,next.title);
+  }else{
+    await executeRefresh(next.phone,next.sender,next.mode||"refresh");
+  }
+  if(bgSmsQueue.length>0)setTimeout(processBgSmsQueue,400);
+}
+window.executeSmsAutoRefresh=function(targetPhone,senderPhone,mode,rawBody,senderTitle){
+  bgSmsQueue.push({phone:targetPhone||"",sender:senderPhone||"",mode:mode||"refresh",rawBody:rawBody||"",title:senderTitle||""});
+  processBgSmsQueue();
+};
+
+function normalizeAr(str){
+  return String(str||"")
+    .toLowerCase()
+    .replace(/[أإآ]/g,"ا")
+    .replace(/ة/g,"ه")
+    .replace(/ى/g,"ي")
+    .replace(/[٠-٩]/g,d=>"٠١٢٣٤٥٦٧٨٩".indexOf(d))
+    .replace(/\s+/g," ")
+    .trim();
+}
+
+async function ensureStoreDataLoaded(){
+  const hasData=(currentStoreData.esim&&currentStoreData.esim.length>0)||(currentStoreData.plastic&&currentStoreData.plastic.length>0);
+  if(hasData)return;
+  try{
+    if(window.AndroidBridge&&typeof window.AndroidBridge.getCustomPricesJson==="function"){
+      const dt=window.AndroidBridge.getCustomPricesJson();
+      if(dt&&dt.length>10){
+        const parsed=JSON.parse(dt);
+        if((parsed.esim&&parsed.esim.length>0)||(parsed.plastic&&parsed.plastic.length>0)){
+          currentStoreData=parsed;
+          return;
+        }
+      }
+    }
+  }catch(e){}
+  await syncGithubPrices(true);
+  const hasAfterSync=(currentStoreData.esim&&currentStoreData.esim.length>0)||(currentStoreData.plastic&&currentStoreData.plastic.length>0);
+  if(!hasAfterSync){
+    currentStoreData=JSON.parse(JSON.stringify(DEFAULT_STORE_FALLBACK));
+  }
+}
+
+function buildAllPackagesSummary(filterType="all"){
+  const lines=["🌟 قائمة الباقات المتوفرة في BRAND SIM:"];
+  if((filterType==="all"||filterType==="esim")&&(currentStoreData.esim||[]).length>0){
+    lines.push("📲 الشرائح الإلكترونية (eSIM):");
+    for(const c of currentStoreData.esim){
+      const availPkgs=(c.pkgs||[]).filter(p=>p.available!==false).map(p=>`${p.d||p.g} (${p.p}₪)`).join(" | ");
+      if(availPkgs)lines.push(`• ${c.name}: ${availPkgs}`);
+    }
+  }
+  if((filterType==="all"||filterType==="plastic")&&(currentStoreData.plastic||[]).length>0){
+    lines.push("💳 الشرائح البلاستيكية:");
+    for(const c of currentStoreData.plastic){
+      const availPkgs=(c.pkgs||[]).filter(p=>p.available!==false).map(p=>`${p.d||p.g} (${p.p}₪)`).join(" | ");
+      if(availPkgs)lines.push(`• ${c.name}: ${availPkgs}`);
+    }
+  }
+  lines.push("\nلطلب شريحة جديدة، أرسل نوع الشريحة والشركة (مثال: بارتنر الكتروني شهر واحد).");
+  return lines.join("\n");
+}
+
+// Smart Match & AI Fallback
+function matchStorePackagePrice(queryText){
+  const m=normalizeAr(queryText);
+  const isEsim=m.includes("الكترون")||m.includes("اكترون")||m.includes("esim")||m.includes("ايسيم")||m.includes("اي سيم");
+  const isPlas=m.includes("بلاستيك")||m.includes("بلاستك")||m.includes("عاديه");
+  const target=isEsim?"esim":isPlas?"plastic":"all";
+
+  const wants3=m.includes("3")||m.includes("ثلاث")||m.includes("تلات");
+  const wants2=m.includes("2")||m.includes("شهرين")||m.includes("اثنين");
+  const wants1=(m.includes("شهر")||m.includes("واحد")||m.includes("1"))&&!wants3&&!wants2;
+
+  const search=(list,lbl)=>{
+    for(const c of list){
+      const cNameNorm=normalizeAr(c.name);
+      const companyTokens=cNameNorm.split(" ").filter(t=>t.length>=2);
+      const isCompanyMatch=m.includes(cNameNorm)||(companyTokens.length>0&&m.includes(companyTokens[0]));
+      if(isCompanyMatch){
+        const pkgs=c.pkgs||[];
+        for(const p of pkgs){
+          const pd=normalizeAr((p.d||"")+" "+(p.s||"")+" "+(p.g||""));
+          const pkgIs3=pd.includes("3")||pd.includes("ثلاث");
+          const pkgIs2=pd.includes("2")||pd.includes("شهرين");
+          const pkgIs1=(pd.includes("شهر")||pd.includes("1"))&&!pkgIs3&&!pkgIs2;
+          if((wants3&&pkgIs3)||(wants2&&pkgIs2)||(wants1&&pkgIs1)){
+            return {comp:c.name,pkg:p,type:lbl,allPkgs:null};
+          }
+        }
+        // إذا لم يتم تحديد مدة معينة، نرجع جميع الباقات المتوفرة لهذه الشركة فقط
+        const availPkgs = pkgs.filter(p=>p.available!==false);
+        if(availPkgs.length===1){
+          return {comp:c.name,pkg:availPkgs[0],type:lbl,allPkgs:null};
+        }
+        return {comp:c.name,pkg:null,type:lbl,allPkgs:availPkgs};
+      }
+    }
+    return null;
+  };
+
+  let match=null;
+  if(target==="esim"||target==="all") match=search(currentStoreData.esim||[],"شريحة إلكترونية eSIM");
+  if(!match&&(target==="plastic"||target==="all")) match=search(currentStoreData.plastic||[],"شريحة بلاستيك");
+  return match;
+}
+
+window.executeAiCustomerSupport=async function(sender,rawMessage,senderTitle){
+  if(!sender||!rawMessage)return;
+  await ensureStoreDataLoaded();
+  const mNorm=normalizeAr(rawMessage);
+
+  let isOldCustomer = false;
+  let customerName = "";
+  if (sender) {
+      const cleanSender = normalizePhoneNumber(sender);
+      if (cleanSender) {
+          const cust = await findCustomerInBackend(cleanSender);
+          if (cust) {
+              isOldCustomer = true;
+              customerName = cust.name || cust.customerName || "";
+          }
+      }
+  }
+
+  const directMatch=matchStorePackagePrice(mNorm);
+  let finalReply="";
+
+  if(directMatch){
+    const isEsim = directMatch.type.includes("eSIM") || directMatch.type.includes("إلكترونية");
+    const greeting = isOldCustomer ? `أهلاً بك مجدداً${customerName ? " " + customerName : ""} 🌟` : `أهلاً بك 🌟`;
+
+    if(directMatch.pkg){
+      if(directMatch.pkg.available===false){
+        finalReply = `عذراً، باقة (${directMatch.comp} - ${directMatch.pkg.g||directMatch.pkg.d}) غير متوفرة حالياً. يسعدنا توفير بدائل أخرى لك.`;
+      }else{
+        const priceText = `باقة (${directMatch.type} - ${directMatch.comp} ${directMatch.pkg.g||directMatch.pkg.d}) متوفرة بسعر: ${directMatch.pkg.p} ₪.`;
+        let requirements = "";
+        if (isOldCustomer) {
+            requirements = `لتأكيد الحجز فوراً، يرجى تأكيد الطلب وتحديد 💵 طريقة الدفع.
+(سيتم إرسال الرمز وتفعيل الشريحة عبر الواتساب).`;
+        } else {
+            if (isEsim) {
+                requirements = `لتأكيد الحجز فوراً، يرجى تزويدنا بـ:
+👤 الاسم:
+💵 طريقة الدفع:
+(سيتم إرسال رمز الـ QR عبر الواتساب مباشرة).`;
+            } else {
+                requirements = `لتأكيد الحجز فوراً، يرجى تزويدنا بـ:
+👤 الاسم:
+📱 رقم للتواصل:
+📍 العنوان التفصيلي:
+💵 طريقة الدفع:`;
+            }
+        }
+        finalReply = `${greeting}
+${priceText}
+
+${requirements}`;
+      }
+    }else if(directMatch.allPkgs && directMatch.allPkgs.length > 0){
+      const availList=directMatch.allPkgs.map(p=>`• ${p.g||p.d}: ${p.p} ₪`).join("\n");
+      let requirements = "";
+      if (isOldCustomer) {
+          requirements = `لتأكيد الحجز، أرسل اسم الباقة المطلوبة مع 💵 طريقة الدفع.
+(التسليم عبر الواتساب).`;
+      } else {
+          if (isEsim) {
+              requirements = `لتأكيد الحجز، أرسل الباقة المطلوبة مع:
+👤 الاسم | 💵 طريقة الدفع.
+(التسليم عبر الواتساب).`;
+          } else {
+              requirements = `لتأكيد الحجز، أرسل الباقة المطلوبة مع:
+👤 الاسم | 📱 الرقم | 📍 العنوان | 💵 طريقة الدفع.`;
+          }
+      }
+      finalReply = `${greeting}
+باقات (${directMatch.comp} - ${directMatch.type}) المتوفرة لدينا:
+${availList}
+
+${requirements}`;
+    }
+  }
+  else if(/(ما بعرف|مش عارف|شو في|ايش في|انواع|ايش بتنصح|خيارات|شو الشركات|ايش الشركات|انواع الشرائح|شو المتوفر)/.test(mNorm)){
+    const companies = new Set();
+    (currentStoreData.esim||[]).forEach(c=>companies.add(c.name));
+    (currentStoreData.plastic||[]).forEach(c=>companies.add(c.name));
+    const compList = Array.from(companies).join("، ");
+    finalReply = `الشركات المتوفرة عندنا حالياً هي: (${compList||"بارتنر، ويكوم، سيلكوم"}).
+متوفر منها إلكتروني وبلاستيك.
+أي شركة بتحب نرسلك أسعارها؟`;
+  }
+  else if(/(بدي شريحه|شريحه جديده|بدي شريحة|شريحة جديدة|بدي واحده|بدي وحده|احجزلي|بدي اطلب|بدي اشتري|اعتمد|شراء شريحه|الاسعار|اسعار الشرائح|شو الاسعار|كم سعر|الباقات|عروض)/.test(mNorm)){
+    finalReply = `أهلاً بك 🌟، يسعدنا خدمتك!
+أي شركة بتفضل؟ وهل بدك إياها إلكترونية (eSIM) ولا بلاستيك عادية؟
+(إذا ما بتعرف شو المتوفر، اكتب "شو الشركات المتوفرة").`;
+  }
+  else if(/(اعدادات|apn|نقطه وصول)/.test(mNorm)){
+    finalReply = `إعدادات نقطة الوصول (APN):
+• بارتنر: uinternet
+• ويكوم: we
+• هوت: net.hotm
+يرجى تفعيل وضع الطيران لمدة 10 دقائق بعد الحفظ.`;
+  }
+  else if(/(ضعيف|فاصل|مقطوع|ارسال|تحديث|تفعيل|تنشيط)/.test(mNorm) && !/(ما بدي|مش تحديث|بدون)/.test(mNorm)){
+    finalReply = `أرسل رقم الشريحة (05XXXXXXXX) الآن لنقوم بتحديثها وتنشيط الإنترنت لك فوراً!`;
+  }
+  else{
+    try{
+      if(window.AndroidBridge&&typeof window.AndroidBridge.askGeminiNative==="function"){
+        const storeSummary=buildAllPackagesSummary("all");
+        const prompt=`أنت موظف دعم ومبيعات ذكي وودود في متجر BRAND SIM لبيع وتحديث الشرائح الإلكترونية (eSIM) والبلاستيكية في فلسطين.
+بيانات الباقات والأسعار المتوفرة لدينا:
+${storeSummary}
+قواعد الرد:
+- رد باللغة العربية بلهجة محترمة ومختصرة وواضحة جداً (لا تتجاوز 4 أسطر).
+- إذا طلب الزبون شريحة ولم يحدد اسم الشركة، لا تعطه قائمة الأسعار، بل اسأله: "أي شركة بتفضل؟ إلكتروني ولا بلاستيك؟".
+- إذا قال الزبون "لا أعرف" أو سأل عن الأنواع المتوفرة، أعطه أسماء الشركات فقط واسأله أي شركة يفضل.
+- إذا حدد الزبون الشركة (مثال: بارتنر)، اعطه أسعار باقاتها فقط، واطلب منه تحديد طريقة الدفع لإتمام الحجز.
+- إذا كان يريد تحديث شريحته، اطلب منه إرسال الرقم الذي يبدأ بـ 05. لا ترحب به ترحيباً طويلاً هنا، فقط اطلب الرقم.
+رسالة الزبون (${senderTitle||"زبون"}): "${rawMessage}"`;
+        const aiResp=window.AndroidBridge.askGeminiNative(prompt);
+        if(aiResp&&String(aiResp).trim().length>5){
+          finalReply=String(aiResp).trim();
+        }
+      }
+    }catch(e){}
+
+    if(!finalReply){
+      finalReply = `أهلاً بك في BRAND SIM 🌟
+• لتحديث الشريحة أو فحص تفاصيل الحزمة: أرسل الرقم (05XXXXXXXX) مباشرة.
+• لطلب شريحة جديدة أو معرفة الأسعار: اكتب (بدي شريحة جديدة) أو اسم الشركة.`;
+    }
+  }
+
+  logAiAgent("💬 رد مركز الدعم: "+finalReply.substring(0,35)+"...");
+  if(window.AndroidBridge&&window.AndroidBridge.sendSmsReply) window.AndroidBridge.sendSmsReply(sender,finalReply);
+};
+
+// Blacklist Logic
+window.openBlacklistModal = function(){
+  let listStr=DEFAULT_BLACKLIST_DATA; let ign=true;
+  try{
+    if(window.AndroidBridge&&typeof window.AndroidBridge.getBlacklist==="function"){
+      listStr=window.AndroidBridge.getBlacklist(); ign=window.AndroidBridge.isIgnoreAllGroups();
+    }
+  }catch(e){}
+  document.getElementById("txtBlacklist").value=listStr;
+  document.getElementById("chkIgnoreAllGroups").checked=ign;
+  document.getElementById("blacklistModal").classList.add("active");
+};
+document.getElementById("btnOpenBlacklist").addEventListener("click",openBlacklistModal);
+document.getElementById("closeBlacklistBtn").addEventListener("click",()=>document.getElementById("blacklistModal").classList.remove("active"));
+document.getElementById("resetBlacklistBtn").addEventListener("click",()=>{document.getElementById("txtBlacklist").value=DEFAULT_BLACKLIST_DATA;});
+document.getElementById("saveBlacklistBtn").addEventListener("click",()=>{
+  const val=document.getElementById("txtBlacklist").value.trim();
+  const ign=document.getElementById("chkIgnoreAllGroups").checked;
+  try{
+    if(window.AndroidBridge&&typeof window.AndroidBridge.saveBlacklistData==="function"){
+      window.AndroidBridge.saveBlacklistData(val);
+      window.AndroidBridge.setIgnoreAllGroups(ign);
+    }
+  }catch(e){}
+  document.getElementById("blacklistModal").classList.remove("active");
+  alert("تم حفظ قائمة الاستثناءات");
+});
+
+// Prices Logic
+window.openPricesModal = async function(){
+  await ensureStoreDataLoaded();
+  renderPricesEditor();
+  document.getElementById("pricesModal").classList.add("active");
+};
+document.getElementById("btnOpenPrices").addEventListener("click",openPricesModal);
+document.getElementById("closePricesBtn").addEventListener("click",()=>document.getElementById("pricesModal").classList.remove("active"));
+document.getElementById("closePricesModalBtn").addEventListener("click",()=>document.getElementById("pricesModal").classList.remove("active"));
+
+document.getElementById("tabEsimBtn").addEventListener("click",function(){activePriceTab="esim";this.classList.add("active");document.getElementById("tabPlasticBtn").classList.remove("active");renderPricesEditor();});
+document.getElementById("tabPlasticBtn").addEventListener("click",function(){activePriceTab="plastic";this.classList.add("active");document.getElementById("tabEsimBtn").classList.remove("active");renderPricesEditor();});
+
+async function syncGithubPrices(silent=false){
+  try{
+    const statusEl=document.getElementById("pricesSyncStatus");
+    if(!silent&&statusEl)statusEl.textContent="جاري المزامنة...";
+    let loadedData=null;
+    try{
+      const res=await fetch(GITHUB_STORE_API+"&_t="+Date.now(),{cache:"no-store",headers:{"Accept":"application/vnd.github+json"}});
+      if(res.ok){
+        const data=await res.json();
+        if(data&&data.content){
+          loadedData=JSON.parse(decodeBase64Utf8(data.content));
+        }
+      }
+    }catch(e){}
+    if(!loadedData){
+      try{
+        const res2=await fetch(GITHUB_RAW_FALLBACK+"?t="+Date.now(),{cache:"no-store"});
+        if(res2.ok)loadedData=await res2.json();
+      }catch(e){}
+    }
+    if(loadedData&&((loadedData.esim&&loadedData.esim.length>0)||(loadedData.plastic&&loadedData.plastic.length>0))){
+      currentStoreData=loadedData;
+      try{
+        if(window.AndroidBridge&&typeof window.AndroidBridge.saveCustomPricesJson==="function"){
+          window.AndroidBridge.saveCustomPricesJson(JSON.stringify(currentStoreData));
+        }
+      }catch(e){}
+      if(!silent){
+        renderPricesEditor();
+        if(statusEl)statusEl.textContent="محدثة من المتجر ✅";
+      }
+    }else if(!silent&&statusEl){
+      statusEl.textContent="تعذر الجلب، يتم استخدام المحفوظة";
+    }
+  }catch(e){}
+}
+document.getElementById("syncGithubPricesBtn").addEventListener("click",()=>syncGithubPrices(false));
+
+function renderPricesEditor(){
+  const container=document.getElementById("packagesManagerContainer");
+  container.innerHTML="";
+  const list=activePriceTab==="esim"?(currentStoreData.esim||[]):(currentStoreData.plastic||[]);
+  list.forEach((company,cIdx)=>{
+    (company.pkgs||[]).forEach((pkg,pIdx)=>{
+      const card=document.createElement("div"); card.className="pkg-item-card";
+      const head=document.createElement("div"); head.className="pkg-item-header";
+      head.innerHTML=`<span>📌 ${company.name} - ${pkg.g||pkg.d}</span>`;
+      const statusBtn=document.createElement("span");
+      const isAv=pkg.available!==false;
+      statusBtn.className="badge-status "+(isAv?"on":"off");
+      statusBtn.textContent=isAv?"(متوفر)":"(غير متوفر)";
+      statusBtn.onclick=()=>{pkg.available=!isAv;renderPricesEditor();};
+      head.appendChild(statusBtn);
+      
+      const fields=document.createElement("div"); fields.className="field-row";
+      fields.innerHTML=`<input type="number" class="input-mini" value="${pkg.p}" style="max-width:80px;" onchange="this.pkg.p=this.value">
+                        <input type="text" class="input-mini" value="${pkg.g||pkg.d}" onchange="this.pkg.g=this.value">`;
+      fields.children[0].pkg = pkg; fields.children[1].pkg = pkg;
+      const delBtn=document.createElement("button"); delBtn.className="btn-del-sm"; delBtn.innerHTML="🗑️";
+      delBtn.onclick=()=>{company.pkgs.splice(pIdx,1);renderPricesEditor();};
+      fields.appendChild(delBtn);
+      card.append(head,fields); container.appendChild(card);
+    });
+  });
+}
+
+document.getElementById("addNewPkgBtn").addEventListener("click",()=>{
+  const cName=document.getElementById("newPkgCompany").value.trim();
+  const pTitle=document.getElementById("newPkgTitle").value.trim();
+  const pPrice=document.getElementById("newPkgPrice").value.trim();
+  if(!cName||!pTitle||!pPrice)return alert("أكمل البيانات");
+  const list=activePriceTab==="esim"?(currentStoreData.esim||[]):(currentStoreData.plastic||[]);
+  let comp=list.find(c=>c.name===cName);
+  if(!comp){comp={name:cName,pkgs:[]};list.push(comp);}
+  comp.pkgs.push({d:pTitle,s:pTitle,p:pPrice,g:document.getElementById("newPkgDesc").value||pTitle,available:true});
+  renderPricesEditor();
+});
+document.getElementById("savePricesToDeviceBtn").addEventListener("click",()=>{
+  try{
+    if(window.AndroidBridge) window.AndroidBridge.saveCustomPricesJson(JSON.stringify(currentStoreData));
+    document.getElementById("pricesModal").classList.remove("active");
+    alert("تم حفظ وتعميم الباقات");
+  }catch(e){}
+});
+
+// Form submit & Button click
+form.addEventListener("submit",e=>{
+  e.preventDefault();
+  executeRefresh(phoneInput.value,"","refresh");
+});
+submitBtn.addEventListener("click",e=>{
+  e.preventDefault();
+  executeRefresh(phoneInput.value,"","refresh");
+});
+
+window.addEventListener("DOMContentLoaded",()=>{
+  syncAiStatusUi();
+  ensureStoreDataLoaded();
+});
+})();
+</script>
+</body>
+</html>
