@@ -1,4 +1,5 @@
 name: Build BRAND SIM APK
+
 on:
   push:
     branches: [ "main", "master" ]
@@ -7,6 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -17,8 +19,12 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Organize Project Structure Automatically
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Organize Project Structure from Root
         run: |
+          set -e
           mkdir -p app/src/main/java/com/brandsim/refresh
           mkdir -p app/src/main/assets
           mkdir -p app/src/main/res/drawable
@@ -28,68 +34,113 @@ jobs:
           mkdir -p app/src/main/res/mipmap-xxhdpi
           mkdir -p app/src/main/res/mipmap-xxxhdpi
 
-          MANIFEST_FILE=$(find . -iname "AndroidManifest.xml" | head -n 1)
-          if [ -n "$MANIFEST_FILE" ] && [ "$MANIFEST_FILE" != "./app/src/main/AndroidManifest.xml" ]; then
-            cp "$MANIFEST_FILE" app/src/main/AndroidManifest.xml
-          fi
+          # التحقق من وجود الملفات الأساسية في الواجهة ونسخها لمساراتها الصحيحة
+          for file in AndroidManifest.xml MainActivity.java refresh.html price.html ic_launcher.png; do
+            if [ ! -f "$file" ]; then
+              echo "Error: Required file '$file' not found in repository root!"
+              exit 1
+            fi
+          done
 
-          JAVA_FILE=$(find . -iname "MainActivity.java" | head -n 1)
-          if [ -n "$JAVA_FILE" ] && [ "$JAVA_FILE" != "./app/src/main/java/com/brandsim/refresh/MainActivity.java" ]; then
-            cp "$JAVA_FILE" app/src/main/java/com/brandsim/refresh/MainActivity.java
-          fi
+          cp -f AndroidManifest.xml app/src/main/AndroidManifest.xml
+          cp -f MainActivity.java app/src/main/java/com/brandsim/refresh/MainActivity.java
+          cp -f refresh.html app/src/main/assets/refresh.html
+          cp -f price.html app/src/main/assets/price.html
 
-          HTML_FILE=$(find . -iname "refresh.html" | head -n 1)
-          if [ -n "$HTML_FILE" ] && [ "$HTML_FILE" != "./app/src/main/assets/refresh.html" ]; then
-            cp "$HTML_FILE" app/src/main/assets/refresh.html
-          fi
+          # نسخ أي ملفات HTML إضافية موجودة في الواجهة تلقائياً (مثل sms.html إن وجد)
+          for html_file in *.html; do
+            if [ -f "$html_file" ]; then
+              cp -f "$html_file" "app/src/main/assets/$html_file"
+            fi
+          done
 
-          ICON_FILE=$(find . -iname "ic_launcher.png" | head -n 1)
-          if [ -n "$ICON_FILE" ]; then
-            cp "$ICON_FILE" app/src/main/res/drawable/ic_launcher.png
-            cp "$ICON_FILE" app/src/main/res/mipmap-mdpi/ic_launcher.png
-            cp "$ICON_FILE" app/src/main/res/mipmap-hdpi/ic_launcher.png
-            cp "$ICON_FILE" app/src/main/res/mipmap-xhdpi/ic_launcher.png
-            cp "$ICON_FILE" app/src/main/res/mipmap-xxhdpi/ic_launcher.png
-            cp "$ICON_FILE" app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
-          fi
+          # نسخ أيقونة التطبيق لكافة الكثافات
+          cp -f ic_launcher.png app/src/main/res/drawable/ic_launcher.png
+          cp -f ic_launcher.png app/src/main/res/mipmap-mdpi/ic_launcher.png
+          cp -f ic_launcher.png app/src/main/res/mipmap-hdpi/ic_launcher.png
+          cp -f ic_launcher.png app/src/main/res/mipmap-xhdpi/ic_launcher.png
+          cp -f ic_launcher.png app/src/main/res/mipmap-xxhdpi/ic_launcher.png
+          cp -f ic_launcher.png app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
 
       - name: Generate Gradle Configs
         run: |
+          cat << 'EOF' > gradle.properties
+          org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8
+          android.useAndroidX=true
+          org.gradle.parallel=true
+          org.gradle.caching=true
+          EOF
+
           cat << 'EOF' > settings.gradle
-          pluginManagement { repositories { google(); mavenCentral(); gradlePluginPortal() } }
-          dependencyResolutionManagement { repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS); repositories { google(); mavenCentral() } }
+          pluginManagement {
+              repositories {
+                  google()
+                  mavenCentral()
+                  gradlePluginPortal()
+              }
+          }
+          dependencyResolutionManagement {
+              repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+              repositories {
+                  google()
+                  mavenCentral()
+              }
+          }
           rootProject.name = "BrandSim"
           include ':app'
           EOF
+
           cat << 'EOF' > app/build.gradle
-          plugins { id 'com.android.application' version '8.2.0' }
+          plugins {
+              id 'com.android.application' version '8.2.0'
+          }
           android {
               namespace 'com.brandsim.refresh'
               compileSdk 34
+
               defaultConfig {
                   applicationId "com.brandsim.refresh"
                   minSdk 23
                   targetSdk 34
-                  versionCode 6
-                  versionName "1.5"
+                  versionCode 8
+                  versionName "1.7"
               }
+
+              buildTypes {
+                  debug {
+                      minifyEnabled false
+                  }
+              }
+
               compileOptions {
                   sourceCompatibility JavaVersion.VERSION_1_8
                   targetCompatibility JavaVersion.VERSION_1_8
               }
+
+              lint {
+                  abortOnError false
+                  checkReleaseBuilds false
+              }
           }
           EOF
 
-      - name: Setup Gradle
+      - name: Setup Gradle with Caching
         uses: gradle/actions/setup-gradle@v3
         with:
           gradle-version: '8.5'
+          cache-read-only: false
 
       - name: Build Debug APK
-        run: gradle assembleDebug
+        run: gradle assembleDebug --stacktrace --no-daemon
+
+      - name: Rename APK File
+        run: |
+          cp app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/BRAND-SIM-v1.7.apk
 
       - name: Upload BRAND SIM APK
         uses: actions/upload-artifact@v4
         with:
           name: BRAND-SIM-APK
-          path: app/build/outputs/apk/debug/app-debug.apk
+          path: app/build/outputs/apk/debug/BRAND-SIM-v1.7.apk
+          if-no-files-found: error
+          retention-days: 30
