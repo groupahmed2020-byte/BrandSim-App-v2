@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob:; img-src * data: blob:; style-src * 'unsafe-inline'; font-src * data:; script-src * 'unsafe-inline' 'unsafe-eval'; connect-src *;">
+<title>BRAND SIM | تحديث وتنشيط الشرائح ومركز الدعم</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Cairo',sans-serif;-webkit-tap-highlight-color:transparent}
+body{background-color:#04101c;color:#fff;min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:14px;overflow-x:hidden;position:relative}
+body::before{content:"";position:fixed;inset:0;z-index:-1;background-image:linear-gradient(rgba(4,16,28,0.18),rgba(4,16,28,0.35)),url('tower-bg.jpg');background-position:center center;background-size:cover}
+.card{width:100%;max-width:480px;border:2px solid #00e5ff;border-radius:22px;padding:26px 18px 20px;background:rgba(4,18,31,0.65);backdrop-filter:blur(5px);box-shadow:0 0 25px rgba(0,229,255,0.35);text-align:center;position:relative}
+.logo-wrapper{display:inline-flex;align-items:center;justify-content:center;gap:12px;margin-bottom:12px;direction:ltr}
+.logo-icon{background:rgba(0,229,255,0.15);border:1.5px solid #00e5ff;color:#00e5ff;width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 0 12px rgba(0,229,255,0.35)}
+.logo-text{font-size:2.1rem;font-weight:900;letter-spacing:2px;color:#fff;text-shadow:0 0 12px #00e5ff,0 0 24px #00e5ff}
+.welcome-title{font-size:1.3rem;font-weight:800;margin-bottom:5px;color:#00e5ff;}
+.subtitle{font-size:.9rem;color:#e2f4fc;margin-bottom:14px;font-weight:700;}
+.quick-tools-bar{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.tool-btn{background:rgba(6,35,53,0.85);border:1.5px solid #00e5ff;border-radius:12px;color:#e0f7ff;padding:8px 6px;font-size:0.82rem;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:.2s;}
+.tool-btn.danger{border-color:#ff5252;color:#ffcdd2}
+.ai-agent-panel{background:rgba(6,35,53,0.88);border:1.5px solid rgba(0,229,255,0.6);border-radius:14px;padding:10px 12px;margin-bottom:16px;text-align:right}
+.ai-agent-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:0.86rem;font-weight:800;color:#69f0ae;}
+.ai-agent-status{display:inline-flex;align-items:center;gap:6px;font-size:0.78rem;cursor:pointer;background:rgba(0,0,0,0.35);padding:4px 10px;border-radius:20px;border:1px solid rgba(255,255,255,0.15);}
+.status-dot{width:9px;height:9px;border-radius:50%;background:#00e676;box-shadow:0 0 8px #00e676}
+.status-dot.off{background:#ff5252;box-shadow:0 0 8px #ff5252}
+.ai-log-box{max-height:100px;overflow-y:auto;background:rgba(4,14,24,0.92);border:1px solid rgba(0,229,255,0.25);border-radius:8px;padding:8px;font-size:0.74rem;color:#e2f4fc;text-align:right;white-space:pre-wrap}
+.ai-log-actions{display:flex;justify-content:space-between;margin-top:6px;font-size:0.72rem;color:#94e2f7}
+.btn-mini{background:rgba(0,229,255,0.12);color:#00e5ff;border:1px solid rgba(0,229,255,0.4);padding:2px 8px;border-radius:6px;cursor:pointer;font-size:0.7rem;font-weight:700}
+.form-group{text-align:right;margin-bottom:16px}
+.form-group label{display:block;font-weight:800;font-size:.92rem;margin-bottom:8px;color:#00e5ff;}
+.form-control{width:100%;padding:13px 16px;font-size:1.25rem;font-weight:800;letter-spacing:1.5px;border:1.5px solid rgba(0,229,255,0.45);border-radius:12px;text-align:center;direction:ltr;color:#fff;background:rgba(4,21,35,0.75);outline:none;}
+.btn-submit{width:100%;padding:13px;font-size:1.05rem;font-weight:800;color:#001b29;background:linear-gradient(90deg,#00e5ff,#00a8cc);border:none;border-radius:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;}
+.spinner{display:none}
+.btn-submit.loading .spinner{display:inline-block}
+.alert-box{margin-top:16px;padding:12px 14px;border-radius:12px;font-size:.88rem;font-weight:700;display:none;align-items:center;gap:10px;background:rgba(6,35,53,0.85)}
+.alert-box.success{display:flex;color:#69f0ae;border:1.5px solid #00c853;}
+.alert-box.warning{display:flex;color:#ffd740;border:1.5px solid #ffab00;}
+.alert-box.error{display:flex;color:#ff5252;border:1.5px solid #ff1744;}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(2,10,18,0.88);backdrop-filter:blur(6px);z-index:3000;align-items:center;justify-content:center;padding:12px}
+.modal-overlay.active{display:flex}
+.modal-content{width:100%;max-width:460px;max-height:90vh;overflow-y:auto;background:radial-gradient(circle at top,#0a273d 0%,#04121f 100%);border:2px solid #00e5ff;border-radius:20px;padding:18px 14px;text-align:right}
+.modal-header{display:flex;justify-content:space-between;margin-bottom:14px;border-bottom:1px solid rgba(0,229,255,0.3);padding-bottom:10px}
+.modal-title{color:#00e5ff;font-size:1.15rem;font-weight:900}
+.modal-close-x{background:none;border:none;color:#ff5252;font-size:1.3rem;cursor:pointer;}
+.tabs-nav{display:flex;gap:8px;margin-bottom:12px}
+.tab-nav-btn{flex:1;background:rgba(6,27,43,0.6);border:1px solid rgba(0,229,255,0.4);color:#b0d7e8;padding:8px;border-radius:10px;font-weight:800;text-align:center;cursor:pointer}
+.tab-nav-btn.active{background:rgba(0,229,255,0.25);border-color:#00e5ff;color:#fff;}
+.items-list{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+.pkg-item-card{background:rgba(4,19,31,0.7);border:1px solid rgba(0,229,255,0.3);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:6px}
+.pkg-item-header{display:flex;justify-content:space-between;color:#fff;font-weight:800;font-size:0.9rem}
+.badge-status{font-size:0.7rem;padding:2px 8px;border-radius:10px;cursor:pointer;}
+.badge-status.on{background:rgba(0,200,83,0.2);color:#69f0ae;border:1px solid #00c853}
+.badge-status.off{background:rgba(255,82,82,0.2);color:#ff8a80;border:1px solid #ff5252}
+.field-row{display:flex;gap:8px;}
+.input-mini{background:#041523;border:1px solid rgba(0,229,255,0.4);border-radius:8px;padding:6px 10px;color:#fff;font-weight:700;width:100%}
+.btn-action-sm{background:rgba(0,229,255,0.2);border:1px solid #00e5ff;color:#fff;padding:6px 12px;border-radius:8px;cursor:pointer}
+.btn-del-sm{background:rgba(255,82,82,0.2);border:1px solid #ff5252;color:#ff8a80;padding:6px 10px;border-radius:8px;cursor:pointer}
+.modal-footer{display:flex;gap:10px;margin-top:14px;border-top:1px solid rgba(0,229,255,0.25);padding-top:12px}
+.btn-full-action{flex:1;background:linear-gradient(90deg,#00d2ff,#00a8cc);color:#001b29;border:none;border-radius:10px;padding:10px;font-weight:900;cursor:pointer}
+.btn-secondary{background:rgba(255,255,255,0.1);color:#cfe5f0;border:1px solid rgba(255,255,255,0.2);border-radius:10px;padding:10px;cursor:pointer}
+.switch-label{display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:800;color:#e0f7ff;margin-bottom:12px;background:rgba(6,35,53,0.5);padding:8px;border-radius:10px;border:1px solid rgba(0,229,255,0.3)}
+</style>
+</head>
+<body lang="ar">
+<div class="card">
+  <div class="logo-wrapper"><div class="logo-icon"><i class="fas fa-sim-card"></i></div><div class="logo-text">BRAND SIM</div></div>
+  <h2 class="welcome-title" id="ui-welcome">مرحباً بك في براند سيم</h2>
+  <p class="subtitle" id="ui-subtitle">أدخل رقم الهاتف لإجراء تحديث وتنشيط فوري</p>
+
+  <div class="quick-tools-bar">
+    <button type="button" class="tool-btn danger" id="btnOpenBlacklist"><i class="fas fa-user-slash"></i> 🚫 قائمة عدم الرد</button>
+    <button type="button" class="tool-btn" id="btnOpenPrices"><i class="fas fa-tags"></i> 🏷️ إدارة الأسعار</button>
+  </div>
+
+  <div class="ai-agent-panel">
+    <div class="ai-agent-header">
+      <span><i class="fas fa-headset"></i> مركز الدعم الذكي</span>
+      <div class="ai-agent-status" id="aiToggleBadge"><span id="aiStatusDot" class="status-dot"></span><span id="aiStatusText">يعمل 24/7</span></div>
+    </div>
+    <div id="aiLogBox" class="ai-log-box">🌟 الدعم جاهز للرد على الزبائن وإتمام الحجوزات مع استثناء المجموعات...</div>
+    <div class="ai-log-actions">
+      <span id="aiCounterSpan">العمليات المنفذة: 0</span>
+      <div style="display:flex;gap:6px;">
+        <button type="button" class="btn-mini" id="editApiKeyBtn">🔑 API</button>
+        <button type="button" class="btn-mini" id="clearAiLogBtn">مسح</button>
+      </div>
+    </div>
+  </div>
+
+  <form id="customer-refresh-number-form" novalidate>
+    <div class="form-group"><label for="customerPhone" id="ui-label">📱 رقم الهاتف:</label><input type="tel" id="customerPhone" class="form-control" placeholder="05XXXXXXXX" maxlength="10" required></div>
+    <button type="submit" id="customSubmitBtn" class="btn-submit"><span id="ui-btn">تحديث الرقم الآن</span><i class="fas fa-sync-alt fa-spin spinner"></i></button>
+  </form>
+  <div id="alertBox" class="alert-box" role="alert"></div>
+</div>
+
+<!-- Modal 1: Blacklist -->
+<div id="blacklistModal" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title"><i class="fas fa-ban"></i> أرقام ومجموعات (عدم الرد)</div>
+      <button type="button" class="modal-close-x" id="closeBlacklistBtn">&times;</button>
+    </div>
+    <label class="switch-label">
+      <input type="checkbox" id="chkIgnoreAllGroups" checked style="width:18px;height:18px;accent-color:#00e5ff;">
+      <span>تجاهل جميع مجموعات واتساب وتيليجرام تلقائياً</span>
+    </label>
+    <div style="font-size:0.8rem;color:#b0d7e8;margin-bottom:6px;font-weight:700;">📝 الأسماء المستثناة (كل اسم في سطر جديد):</div>
+    <textarea id="txtBlacklist" class="form-control" rows="6" style="text-align:right;font-size:0.95rem;" placeholder="كويك لاين&#10;رامز"></textarea>
+    <div class="modal-footer">
+      <button type="button" class="btn-full-action" id="saveBlacklistBtn">حفظ التعديلات</button>
+      <button type="button" class="btn-secondary" id="resetBlacklistBtn">الافتراضي</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal 2: Prices -->
+<div id="pricesModal" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title"><i class="fas fa-tags"></i> إدارة الأسعار والباقات</div>
+      <button type="button" class="modal-close-x" id="closePricesBtn">&times;</button>
+    </div>
+    <div class="tabs-nav">
+      <div class="tab-nav-btn active" id="tabEsimBtn">📲 إلكترونية (eSIM)</div>
+      <div class="tab-nav-btn" id="tabPlasticBtn">💳 بلاستيك عادية</div>
+    </div>
+    <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
+      <span style="font-size:0.8rem;color:#69f0ae;font-weight:800;" id="pricesSyncStatus">الأسعار جاهزة</span>
+      <button type="button" class="btn-action-sm" id="syncGithubPricesBtn"><i class="fas fa-sync-alt"></i> مزامنة المتجر</button>
+    </div>
+    <div id="packagesManagerContainer" class="items-list"></div>
+    <div style="background:rgba(6,35,53,0.7);padding:10px;border-radius:12px;margin-top:10px;">
+      <div style="font-size:0.85rem;font-weight:800;color:#00e5ff;margin-bottom:8px;">➕ إضافة باقة جديدة:</div>
+      <div class="field-row" style="margin-bottom:6px;">
+        <input type="text" id="newPkgCompany" class="input-mini" placeholder="اسم الشركة">
+        <input type="text" id="newPkgTitle" class="input-mini" placeholder="المدة/الحجم">
+      </div>
+      <div class="field-row">
+        <input type="number" id="newPkgPrice" class="input-mini" placeholder="السعر ₪" style="max-width:90px;">
+        <input type="text" id="newPkgDesc" class="input-mini" placeholder="الوصف">
+        <button type="button" class="btn-action-sm" id="addNewPkgBtn">إضافة</button>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn-full-action" id="savePricesToDeviceBtn">حفظ وتعميم الأسعار</button>
+      <button type="button" class="btn-secondary" id="closePricesModalBtn">إغلاق</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){"use strict";
+if(window.top!==window.self){try{window.top.location=window.self.location;}catch(e){}}
+
+const NETLIFY_QUERY_URL="https://incredible-crumble-58566c.netlify.app/.netlify/functions/query";
+const GITHUB_STORE_API="https://api.github.com/repos/groupahmed2020/brand-store/contents/data.json";
+const DEFAULT_BLACKLIST_DATA="كويك لاين\nرامز";
+let currentStoreData = {esim:[],plastic:[]};
+let activePriceTab = "esim";
+let isRefreshing=false;
+let aiActionCount=Number(localStorage.getItem("bs_ai_count")||0);
+
+function logAiAgent(msg){
+  const box=document.getElementById("aiLogBox");
+  if(!box)return;
+  const time=new Date().toLocaleTimeString("ar-EG",{hour:"2-digit",minute:"2-digit"});
+  const entry="["+time+"] "+msg;
+  try{
+    let saved=JSON.parse(localStorage.getItem("bs_ai_logs")||"[]");
+    saved.push(entry);
+    if(saved.length>40)saved=saved.slice(-40);
+    localStorage.setItem("bs_ai_logs",JSON.stringify(saved));
+    aiActionCount++;
+    document.getElementById("aiCounterSpan").textContent="العمليات المنفذة: "+aiActionCount;
+    box.textContent=saved.join("\n");
+    box.scrollTop=box.scrollHeight;
+  }catch(e){}
+}
+window.logAiAgent=logAiAgent;
+
+function syncAiStatusUi(){
+  let enabled=true;
+  try{
+    if(window.AndroidBridge&&typeof window.AndroidBridge.isAiAgentEnabled==="function"){
+      enabled=Boolean(window.AndroidBridge.isAiAgentEnabled());
+    }else{
+      enabled=localStorage.getItem("bs_ai_enabled")!=="0";
+    }
+  }catch(e){}
+  document.getElementById("aiStatusDot").className=enabled?"status-dot":"status-dot off";
+  document.getElementById("aiStatusText").textContent=enabled?"يعمل 24/7":"متوقف";
+  document.getElementById("aiStatusText").style.color=enabled?"#69f0ae":"#ff5252";
+}
+window.syncAiStatusUi=syncAiStatusUi;
+
+document.getElementById("aiToggleBadge").addEventListener("click",()=>{
+  try{
+    if(window.AndroidBridge&&typeof window.AndroidBridge.isAiAgentEnabled==="function"){
+      window.AndroidBridge.setAiAgentEnabled(!window.AndroidBridge.isAiAgentEnabled());
+    }else{
+      localStorage.setItem("bs_ai_enabled",localStorage.getItem("bs_ai_enabled")!=="0"?"0":"1");
+    }
+  }catch(e){}
+  syncAiStatusUi();
+});
+
+// Blacklist Logic
+window.openBlacklistModal = function(){
+  let listStr=DEFAULT_BLACKLIST_DATA; let ign=true;
+  try{
+    if(window.AndroidBridge&&typeof window.AndroidBridge.getBlacklist==="function"){
+      listStr=window.AndroidBridge.getBlacklist(); ign=window.AndroidBridge.isIgnoreAllGroups();
+    }
+  }catch(e){}
+  document.getElementById("txtBlacklist").value=listStr;
+  document.getElementById("chkIgnoreAllGroups").checked=ign;
+  document.getElementById("blacklistModal").classList.add("active");
+};
+document.getElementById("btnOpenBlacklist").addEventListener("click",openBlacklistModal);
+document.getElementById("closeBlacklistBtn").addEventListener("click",()=>document.getElementById("blacklistModal").classList.remove("active"));
+document.getElementById("resetBlacklistBtn").addEventListener("click",()=>{document.getElementById("txtBlacklist").value=DEFAULT_BLACKLIST_DATA;});
+document.getElementById("saveBlacklistBtn").addEventListener("click",()=>{
+  const val=document.getElementById("txtBlacklist").value.trim();
+  const ign=document.getElementById("chkIgnoreAllGroups").checked;
+  try{
+    if(window.AndroidBridge&&typeof window.AndroidBridge.saveBlacklistData==="function"){
+      window.AndroidBridge.saveBlacklistData(val);
+      window.AndroidBridge.setIgnoreAllGroups(ign);
+    }
+  }catch(e){}
+  document.getElementById("blacklistModal").classList.remove("active");
+  alert("تم حفظ قائمة الاستثناءات");
+});
+
+// Prices Logic
+window.openPricesModal = function(){
+  try{
+    if(window.AndroidBridge&&typeof window.AndroidBridge.getCustomPricesJson==="function"){
+      const dt=window.AndroidBridge.getCustomPricesJson();
+      if(dt&&dt.length>10) currentStoreData=JSON.parse(dt);
+    }
+  }catch(e){}
+  renderPricesEditor();
+  document.getElementById("pricesModal").classList.add("active");
+};
+document.getElementById("btnOpenPrices").addEventListener("click",openPricesModal);
+document.getElementById("closePricesBtn").addEventListener("click",()=>document.getElementById("pricesModal").classList.remove("active"));
+document.getElementById("closePricesModalBtn").addEventListener("click",()=>document.getElementById("pricesModal").classList.remove("active"));
+
+document.getElementById("tabEsimBtn").addEventListener("click",function(){activePriceTab="esim";this.classList.add("active");document.getElementById("tabPlasticBtn").classList.remove("active");renderPricesEditor();});
+document.getElementById("tabPlasticBtn").addEventListener("click",function(){activePriceTab="plastic";this.classList.add("active");document.getElementById("tabEsimBtn").classList.remove("active");renderPricesEditor();});
+
+async function syncGithubPrices(){
+  try{
+    document.getElementById("pricesSyncStatus").textContent="جاري المزامنة...";
+    const res=await fetch(GITHUB_STORE_API+"?t="+Date.now());
+    if(res.ok){
+      const data=await res.json();
+      currentStoreData=JSON.parse(atob(data.content.replace(/\s/g,"")));
+      renderPricesEditor();
+      document.getElementById("pricesSyncStatus").textContent="محدثة من المتجر ✅";
+    }
+  }catch(e){}
+}
+document.getElementById("syncGithubPricesBtn").addEventListener("click",syncGithubPrices);
+
+function renderPricesEditor(){
+  const container=document.getElementById("packagesManagerContainer");
+  container.innerHTML="";
+  const list=activePriceTab==="esim"?(currentStoreData.esim||[]):(currentStoreData.plastic||[]);
+  list.forEach((company,cIdx)=>{
+    (company.pkgs||[]).forEach((pkg,pIdx)=>{
+      const card=document.createElement("div"); card.className="pkg-item-card";
+      const head=document.createElement("div"); head.className="pkg-item-header";
+      head.innerHTML=`<span>📌 ${company.name} - ${pkg.g||pkg.d}</span>`;
+      const statusBtn=document.createElement("span");
+      const isAv=pkg.available!==false;
+      statusBtn.className="badge-status "+(isAv?"on":"off");
+      statusBtn.textContent=isAv?"(متوفر)":"(غير متوفر)";
+      statusBtn.onclick=()=>{pkg.available=!isAv;renderPricesEditor();};
+      head.appendChild(statusBtn);
+      
+      const fields=document.createElement("div"); fields.className="field-row";
+      fields.innerHTML=`<input type="number" class="input-mini" value="${pkg.p}" style="max-width:80px;" onchange="this.pkg.p=this.value">
+                        <input type="text" class="input-mini" value="${pkg.g||pkg.d}" onchange="this.pkg.g=this.value">`;
+      fields.children[0].pkg = pkg; fields.children[1].pkg = pkg;
+      const delBtn=document.createElement("button"); delBtn.className="btn-del-sm"; delBtn.innerHTML="🗑️";
+      delBtn.onclick=()=>{company.pkgs.splice(pIdx,1);renderPricesEditor();};
+      fields.appendChild(delBtn);
+      card.append(head,fields); container.appendChild(card);
+    });
+  });
+}
+
+document.getElementById("addNewPkgBtn").addEventListener("click",()=>{
+  const cName=document.getElementById("newPkgCompany").value.trim();
+  const pTitle=document.getElementById("newPkgTitle").value.trim();
+  const pPrice=document.getElementById("newPkgPrice").value.trim();
+  if(!cName||!pTitle||!pPrice)return alert("أكمل البيانات");
+  const list=activePriceTab==="esim"?(currentStoreData.esim||[]):(currentStoreData.plastic||[]);
+  let comp=list.find(c=>c.name===cName);
+  if(!comp){comp={name:cName,pkgs:[]};list.push(comp);}
+  comp.pkgs.push({d:pTitle,s:pTitle,p:pPrice,g:document.getElementById("newPkgDesc").value||pTitle,available:true});
+  renderPricesEditor();
+});
+document.getElementById("savePricesToDeviceBtn").addEventListener("click",()=>{
+  try{
+    if(window.AndroidBridge) window.AndroidBridge.saveCustomPricesJson(JSON.stringify(currentStoreData));
+    document.getElementById("pricesModal").classList.remove("active");
+    alert("تم حفظ وتعميم الباقات");
+  }catch(e){}
+});
+
+// Smart Match & AI Fallback
+function matchStorePackagePrice(queryText){
+  const m=String(queryText||"").toLowerCase();
+  const isEsim=m.includes("الكترون")||m.includes("esim");
+  const isPlas=m.includes("بلاستيك")||m.includes("عادية");
+  const target=isEsim?"esim":isPlas?"plastic":"all";
+  
+  const search=(list,lbl)=>{
+    for(const c of list){
+      if(m.includes(c.name.toLowerCase())){
+        for(const p of (c.pkgs||[])){
+          const pd=String(p.g||p.d).toLowerCase();
+          if((m.includes("3")&&(pd.includes("3")||pd.includes("ثلاث")))|| (m.includes("شهر")&&!m.includes("3")&&(pd.includes("شهر")||pd.includes("1"))))
+            return {comp:c.name,pkg:p,type:lbl};
+        }
+      }
+    }
+    return null;
+  };
+  
+  let match=null;
+  if(target==="esim"||target==="all") match=search(currentStoreData.esim||[],"شريحة إلكترونية eSIM");
+  if(!match&&(target==="plastic"||target==="all")) match=search(currentStoreData.plastic||[],"شريحة بلاستيك");
+  return match;
+}
+
+window.executeAiCustomerSupport=async function(sender,rawMessage,senderTitle){
+  if(!sender||!rawMessage)return;
+  const mLower=String(rawMessage||"").toLowerCase().trim();
+  
+  // Smart Package Detection FIRST
+  const directMatch=matchStorePackagePrice(mLower);
+  let finalReply="";
+  if(directMatch){
+    if(directMatch.pkg.available===false) finalReply=`عذراً، باقة (${directMatch.comp} ${directMatch.pkg.g}) غير متوفرة حالياً. يسعدنا توفير بدائل أخرى لك.`;
+    else finalReply=`أهلاً بك 🌟\nباقة (${directMatch.type} - ${directMatch.comp} ${directMatch.pkg.g}) متوفرة بسعر: ${directMatch.pkg.p} ₪.\nلتأكيد الحجز فوراً، يرجى تزويدنا:\n👤 الاسم:\n📱 الرقم:\n📍 العنوان:\n💵 طريقة الدفع:`;
+  }
+  else if(/(بدي واحدة|احجزلي|بدي اطلب|بدي اشتري|اعتمد)/.test(mLower)){
+    finalReply="أهلاً بك 🌟\nيسعدنا إتمام طلبك! يرجى تزويدنا:\n1️⃣ نوع الشريحة والشركة (مثال: إلكترونية بارتنر 3 شهور)\n2️⃣ الاسم\n3️⃣ العنوان ورقم الهاتف\n4️⃣ طريقة الدفع";
+  }
+  else if(/(اعدادات|apn|نقطة وصول)/.test(mLower)){
+    finalReply="إعدادات (APN):\nبارتنر: uinternet\nويكوم: we\nهوت: net.hotm\nضع الهاتف طيران 10 دقائق بعد الحفظ.";
+  }
+  else if(/(ضعيف|فاصل|مقطوع|ارسال|تحديث)/.test(mLower) && !/(ما بدي|مش تحديث|بدون)/.test(mLower)){
+    finalReply="أرسل رقم الشريحة (05XXXXXXXX) الآن لنقوم بتحديثها وتنشيط الإنترنت لك فوراً!";
+  }
+  else{
+    finalReply="أهلاً بك في BRAND SIM 🌟\n• لتحديث الشريحة: أرسل الرقم (05XXXXXXXX).\n• للاستفسار عن الباقات: اكتب نوع الشريحة والشركة وسنزودك بالسعر.";
+  }
+
+  logAiAgent("💬 رد مركز الدعم: "+finalReply.substring(0,30)+"...");
+  if(window.AndroidBridge&&window.AndroidBridge.sendSmsReply) window.AndroidBridge.sendSmsReply(sender,finalReply);
+};
+
+window.addEventListener("DOMContentLoaded",()=>{
+  syncAiStatusUi();
+  try{
+    if(window.AndroidBridge&&window.AndroidBridge.getCustomPricesJson){
+      const dt=window.AndroidBridge.getCustomPricesJson();
+      if(dt&&dt.length>10) currentStoreData=JSON.parse(dt);
+    }
+  }catch(e){}
+});
+})();
+</script>
+</body>
+</html>
