@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob:; img-src * data: blob:; style-src * 'unsafe-inline'; font-src * data:; script-src * 'unsafe-inline' 'unsafe-eval'; connect-src *;">
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta name="referrer" content="no-referrer">
+<title>BRAND SIM | تحديث وتنشيط الشرائح والموظف الذكي</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Rubik:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Cairo',sans-serif;-webkit-tap-highlight-color:transparent}
+body{background-color:#04101c;color:#fff;min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:14px;overflow-x:hidden;position:relative}
+body[lang="he"]{font-family:'Rubik',sans-serif}
+body::before{content:"";position:fixed;inset:0;z-index:-1;background-image:linear-gradient(rgba(4,16,28,0.18),rgba(4,16,28,0.35)),url('tower-bg.jpg'),url('1000046718.jpg');background-position:center center;background-repeat:no-repeat;background-size:cover}
+.card{width:100%;max-width:480px;border:2px solid #00e5ff;border-radius:22px;padding:26px 18px 20px;background:rgba(4,18,31,0.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);box-shadow:0 0 25px rgba(0,229,255,0.35);text-align:center;position:relative}
+.logo-wrapper{display:inline-flex;align-items:center;justify-content:center;gap:12px;margin-bottom:12px;direction:ltr}
+.logo-icon{background:rgba(0,229,255,0.15);border:1.5px solid #00e5ff;color:#00e5ff;width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 0 12px rgba(0,229,255,0.35)}
+.logo-text{font-size:2.1rem;font-weight:900;letter-spacing:2px;color:#fff;text-shadow:0 0 12px #00e5ff,0 0 24px #00e5ff}
+.welcome-title{font-size:1.3rem;font-weight:800;margin-bottom:5px;color:#00e5ff;text-shadow:0 2px 6px rgba(0,0,0,0.9)}
+.subtitle{font-size:.9rem;color:#e2f4fc;margin-bottom:16px;line-height:1.6;font-weight:700;text-shadow:0 2px 5px rgba(0,0,0,0.9)}
+
+/* لوحة تحكم الموظف الذكي الآلي */
+.ai-agent-panel{background:rgba(6,35,53,0.88);border:1.5px solid rgba(0,229,255,0.6);border-radius:14px;padding:10px 12px;margin-bottom:16px;text-align:right}
+.ai-agent-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:0.86rem;font-weight:800;color:#69f0ae;flex-wrap:wrap;gap:6px}
+.ai-agent-status{display:inline-flex;align-items:center;gap:6px;font-size:0.78rem;cursor:pointer;background:rgba(0,0,0,0.35);padding:4px 10px;border-radius:20px;border:1px solid rgba(255,255,255,0.15);user-select:none}
+.status-dot{width:9px;height:9px;border-radius:50%;background:#00e676;box-shadow:0 0 8px #00e676}
+.status-dot.off{background:#ff5252;box-shadow:0 0 8px #ff5252}
+.ai-log-box{max-height:110px;overflow-y:auto;background:rgba(4,14,24,0.92);border:1px solid rgba(0,229,255,0.25);border-radius:8px;padding:8px;font-size:0.74rem;color:#e2f4fc;direction:rtl;text-align:right;line-height:1.5;white-space:pre-wrap}
+.ai-log-actions{display:flex;justify-content:space-between;align-items:center;margin-top:6px;font-size:0.72rem;color:#94e2f7}
+.btn-mini{background:rgba(0,229,255,0.12);color:#00e5ff;border:1px solid rgba(0,229,255,0.4);padding:2px 8px;border-radius:6px;cursor:pointer;font-size:0.7rem;font-weight:700}
+
+.form-group{text-align:right;margin-bottom:16px}
+body[lang="he"] .form-group{text-align:right}
+.form-group label{display:block;font-weight:800;font-size:.92rem;margin-bottom:8px;color:#00e5ff;text-shadow:0 1px 4px rgba(0,0,0,0.9)}
+.form-control{width:100%;padding:13px 16px;font-size:1.25rem;font-weight:800;letter-spacing:1.5px;border:1.5px solid rgba(0,229,255,0.45);border-radius:12px;text-align:center;direction:ltr;color:#fff;background:rgba(4,21,35,0.75);outline:none;transition:.2s}
+.form-control::placeholder{color:rgba(194,226,242,0.5)}
+.form-control:focus{border-color:#00e5ff;background:rgba(4,21,35,0.9);box-shadow:0 0 12px rgba(0,229,255,0.4)}
+.btn-submit{width:100%;padding:13px;font-size:1.05rem;font-weight:800;color:#001b29;background:linear-gradient(90deg,#00e5ff,#00a8cc);border:none;border-radius:12px;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 0 15px rgba(0,229,255,0.45)}
+.btn-submit:active{transform:scale(0.98)}
+.btn-submit:disabled{background:rgba(148,163,184,0.4);color:#cbd5e1;cursor:not-allowed;box-shadow:none}
+.spinner{display:none}
+.btn-submit.loading .spinner{display:inline-block}
+.alert-box{margin-top:16px;padding:12px 14px;border-radius:12px;font-size:.88rem;font-weight:700;display:none;align-items:center;justify-content:center;gap:10px;line-height:1.6;word-break:break-word;white-space:pre-line;background:rgba(6,35,53,0.85)}
+.alert-box.success{display:flex;color:#69f0ae;border:1.5px solid #00c853;box-shadow:0 0 12px rgba(0,200,83,0.25)}
+.alert-box.warning{display:flex;color:#ffd740;border:1.5px solid #ffab00;box-shadow:0 0 12px rgba(255,171,0,0.25)}
+.alert-box.error{display:flex;color:#ff5252;border:1.5px solid #ff1744;box-shadow:0 0 12px rgba(255,23,68,0.25)}
+.footer-bar{margin-top:20px;padding-top:12px;border-top:1px solid rgba(0,229,255,0.25);display:flex;justify-content:space-between;align-items:center}
+.lang-btn{color:#00e5ff;background:rgba(0,229,255,0.1);font-weight:800;font-size:.85rem;cursor:pointer;padding:5px 16px;border-radius:20px;border:1.5px solid #00e5ff;transition:.2s;user-select:none}
+.lang-btn:hover{background:#00e5ff;color:#001b29;box-shadow:0 0 10px rgba(0,229,255,0.5)}
+.copyright{color:#c2e2f2;font-size:.85rem;font-weight:700;direction:ltr;text-shadow:0 1px 3px rgba(0,0,0,0.9)}
+</style>
+</head>
+<body lang="ar">
+<div class="card">
+  <div class="logo-wrapper"><div class="logo-icon"><i class="fas fa-sim-card"></i></div><div class="logo-text">BRAND SIM</div></div>
+  <h2 class="welcome-title" id="ui-welcome">مرحباً بك في براند سيم</h2>
+  <p class="subtitle" id="ui-subtitle">أدخل رقم الهاتف لإجراء تحديث وتنشيط فوري للشريحة</p>
+
+  <!-- لوحة الموظف الذكي الآلي وتقرير الصباح -->
+  <div class="ai-agent-panel">
+    <div class="ai-agent-header">
+      <span><i class="fas fa-robot"></i> الموظف الذكي للدعم الآلي (Gemini AI)</span>
+      <div class="ai-agent-status" id="aiToggleBadge" title="اضغط لتشغيل أو إيقاف الموظف الذكي">
+        <span id="aiStatusDot" class="status-dot"></span>
+        <span id="aiStatusText">يعمل 24/7</span>
+      </div>
+    </div>
+    <div id="aiLogBox" class="ai-log-box">🤖 الموظف الآلي جاهز للرد على الزبائن، تحديث الأرقام، وحل مشاكل الإعدادات والشبكة تلقائياً...</div>
+    <div class="ai-log-actions">
+      <span id="aiCounterSpan">العمليات المنفذة: 0</span>
+      <button type="button" class="btn-mini" id="clearAiLogBtn">مسح السجل</button>
+    </div>
+  </div>
+
+  <form id="customer-refresh-number-form" novalidate>
+    <div class="form-group"><label for="customerPhone" id="ui-label">📱 رقم الهاتف:</label><input type="tel" id="customerPhone" class="form-control" placeholder="05XXXXXXXX" maxlength="10" inputmode="numeric" autocomplete="tel" required></div>
+    <button type="submit" id="customSubmitBtn" class="btn-submit"><span id="ui-btn">تحديث الرقم الآن</span><i class="fas fa-sync-alt fa-spin spinner"></i></button>
+  </form>
+  <div id="alertBox" class="alert-box" role="alert"></div>
+  <div class="footer-bar"><button type="button" class="lang-btn" id="langToggleBtn">עברית</button><span class="copyright">BRAND SIM © <span id="yearSpan"></span></span></div>
+</div>
+<script>
+(function(){"use strict";
+if(window.top!==window.self){try{window.top.location=window.self.location;}catch(e){}}
+document.getElementById("yearSpan").textContent=new Date().getFullYear();
+
+const SKY_TELEGRAM_WORKER_URL="https://gentle-morning-4759.groupahmed2020.workers.dev/";
+const LAYAN_API_URL="https://api.layan-t.net/api/Subscribtions/CustomersRefreshNumber";
+const AREEN_GAS_URL="https://script.google.com/macros/s/AKfycbxidpoKH8PnhxSvKggQpI2K2BiQQLm7PJM2byXFxnJY1f2Iahqj4UdRfYFuECuqqoPK/exec";
+const QUICKLINE_GAS_URL="https://script.google.com/macros/s/AKfycbzoFY7vXfDNsMBieM33Ohym4o3oif6_hoc1FI0RFzKbEgvfALOVMBWQKNt14VOakcQg/exec";
+const AYLOL_WORKER_URL="https://steep-shadow-66a0.groupahmed2020.workers.dev/";
+const NETLIFY_QUERY_URL="https://incredible-crumble-58566c.netlify.app/.netlify/functions/query";
+const SKY_COOLDOWN_MS=20*60*1000; // 20 دقيقة
+const GEMINI_API_KEY="AIzaSyDMLJgPX2MeOP3sdfNDWV6PSUj8FgqP3O8";
+
+const i18n=Object.freeze({
+  ar:Object.freeze({welcome:"مرحباً بك في براند سيم",subtitle:"أدخل رقم الهاتف لإجراء تحديث وتنشيط فوري للشريحة",label:"📱 رقم الهاتف:",placeholder:"05XXXXXXXX",btn:"تحديث الرقم الآن",loading:"جاري الفحص والتحديث...",switchBtn:"עברית",invalidPhone:"يرجى إدخال رقم هاتف صحيح مكون من 10 أرقام ويبدأ بـ 05",notAuthorized:"عذراً، هذا الرقم غير مسجل في منظومة براند سيم (BRAND SIM) ولا يمكن تحديثه.",skyExpired:"الرقم منتهي اشتراكه، الرجاء التواصل مع المندوب من أجل التجديد",defaultSuccess:"✅ تم إرسال طلب تحديث وتنشيط الرقم بنجاح!",defaultError:"⚠️ تعذر تحديث الرقم حالياً، يرجى التأكد من الرقم أو المحاولة لاحقاً."}),
+  he:Object.freeze({welcome:"ברוך הבא ל-BRAND SIM",subtitle:"נא להזין מספר טלפון כדי לבצע רענון והפעלה לכרטיס ה-SIM",label:"📱 מספר טלפון:",placeholder:"05XXXXXXXX",btn:"רענון מספר כעת",loading:"בודק ומרענן...",switchBtn:"العربية",invalidPhone:"נא להזין מספר טלפון תקין בן 10 ספרות המתחיל ב-05",notAuthorized:"מספר זה אינו רשום במערכת BRAND SIM ולא ניתן לרענן אותו.",skyExpired:"الرقم منتهي اشتراكه، الرجاء التواصل مع المندوب من أجل التجديد",defaultSuccess:"✅ המספר רוענן בהצלחה!",defaultError:"⚠️ פעולת הרענון נכשלה, בדוק את המספר או נסה שוב."})
+});
+
+let currentLang=localStorage.getItem("language")==="he"?"he":"ar";
+let isRefreshing=false;
+let lastSubmit=0;
+let lastSkySentPhone="";
+let lastSkySentTime=0;
+let aiActionCount=Number(localStorage.getItem("bs_ai_count")||0);
+
+const form=document.getElementById("customer-refresh-number-form"),phoneInput=document.getElementById("customerPhone"),submitBtn=document.getElementById("customSubmitBtn"),btnText=document.getElementById("ui-btn"),alertBox=document.getElementById("alertBox"),langBtn=document.getElementById("langToggleBtn");
+
+function syncAiStatusUi(){
+  let enabled=true;
+  try{
+    if(window.AndroidBridge&&typeof window.AndroidBridge.isAiAgentEnabled==="function"){
+      enabled=Boolean(window.AndroidBridge.isAiAgentEnabled());
+    }else if(localStorage.getItem("bs_ai_enabled")==="0"){
+      enabled=false;
+    }
+  }catch(e){}
+  const dot=document.getElementById("aiStatusDot");
+  const txt=document.getElementById("aiStatusText");
+  if(dot)dot.className=enabled?"status-dot":"status-dot off";
+  if(txt){
+    txt.textContent=enabled?"يعمل 24/7":"متوقف";
+    txt.style.color=enabled?"#69f0ae":"#ff5252";
+  }
+}
+window.syncAiStatusUi=syncAiStatusUi;
+
+function logAiAgent(msg){
+  const box=document.getElementById("aiLogBox");
+  const cnt=document.getElementById("aiCounterSpan");
+  if(!box)return;
+  const time=new Date().toLocaleTimeString("ar-EG",{hour:"2-digit",minute:"2-digit"});
+  const entry=`[${time}] ${msg}`;
+  try{
+    let saved=JSON.parse(localStorage.getItem("bs_ai_logs")||"[]");
+    saved.push(entry);
+    if(saved.length>40)saved=saved.slice(-40);
+    localStorage.setItem("bs_ai_logs",JSON.stringify(saved));
+    aiActionCount++;
+    localStorage.setItem("bs_ai_count",String(aiActionCount));
+    if(cnt)cnt.textContent="العمليات المنفذة: "+aiActionCount;
+    box.textContent=saved.join("
+");
+    box.scrollTop=box.scrollHeight;
+  }catch(e){
+    box.textContent+="
+"+entry;
+    box.scrollTop=box.scrollHeight;
+  }
+}
+window.logAiAgent=logAiAgent;
+
+function loadSavedAiLogs(){
+  try{
+    const box=document.getElementById("aiLogBox");
+    const cnt=document.getElementById("aiCounterSpan");
+    const saved=JSON.parse(localStorage.getItem("bs_ai_logs")||"[]");
+    if(saved.length>0&&box){
+      box.textContent=saved.join("
+");
+      box.scrollTop=box.scrollHeight;
+    }
+    if(cnt)cnt.textContent="العمليات المنفذة: "+aiActionCount;
+  }catch(e){}
+}
+
+document.getElementById("clearAiLogBtn").addEventListener("click",()=>{
+  try{
+    localStorage.removeItem("bs_ai_logs");
+    localStorage.setItem("bs_ai_count","0");
+    aiActionCount=0;
+  }catch(e){}
+  document.getElementById("aiLogBox").textContent="🤖 تم تصفير السجل. الموظف الذكي جاهز لاستقبال رسائل الزبائن...";
+  document.getElementById("aiCounterSpan").textContent="العمليات المنفذة: 0";
+});
+
+document.getElementById("aiToggleBadge").addEventListener("click",()=>{
+  try{
+    if(window.AndroidBridge&&typeof window.AndroidBridge.isAiAgentEnabled==="function"){
+      const next=!window.AndroidBridge.isAiAgentEnabled();
+      window.AndroidBridge.setAiAgentEnabled(next);
+    }else{
+      const cur=localStorage.getItem("bs_ai_enabled")!=="0";
+      localStorage.setItem("bs_ai_enabled",cur?"0":"1");
+    }
+  }catch(e){}
+  syncAiStatusUi();
+});
+
+function cleanText(s){return String(s||"").replace(/[ --<>]/g,"").replace(/Sky\s*Telecom\s*2/gi,"Brand sim").replace(/Sky\s*Telecom/gi,"Brand sim").replace(/أرقام سكاي|ارقام سكاي/g,"ارقام براند سيم").trim().slice(0,550);}
+
+function applyLanguage(lang){
+  currentLang=lang==="he"?"he":"ar";try{localStorage.setItem("language",currentLang);}catch(e){}
+  const t=i18n[currentLang];document.body.setAttribute("lang",currentLang);
+  document.getElementById("ui-welcome").textContent=t.welcome;document.getElementById("ui-subtitle").textContent=t.subtitle;
+  document.getElementById("ui-label").textContent=t.label;phoneInput.placeholder=t.placeholder;
+  btnText.textContent=t.btn;langBtn.textContent=t.switchBtn;
+}
+
+function normalizePhoneNumber(rawInput){
+  if(!rawInput)return"";
+  let str=String(rawInput).replace(/[٠-٩]/g,d=>"٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/[۰-۹]/g,d=>"۰۱۲۳۴۵۶۷۸۹".indexOf(d));
+  if(str.includes("_"))str=str.split("_")[0];str=str.replace(/[^0-9]/g,"");
+  if(str.startsWith("00972")||str.startsWith("00970"))str="0"+str.slice(5);
+  else if((str.startsWith("972")||str.startsWith("970"))&&str.length>=11)str="0"+str.slice(3);
+  else if(str.length===9&&str.startsWith("5"))str="0"+str;
+  else if(str.length>10&&str.startsWith("05"))str=str.slice(0,10);
+  return str;
+}
+
+function getExpiryDiffDays(expStr){
+  if(!expStr)return null;
+  const s=String(expStr).trim();
+  if(s==="موصول"||s==="-"||s==="مفتوح"||s==="دائم")return null;
+  const now=new Date();now.setHours(0,0,0,0);
+  let ex=new Date(s);
+  if(isNaN(ex.getTime())){
+    const parts=s.split(/[\/\-]/);
+    if(parts.length===3){
+      if(parts[0].length===4)ex=new Date(Number(parts[0]),Number(parts[1])-1,Number(parts[2]));
+      else ex=new Date(Number(parts[2]),Number(parts[1])-1,Number(parts[0]));
+    }
+  }
+  if(isNaN(ex.getTime()))return null;
+  ex.setHours(0,0,0,0);
+  return Math.ceil((ex-now)/86400000);
+}
+
+function isSubscriptionExpired(expStr){
+  const diff=getExpiryDiffDays(expStr);
+  return diff!==null&&diff<0;
+}
+
+function formatCustomerDetailsMessage(customer,cleanPhone){
+  const pkg=String(customer.packageInfo||customer.package||customer.plan||customer.bundle||"باقة إنترنت").trim();
+  const exp=String(customer.expiryDate||customer.expiry||customer.endDate||"").trim();
+  const diff=getExpiryDiffDays(exp);
+  let remText="";
+  let expLine="";
+  if(!exp||exp==="موصول"||exp==="-"){
+    expLine="📅 حالة الاشتراك: موصول وفعّال";
+    remText="⏳ المتبقي بالحزمة: الاشتراك ساري المفعول";
+  }else if(diff===null){
+    expLine="📅 تاريخ انتهاء الحزمة: "+exp;
+  }else if(diff<0){
+    expLine="📅 تاريخ انتهاء الحزمة: "+exp;
+    remText="⚠️ المتبقي بالحزمة: منتهية منذ "+Math.abs(diff)+" يوم (يرجى التجديد)";
+  }else if(diff===0){
+    expLine="📅 تاريخ انتهاء الحزمة: "+exp+" (تنتهي اليوم)";
+    remText="⏳ المتبقي بالحزمة: أقل من يوم واحد (ينتهي اليوم)";
+  }else if(diff===1){
+    expLine="📅 تاريخ انتهاء الحزمة: "+exp;
+    remText="⏳ المتبقي بالحزمة: يوم واحد متبقي";
+  }else if(diff===2){
+    expLine="📅 تاريخ انتهاء الحزمة: "+exp;
+    remText="⏳ المتبقي بالحزمة: يومان متبقيان";
+  }else if(diff>=3&&diff<=10){
+    expLine="📅 تاريخ انتهاء الحزمة: "+exp;
+    remText="⏳ المتبقي بالحزمة: "+diff+" أيام متبقية";
+  }else{
+    expLine="📅 تاريخ انتهاء الحزمة: "+exp;
+    remText="⏳ المتبقي بالحزمة: "+diff+" يوماً متبقياً";
+  }
+  let lines=[
+    "📋 تفاصيل اشتراك الرقم: "+cleanPhone,
+    "📦 الباقة والبيانات: "+pkg,
+    expLine
+  ];
+  if(remText)lines.push(remText);
+  return lines.join("
+");
+}
+
+// استخراج نصيحة تقنية تلقائية من خبرة محادثات ليان حسب نوع شريحة الزبون عند التحديث أو ضعف النت
+function getSmartProviderTechTip(customer,mode){
+  if(mode!=="weak_net"&&mode!=="refresh")return "";
+  const p=String((customer.sourceProvider||"")+" "+(customer.packageInfo||"")+" "+(customer.company||"")).toLowerCase();
+  let apnInfo="• تأكد من تفعيل التجوال والـ APN الصحيح ثم ضع وضع طيران 10 دقائق وأعد تشغيل الجهاز.";
+  if(p.includes("بارتنر")||p.includes("partner")||p.includes("012")){
+    apnInfo="💡 نصيحة تقنية (بارتنر): تأكد أن نقطة الوصول APN هي: uinternet ثم ضع الهاتف بوضع طيران 10 دقائق وأعد التشغيل.";
+  }else if(p.includes("ويكوم")||p.includes("wecom")||p.includes("وي كم")){
+    apnInfo="💡 نصيحة تقنية (ويكوم): امسح الإعدادات واكتب APN جديد باسم: we ثم ضع وضع طيران 10 دقائق وأعد التشغيل.";
+  }else if(p.includes("019")||p.includes("نتازي")){
+    apnInfo="💡 نصيحة تقنية (019): اضبط الـ APN يدوياً على: netazi واختر لقط شبكة بارتنر أو بيليفون، وضع طيران 10 دقائق.";
+  }else if(p.includes("هوت")||p.includes("hot")){
+    apnInfo="💡 نصيحة تقنية (هوت موبايل): اضبط الـ APN على: net.hotm (وإذا كانت الإشارة معلقة حول الشبكة لـ 3G ثم أعد التشغيل).";
+  }
+  return mode==="weak_net"?("
+"+apnInfo):"";
+}
+
+function checkSkyCooldown(cleanPhone){
+  try{
+    if(window.AndroidBridge&&typeof window.AndroidBridge.getSkyCooldownRemainingMs==="function"){
+      const rem=Number(window.AndroidBridge.getSkyCooldownRemainingMs(cleanPhone)||0);
+      if(rem>0){
+        const msg=window.AndroidBridge.getSkyCooldownRejectMsg(cleanPhone);
+        return{blocked:true,msg:cleanText(msg||("⚠️ عذراً، طلب التحديث للرقم "+cleanPhone+" مرفوض لتكرار الطلب. يُسمح بتحديث ارقام براند سيم مرة واحدة فقط بعد 20 دقيقة."))};
+      }
+    }
+    const raw=localStorage.getItem("sky_cd_"+cleanPhone);
+    if(raw){
+      const elapsed=Date.now()-Number(raw);
+      if(elapsed>=0&&elapsed<SKY_COOLDOWN_MS){
+        const remMs=SKY_COOLDOWN_MS-elapsed;
+        const totalMins=Math.max(1,Math.ceil(remMs/60000));
+        const hrs=Math.floor(totalMins/60);
+        const mins=totalMins%60;
+        const timeStr=(hrs>0&&mins>0)?(hrs+" ساعة و "+mins+" دقيقة"):(hrs>0?(hrs+" ساعة"):(mins+" دقيقة"));
+        return{
+          blocked:true,
+          msg:"⚠️ عذراً، طلب التحديث للرقم "+cleanPhone+" مرفوض لتكرار الطلب.
+يُسمح بتحديث ارقام براند سيم مرة واحدة فقط بعد 20 دقيقة.
+يرجى المحاولة بعد مرور: "+timeStr+"."
+        };
+      }
+    }
+  }catch(e){}
+  return{blocked:false,msg:""};
+}
+
+function recordSkyCooldown(cleanPhone){
+  try{localStorage.setItem("sky_cd_"+cleanPhone,String(Date.now()));}catch(e){}
+  try{
+    if(window.AndroidBridge&&typeof window.AndroidBridge.markSkyRefreshed==="function"){
+      window.AndroidBridge.markSkyRefreshed(cleanPhone);
+    }
+  }catch(e){}
+}
+
+function showMessage(type,text){
+  const validType=["success","warning","error"].includes(type)?type:"error";
+  alertBox.className="alert-box "+validType;alertBox.textContent="";
+  const icon=document.createElement("i");icon.className="fas "+(validType==="success"?"fa-check-circle":validType==="warning"?"fa-exclamation-triangle":"fa-times-circle");
+  const span=document.createElement("span");span.textContent=cleanText(text);
+  alertBox.append(icon,span);alertBox.style.display="flex";
+}
+window.showMessage=showMessage;
+
+async function findCustomerInBackend(cleanPhone){
+  try{
+    const res=await fetch(NETLIFY_QUERY_URL,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({phone:cleanPhone})
+    });
+    const json=await res.json();
+    if(res.ok&&json.ok&&json.data)return json.data;
+  }catch(e){}
+  try{
+    const localRes=await fetch("https://incredible-crumble-58566c.netlify.app/custom.json?t="+Date.now());
+    if(localRes.ok){
+      const data=await localRes.json();
+      const list=Array.isArray(data)?data:(data.customers||data.data||[]);
+      if(Array.isArray(list)){
+        const found=list.find(c=>normalizePhoneNumber(c.simPhone||c.phone||c.number)===cleanPhone);
+        if(found)return found;
+      }
+    }
+  }catch(e){}
+  return null;
+}
+
+async function sendToTelegramOnce(cmdText){
+  const workerUrl=`${SKY_TELEGRAM_WORKER_URL}?text=${encodeURIComponent(cmdText)}`;
+  try{
+    const res=await fetch(workerUrl,{method:"GET"});
+    if(res&&res.ok)return true;
+  }catch(e){}
+  try{
+    await fetch(workerUrl,{method:"GET",mode:"no-cors",cache:"no-store"});
+    return true;
+  }catch(e){}
+  return false;
+}
+
+function isRunningOnExternalWeb(){
+  if(window.AndroidBridge)return false;
+  const proto=String(window.location.protocol||"").toLowerCase();
+  const host=String(window.location.hostname||"").toLowerCase();
+  if(proto==="file:")return false;
+  return host.includes("brand-sim.com")||host.includes("github.io")||proto==="https:"||proto==="http:";
+}
+
+async function refreshViaSky(phone,senderPhone="",mode="refresh"){
+  if(window.AndroidBridge&&typeof window.AndroidBridge.autoRefreshSkyWithMode==="function"){
+    window.AndroidBridge.autoRefreshSkyWithMode(phone,senderPhone||"",mode||"refresh");
+    return{ok:true,isSkyApp:true,msg:"⏳ جاري تحديث شريحة براند سيم تلقائياً بالخلفية..."};
+  }
+  if(window.AndroidBridge&&typeof window.AndroidBridge.autoRefreshSky==="function"){
+    window.AndroidBridge.autoRefreshSky(phone,senderPhone||"");
+    return{ok:true,isSkyApp:true,msg:"⏳ جاري تحديث شريحة براند سيم تلقائياً بالخلفية..."};
+  }
+
+  recordSkyCooldown(phone);
+
+  if(!senderPhone&&isRunningOnExternalWeb()){
+    const now=Date.now();
+    const cmdText="SKY_WEB:"+phone;
+    if(lastSkySentPhone!==phone||(now-lastSkySentTime)>=15000){
+      lastSkySentPhone=phone;
+      lastSkySentTime=now;
+      await sendToTelegramOnce(cmdText);
+    }
+  }
+
+  return{ok:true,msg:"✅ تم إرسال طلب تحديث رقمك إلى النظام بنجاح! سيتم تنشيط الشريحة خلال لحظات."};
+}
+
+async function refreshViaAreen(phone){
+  try{
+    const res=await fetch(AREEN_GAS_URL,{method:"POST",redirect:"follow",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({MobNumber:phone,provider:"areen"})});
+    const data=JSON.parse(await res.text());
+    const sc=data?.StatusCode??data?.statusCode??data?.Status??data?.status;
+    return{ok:Number(sc)===23||Boolean(data?.IsSuccess??data?.isSuccess),msg:cleanText(data?.Message??data?.message??data?.ErrorMessage??data?.errorMessage)};
+  }catch(e){throw new Error("Areen failed");}
+}
+
+async function refreshViaQuickLine(phone){
+  try{
+    const res=await fetch(QUICKLINE_GAS_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({phoneNumber:phone,provider:"quickline"})});
+    const data=await res.json();
+    return{ok:data.StatusCode>=200&&data.StatusCode<300,msg:cleanText((data.Message||"").replace(/^"|"$/g,""))};
+  }catch(e){throw new Error("QuickLine failed");}
+}
+
+async function refreshViaAylol(phone){
+  try{
+    const formData=new URLSearchParams();
+    formData.append("phone",phone);
+    const res=await fetch(AYLOL_WORKER_URL,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:formData.toString()});
+    const data=await res.json();
+    return{ok:Boolean(data&&data.success),msg:cleanText(data?.message)};
+  }catch(e){throw new Error("Aylol failed");}
+}
+
+async function refreshViaLayan(phone){
+  try{
+    const res=await fetch(LAYAN_API_URL,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json, text/plain, */*","LANG":currentLang},body:JSON.stringify({number:phone,provider:"layan"})});
+    let txt=await res.text();
+    try{const j=JSON.parse(txt);txt=typeof j==="string"?j:(j?.message||j?.title||j?.error||txt);}catch(_){txt=txt.replace(/^"|"$/g,"");}
+    return{ok:res.ok,msg:cleanText(txt)};
+  }catch(e){throw new Error("Layan failed");}
+}
+
+async function executeRefresh(rawNumber,senderPhone="",mode="refresh"){
+  if(isRefreshing)return;
+  if(!senderPhone&&Date.now()-lastSubmit<3000)return;
+  const t=i18n[currentLang],cleanNumber=normalizePhoneNumber(rawNumber);phoneInput.value=cleanNumber;
+  if(!/^05\d{8}$/.test(cleanNumber)){showMessage("warning",t.invalidPhone);return;}
+  
+  isRefreshing=true;
+  lastSubmit=Date.now();
+  submitBtn.disabled=true;
+  submitBtn.classList.add("loading");
+  btnText.textContent=t.loading;
+  alertBox.style.display="none";
+  
+  try{
+    const customer=await findCustomerInBackend(cleanNumber);
+    if(!customer){
+      showMessage("error",t.notAuthorized);
+      logAiAgent(`❌ رقم غير مسجل: ${cleanNumber}`);
+      if(senderPhone&&window.AndroidBridge&&window.AndroidBridge.sendSmsReply){
+        window.AndroidBridge.sendSmsReply(senderPhone,t.notAuthorized);
+      }
+      return;
+    }
+
+    if(mode==="details"){
+      const detailsReply=formatCustomerDetailsMessage(customer,cleanNumber);
+      showMessage("success",detailsReply);
+      logAiAgent(`📋 استعلام حزمة للرقم: ${cleanNumber}`);
+      if(senderPhone&&window.AndroidBridge&&window.AndroidBridge.sendSmsReply){
+        window.AndroidBridge.sendSmsReply(senderPhone,detailsReply);
+      }
+      return;
+    }
+
+    const p=String(customer.sourceProvider||customer.company||customer.provider||"").trim().toLowerCase();
+    const pkg=String(customer.packageInfo||"").trim().toLowerCase();
+    const isSky=p.includes("سكاي")||p.includes("sky")||pkg.includes("سكاي")||pkg.includes("sky");
+    
+    if(isSky&&isSubscriptionExpired(customer.expiryDate)){
+      const expMsg=t.skyExpired;
+      showMessage("error",expMsg);
+      logAiAgent(`⚠️ اشتراك منتهي: ${cleanNumber}`);
+      if(senderPhone&&window.AndroidBridge&&window.AndroidBridge.sendSmsReply){
+        window.AndroidBridge.sendSmsReply(senderPhone,expMsg);
+      }
+      return;
+    }
+
+    if(isSky){
+      const cd=checkSkyCooldown(cleanNumber);
+      if(cd.blocked){
+        showMessage("warning",cd.msg);
+        logAiAgent(`⏳ تكرار مرفوض (20د): ${cleanNumber}`);
+        if(senderPhone&&window.AndroidBridge&&window.AndroidBridge.sendSmsReply){
+          window.AndroidBridge.sendSmsReply(senderPhone,cd.msg);
+        }
+        return;
+      }
+    }
+
+    const res=isSky?await refreshViaSky(cleanNumber,senderPhone,mode):(p.includes("ارين")||p.includes("أرين")||p.includes("areen"))?await refreshViaAreen(cleanNumber):(p.includes("كويك")||p.includes("quick"))?await refreshViaQuickLine(cleanNumber):(p.includes("ايلول")||p.includes("أيلول")||p.includes("aylol")||p.includes("ayloul"))?await refreshViaAylol(cleanNumber):await refreshViaLayan(cleanNumber);
+    let finalMsg=res.msg||(res.ok?t.defaultSuccess:t.defaultError);
+
+    if(mode==="weak_net"&&!res.isSkyApp){
+      finalMsg="تم تحديث الانترنت
+"+finalMsg+getSmartProviderTechTip(customer,mode);
+    }
+
+    logAiAgent(`✅ تحديث (${mode}) للرقم: ${cleanNumber}`);
+    if(res.ok){showMessage("success",finalMsg);if(!res.isSkyApp)phoneInput.value="";}else showMessage("warning",finalMsg);
+    if(senderPhone&&!res.isSkyApp&&window.AndroidBridge&&window.AndroidBridge.sendSmsReply){
+      window.AndroidBridge.sendSmsReply(senderPhone,finalMsg);
+    }
+  }catch(e){
+    showMessage("error",t.defaultError);
+    if(senderPhone&&window.AndroidBridge&&window.AndroidBridge.sendSmsReply){
+      window.AndroidBridge.sendSmsReply(senderPhone,t.defaultError);
+    }
+  }finally{
+    isRefreshing=false;
+    submitBtn.disabled=false;
+    submitBtn.classList.remove("loading");
+    btnText.textContent=t.btn;
+  }
+}
+
+// الرد الاحتياطي الفوري (Offline Fallback) في حال ضعف الإنترنت أثناء نومك لضمان عدم ترك أي زبون بدون رد
+function buildSmartFallbackReply(rawMessage){
+  const m=String(rawMessage||"").toLowerCase();
+  if(/(اعدادات|إعدادات|apn|نقطة وصول)/.test(m)){
+    return "أهلاً بك في BRAND SIM 🌟
+إليك إعدادات نقطة الوصول (APN) حسب نوع شريحتك:
+• بارتنر (Partner): uinternet
+• ويكوم (Wecom): we
+• شريحة 019: netazi
+• هوت موبايل (Hot): net.hotm
+بعد كتابة الـ APN يدوياً، ضع الهاتف بوضع طيران 10 دقائق ثم أعد تشغيله.";
+  }
+  if(/(esim|الكتروني|إلكتروني|باركود|تنشيط)/.test(m)){
+    return "أهلاً بك في BRAND SIM 🌟
+لتفعيل الشريحة الإلكترونية (eSIM) بشكل صحيح:
+1. تأكد من اتصالك بإنترنت قوي ومستقر (حتى لا يتلف الكود).
+2. امسح الباركود من داخل (إعدادات الهاتف -> الشبكة الخلوية -> إضافة شريحة إلكترونية) وليس من الكاميرا العادية.";
+  }
+  if(/(ضعيف|فاصل|مقطوع|ارسال|إرسال|اشارة|إشارة|لا توجد خدمة|تحديث|حدث)/.test(m)){
+    return "أهلاً بك في BRAND SIM 🌟
+يرجى إرسال رقم الشريحة المكون من 10 أرقام (مثال: 05XXXXXXXX) في رسالة الآن ليقوم النظام الآلي بتحديثها وتنشيط الإنترنت لك فوراً!
+(ملاحظة: بعد التحديث، ضع الهاتف بوضع طيران 10 دقائق وأعد تشغيله).";
+  }
+  if(/(شحن|اشحن|تمديد|تجديد|باقة|حزمة|سعر|بدي شريحة)/.test(m)){
+    return "أهلاً بك في BRAND SIM 🌟
+تم استلام طلبك بنجاح! يرجى إرسال رقم الشريحة (05XXXXXXXX) ونوع الباقة المطلوبة، وسيتم تنفيذ طلبك وتأكيده لك في أقرب وقت.";
+  }
+  return "أهلاً بك في مركز الدعم الآلي لـ BRAND SIM 🌟
+• لتحديث شريحتك أو فحص موعد انتهاء الحزمة: أرسل رقم الشريحة (05XXXXXXXX) الآن وسيتم التحديث تلقائياً.
+• لطلب إعدادات الإنترنت أو الشحن: اكتب نوع شريحتك أو طلبك وسنقوم بخدمتك فوراً.";
+}
+
+// الموظف الذكي الآلي المدعوم بـ Gemini AI مع قاعدة معرفة محادثات ليان
+async function executeAiCustomerSupport(sender,rawMessage,senderTitle){
+  if(!sender||!rawMessage)return;
+  syncAiStatusUi();
+  if(window.AndroidBridge&&typeof window.AndroidBridge.isAiAgentEnabled==="function"&&!window.AndroidBridge.isAiAgentEnabled()){
+    return;
+  }
+
+  const label=senderTitle||sender;
+  logAiAgent(`📩 وارد من (${label}): ${rawMessage}`);
+
+  const kbPrompt=`أنت الموظف الذكي الرسمي لخدمة العملاء والدعم الفني في شركة "BRAND SIM" (بإدارة أبو أحمد / أسامة سالم).
+مهمتك الرد على رسائل الزبائن عبر الواتساب والـ SMS بأسلوب محترم، عملي، ومختصر، وحل مشاكلهم التقنية أو استلام طلباتهم أثناء غياب المدير أو نومه.
+
+قاعدة المعرفة التقنية الدقيقة المستخرجة من خبرة العمل ودعم شركة ليان (اعتمد عليها حرفياً):
+1. إعدادات نقاط الوصول (APN) لكل شركة:
+   - شريحة بارتنر (Partner / 012): الـ APN هو uinternet (تتجدد الحزمة الشهرية بتاريخ 13 الشهر).
+   - شريحة ويكوم (Wecom): الـ APN هو we (تعمل على أبراج سيلكوم، وتتجدد الحزمة بتاريخ 1 الشهر).
+   - شريحة 019: الـ APN هو netazi (ملاحظة هامة: شرائح 019 إنترنت فقط وعليها حظر مكالمات، وأفضل لقط شبكة لها هو بارتنر أو بيليفون، ولمعرفة رقم الشريحة اضغط *725#).
+   - شريحة هوت موبايل (Hot Mobile): الـ APN هو net.hotm (إذا لم تعمل نقطة الاتصال الشخصية Hotspot على الآيفون، الحل هو الدخول للإعدادات -> إعادة تعيين إعدادات الشبكة وكتابتها من جديد).
+   - شريحة رامي ليفي (Rami Levy): تعمل على لقط بيليفون.
+2. حلول مشاكل الشبكة والإرسال والإنترنت:
+   - إشارة موجودة بدون إنترنت أو معلقة على H+ / 3G: امسح نقاط الوصول القديمة واكتب الـ APN يدوياً، وإذا كانت الشبكة معلقة على LTE حولها مؤقتاً إلى 3G، ثم ضع الهاتف في "وضع الطيران" لمدة 10 إلى 15 دقيقة وأعد تشغيل الهاتف.
+   - لا توجد خدمة / راح الإرسال بعد التحديث: لا تكرر التحديث وراء بعضه حتى لا تفصل الشريحة؛ أطفيء الجهاز أو ضع وضع طيران 10-15 دقيقة وأعد التشغيل وعندها سيعود الإرسال، أو اعمل بحث يدوي عن الشبكة.
+3. مشاكل الشريحة الإلكترونية (eSIM - غير قادر على تنشيط الشريحة):
+   - السبب هو ضعف الإنترنت أثناء المسح (تكرار المسح على نت ضعيف يتلف الكود).
+   - الحل: شبك إنترنت قوي، والمسح حصراً من "كاميرا الإعدادات" (إعدادات الخلوي -> إضافة eSIM) وليس من الكاميرا العادية.
+4. قوانين التحديث والطلبات:
+   - إذا كان الزبون يشتكي من فصل أو ضعف نت أو يريد تحديث أو فحص موعد انتهاء الحزمة ولم يرسل رقمه: اطلب منه فوراً إرسال رقم الشريحة (05XXXXXXXX) في رسالة ليقوم النظام بتحديثها تلقائياً بالخلفية!
+   - تنبيه أيام الجمعة والسبت والأعياد: الشركات الأم تكون في عطلة أو دوام جزئي، لذا الطلبات الإدارية (مثل النيود أو التفعيل اليدوي) قد تنتظر ليوم الأحد، بينما التحديث الآلي متاح.
+   - إذا كان الزبون يطلب شحن أو تفعيل شريحة جديدة: رحب به واطلب منه إرسال رقم الشريحة أو صورة السيريال (ICCID المكون من 20 رقماً) ونوع الباقة ليتم تسجيل طلبه وتنفيذه فوراً.
+
+اكتب رداً مباشراً للزبون باللغة العربية، واضحاً ومختصراً (لا يتجاوز 4-5 أسطر) وبدون مقدمات طويلة:`;
+
+  let finalReply="";
+  try{
+    const url=`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+    const res=await fetch(url,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        contents:[{parts:[{text:`${kbPrompt}
+
+رسالة الزبون (${label}):
+"${rawMessage}"`}]}],
+        generationConfig:{temperature:0.25,maxOutputTokens:320}
+      })
+    });
+    const json=await res.json();
+    if(json&&json.candidates&&json.candidates[0]&&json.candidates[0].content&&json.candidates[0].content.parts[0]){
+      finalReply=cleanText(json.candidates[0].content.parts[0].text);
+    }
+  }catch(e){}
+
+  if(!finalReply){
+    finalReply=buildSmartFallbackReply(rawMessage);
+  }
+
+  logAiAgent(`🤖 رد الموظف الآلي على (${label}): ${finalReply}`);
+  showMessage("success",`🤖 رد تلقائي على (${label}):
+${finalReply}`);
+
+  if(window.AndroidBridge&&typeof window.AndroidBridge.sendSmsReply==="function"){
+    window.AndroidBridge.sendSmsReply(sender,finalReply);
+  }
+}
+window.executeAiCustomerSupport=executeAiCustomerSupport;
+
+const bgSmsQueue=[];
+async function processBgSmsQueue(){
+  if(isRefreshing||bgSmsQueue.length===0)return;
+  const next=bgSmsQueue.shift();
+  if(next.mode==="ai_agent"){
+    await executeAiCustomerSupport(next.sender,next.rawBody,next.title);
+  }else{
+    await executeRefresh(next.phone,next.sender,next.mode||"refresh");
+  }
+  if(bgSmsQueue.length>0)setTimeout(processBgSmsQueue,400);
+}
+window.executeSmsAutoRefresh=function(targetPhone,senderPhone,mode,rawBody,senderTitle){
+  bgSmsQueue.push({
+    phone:targetPhone||"",
+    sender:senderPhone||"",
+    mode:mode||"refresh",
+    rawBody:rawBody||"",
+    title:senderTitle||""
+  });
+  processBgSmsQueue();
+};
+
+phoneInput.addEventListener("input",e=>{const n=normalizePhoneNumber(e.target.value);if(e.target.value!==n)e.target.value=n;});
+langBtn.addEventListener("click",()=>{alertBox.style.display="none";applyLanguage(currentLang==="ar"?"he":"ar");});
+form.addEventListener("submit",e=>{e.preventDefault();executeRefresh(phoneInput.value,"","refresh");});
+window.addEventListener("DOMContentLoaded",()=>{
+  const p=new URLSearchParams(window.location.search);
+  applyLanguage(p.get("lang")||currentLang);
+  const num=p.get("number")||p.get("phone");
+  if(num)phoneInput.value=normalizePhoneNumber(num);
+  loadSavedAiLogs();
+  syncAiStatusUi();
+});
+})();
+</script>
+</body>
+</html>
