@@ -1862,6 +1862,23 @@ public class MainActivity extends Activity {
         public WebAppInterface(Context ctx) { this.ctx = ctx; }
 
         @JavascriptInterface
+        public void copyToClipboard(final String text, final String label) {
+            new Handler(Looper.getMainLooper()).post(() -> {
+                try {
+                    android.content.ClipboardManager clipboard = (android.content.ClipboardManager) ctx.getSystemService(Context.CLIPBOARD_SERVICE);
+                    android.content.ClipData clip = android.content.ClipData.newPlainText(label != null ? label : "BrandSim", text);
+                    if (clipboard != null) {
+                        clipboard.setPrimaryClip(clip);
+                        Toast.makeText(ctx, "✅ تم نسخ " + (label != null ? label : "النص") + " بنجاح!", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(ctx, "فشل النسخ تلقائياً", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+
+        @JavascriptInterface
         public void autoRefreshSkyWithMode(final String phone, final String sender, final String mode) {
             if (isIgnoredPrefixPhone(phone)) return;
             runUnifiedGatewayOrPortalRefresh(ctx, phone, sender, mode != null ? mode : "refresh", "Sky");
