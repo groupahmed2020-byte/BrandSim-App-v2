@@ -25,7 +25,6 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import org.json.JSONArray;
@@ -75,15 +74,10 @@ public class MainActivity extends Activity {
         public final PendingIntent pendingIntent;
         public final RemoteInput[] remoteInputs;
         public final String sbnKey;
-        public final String senderTitle;
         public WhatsAppReplyAction(PendingIntent pi, RemoteInput[] ri, String key) {
-            this(pi, ri, key, "");
-        }
-        public WhatsAppReplyAction(PendingIntent pi, RemoteInput[] ri, String key, String title) {
             this.pendingIntent = pi;
             this.remoteInputs = ri;
             this.sbnKey = key;
-            this.senderTitle = title != null ? title : "";
         }
     }
 
@@ -161,7 +155,6 @@ public class MainActivity extends Activity {
             menu.add(0, 4, 3, (msgOn ? "✅ " : "❌ ") + "استقبال رسائل مسنجر");
             menu.add(0, 5, 4, (aiOn ? "✅ " : "❌ ") + "موظف الدعم الذكي");
             menu.add(0, 10, 5, "📤 إعدادات إرسال الردود للزبائن");
-            menu.add(0, 11, 5, "🎯 تخصيص أرقام مسموح الرد عليها");
             menu.add(0, 6, 6, "🚫 استثناء أرقام ومجموعات (عدم الرد)");
             menu.add(0, 7, 7, "🏷️ إدارة الأسعار والباقات");
             menu.add(0, 8, 8, "🔑 تعديل أو إضافة GEMINI API");
@@ -192,9 +185,6 @@ public class MainActivity extends Activity {
                     Toast.makeText(this, a ? "✅ تم تشغيل الدعم الذكي" : "⛔ تم إيقاف الدعم الذكي", Toast.LENGTH_SHORT).show();
                 } else if (id == 10) {
                     showReplyChannelsConfigDialog();
-                    return true;
-                } else if (id == 11) {
-                    showCustomAllowedTargetsDialog();
                     return true;
                 } else if (id == 6) {
                     openBlacklistDialog();
@@ -713,16 +703,11 @@ public class MainActivity extends Activity {
             isChannelEnabled(this, "reply_telegram"),
             isChannelEnabled(this, "reply_messenger")
         };
-        String smsCustom = getAllowedReplyTargets(this, "allowed_reply_sms");
-        String waCustom = getAllowedReplyTargets(this, "allowed_reply_whatsapp");
-        String tgCustom = getAllowedReplyTargets(this, "allowed_reply_telegram");
-        String msgCustom = getAllowedReplyTargets(this, "allowed_reply_messenger");
-
         String[] items = new String[]{
-            "السماح بإرسال رد عبر SMS" + (!smsCustom.isEmpty() ? " (مخصص 🎯)" : ""),
-            "السماح بإرسال رد عبر واتساب (WhatsApp)" + (!waCustom.isEmpty() ? " (مخصص 🎯)" : ""),
-            "السماح بإرسال رد عبر تيليجرام (Telegram)" + (!tgCustom.isEmpty() ? " (مخصص 🎯)" : ""),
-            "السماح بإرسال رد عبر مسنجر (Messenger)" + (!msgCustom.isEmpty() ? " (مخصص 🎯)" : "")
+            "السماح بإرسال رد عبر SMS",
+            "السماح بإرسال رد عبر واتساب (WhatsApp)",
+            "السماح بإرسال رد عبر تيليجرام (Telegram)",
+            "السماح بإرسال رد عبر مسنجر (Messenger)"
         };
 
         new AlertDialog.Builder(this)
@@ -735,183 +720,11 @@ public class MainActivity extends Activity {
                 saveAllReplyChannelsState(this, checkedItems[0], checkedItems[1], checkedItems[2], checkedItems[3]);
                 Toast.makeText(this, "✅ تم حفظ إعدادات إرسال الردود بنجاح", Toast.LENGTH_SHORT).show();
             })
-            .setNeutralButton("🎯 تخصيص أرقام للقنوات", (d, w) -> {
-                showCustomAllowedTargetsDialog();
+            .setNeutralButton("📥 قائمة الاستقبال", (d, w) -> {
+                showChannelsConfigDialog();
             })
             .setNegativeButton("إغلاق", null)
             .show();
-    }
-
-    public void showCustomAllowedTargetsDialog() {
-        try {
-            ScrollView scrollView = new ScrollView(this);
-            LinearLayout container = new LinearLayout(this);
-            container.setOrientation(LinearLayout.VERTICAL);
-            int pad = (int) (16 * getResources().getDisplayMetrics().density);
-            container.setPadding(pad, pad / 2, pad, pad / 2);
-
-            TextView infoTv = new TextView(this);
-            infoTv.setText("حدد الأرقام أو أسماء الحسابات المسموح إرسال البيانات والردود إليها لكل تطبيق (كل رقم أو اسم في سطر أو مفصول بفاصلة).
-• إذا تركت حقل القناة فارغاً: يتم الرد على الجميع عند تفعيل القناة.
-• إذا كتبت أرقاماً داخل حقل القناة: يتم إرسال الردود والبيانات فقط لهذه الأرقام المحددة!");
-            infoTv.setTextSize(12.5f);
-            infoTv.setPadding(0, 0, 0, pad / 2);
-            container.addView(infoTv);
-
-            TextView smsLabel = new TextView(this);
-            smsLabel.setText("📱 أرقام مخصصة لـ SMS:");
-            smsLabel.setTextSize(13.5f);
-            container.addView(smsLabel);
-
-            final EditText smsInput = new EditText(this);
-            smsInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-            smsInput.setMinLines(2);
-            smsInput.setMaxLines(4);
-            smsInput.setHint("مثال: 0521234567 (اتركه فارغاً للجميع)");
-            smsInput.setText(getAllowedReplyTargets(this, "allowed_reply_sms"));
-            container.addView(smsInput);
-
-            TextView waLabel = new TextView(this);
-            waLabel.setText("💬 أرقام أو أسماء مخصصة لـ واتساب (WhatsApp):");
-            waLabel.setTextSize(13.5f);
-            waLabel.setPadding(0, pad / 3, 0, 0);
-            container.addView(waLabel);
-
-            final EditText waInput = new EditText(this);
-            waInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-            waInput.setMinLines(2);
-            waInput.setMaxLines(4);
-            waInput.setHint("مثال: 0541234567 أو اسم الزبون في واتساب");
-            waInput.setText(getAllowedReplyTargets(this, "allowed_reply_whatsapp"));
-            container.addView(waInput);
-
-            TextView tgLabel = new TextView(this);
-            tgLabel.setText("✈️ أرقام أو معرفات مخصصة لـ تيليجرام (Telegram):");
-            tgLabel.setTextSize(13.5f);
-            tgLabel.setPadding(0, pad / 3, 0, 0);
-            container.addView(tgLabel);
-
-            final EditText tgInput = new EditText(this);
-            tgInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-            tgInput.setMinLines(2);
-            tgInput.setMaxLines(4);
-            tgInput.setHint("مثال: اسم الحساب أو الرقم في تيليجرام");
-            tgInput.setText(getAllowedReplyTargets(this, "allowed_reply_telegram"));
-            container.addView(tgInput);
-
-            TextView msgLabel = new TextView(this);
-            msgLabel.setText("⚡ أسماء أو أرقام مخصصة لـ مسنجر (Messenger):");
-            msgLabel.setTextSize(13.5f);
-            msgLabel.setPadding(0, pad / 3, 0, 0);
-            container.addView(msgLabel);
-
-            final EditText msgInput = new EditText(this);
-            msgInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-            msgInput.setMinLines(2);
-            msgInput.setMaxLines(4);
-            msgInput.setHint("مثال: اسم حساب الزبون في مسنجر");
-            msgInput.setText(getAllowedReplyTargets(this, "allowed_reply_messenger"));
-            container.addView(msgInput);
-
-            scrollView.addView(container);
-
-            new AlertDialog.Builder(this)
-                .setTitle("🎯 تخصيص أرقام الإرسال لكل قناة")
-                .setView(scrollView)
-                .setPositiveButton("حفظ التخصيص", (d, w) -> {
-                    String sVal = smsInput.getText() != null ? smsInput.getText().toString().trim() : "";
-                    String wVal = waInput.getText() != null ? waInput.getText().toString().trim() : "";
-                    String tVal = tgInput.getText() != null ? tgInput.getText().toString().trim() : "";
-                    String mVal = msgInput.getText() != null ? msgInput.getText().toString().trim() : "";
-                    saveAllAllowedReplyTargets(this, sVal, wVal, tVal, mVal);
-                    Toast.makeText(this, "✅ تم حفظ الأرقام المخصصة للإرسال بنجاح!", Toast.LENGTH_SHORT).show();
-                })
-                .setNeutralButton("📤 رجوع لإعدادات الإرسال", (d, w) -> {
-                    String sVal = smsInput.getText() != null ? smsInput.getText().toString().trim() : "";
-                    String wVal = waInput.getText() != null ? waInput.getText().toString().trim() : "";
-                    String tVal = tgInput.getText() != null ? tgInput.getText().toString().trim() : "";
-                    String mVal = msgInput.getText() != null ? msgInput.getText().toString().trim() : "";
-                    saveAllAllowedReplyTargets(this, sVal, wVal, tVal, mVal);
-                    showReplyChannelsConfigDialog();
-                })
-                .setNegativeButton("إلغاء", null)
-                .show();
-        } catch (Exception e) {}
-    }
-
-    public static String getAllowedReplyTargets(Context ctx, String key) {
-        try {
-            return ctx.getApplicationContext()
-                .getSharedPreferences("BrandSimConfig", Context.MODE_PRIVATE)
-                .getString(key, "");
-        } catch (Exception e) {
-            return "";
-        }
-    }
-
-    public static void saveAllAllowedReplyTargets(Context ctx, String smsTargets, String waTargets, String tgTargets, String msgTargets) {
-        try {
-            String s = smsTargets != null ? smsTargets.trim() : "";
-            String w = waTargets != null ? waTargets.trim() : "";
-            String t = tgTargets != null ? tgTargets.trim() : "";
-            String m = msgTargets != null ? msgTargets.trim() : "";
-            ctx.getApplicationContext()
-                .getSharedPreferences("BrandSimConfig", Context.MODE_PRIVATE)
-                .edit()
-                .putString("allowed_reply_sms", s)
-                .putString("allowed_reply_whatsapp", w)
-                .putString("allowed_reply_telegram", t)
-                .putString("allowed_reply_messenger", m)
-                .commit();
-            Intent sync = new Intent(ctx.getApplicationContext(), RefreshService.class);
-            sync.putExtra("sync_allowed_reply_targets", true);
-            sync.putExtra("allowed_reply_sms", s);
-            sync.putExtra("allowed_reply_whatsapp", w);
-            sync.putExtra("allowed_reply_telegram", t);
-            sync.putExtra("allowed_reply_messenger", m);
-            startBackgroundRefreshServiceWithIntent(ctx.getApplicationContext(), sync);
-        } catch (Exception e) {}
-    }
-
-    public static boolean isSenderInAllowedReplyList(String allowedListRaw, String senderKey, String senderTitle) {
-        if (allowedListRaw == null || allowedListRaw.trim().isEmpty()) return false;
-        String combinedTarget = ((senderKey != null ? senderKey : "") + " " + (senderTitle != null ? senderTitle : "")).toLowerCase().trim();
-        String targetDigits = normalizeDigitsOnly(combinedTarget);
-        String targetNormPhone = extractCleanPhone(combinedTarget, true);
-
-        String[] tokens = allowedListRaw.split("[\n,،;]+");
-        for (String rawToken : tokens) {
-            String token = rawToken != null ? rawToken.trim().toLowerCase() : "";
-            if (token.isEmpty()) continue;
-
-            if (combinedTarget.contains(token)) return true;
-
-            String tokenNormPhone = extractCleanPhone(token, true);
-            if (tokenNormPhone != null && !tokenNormPhone.isEmpty()) {
-                if (tokenNormPhone.equals(targetNormPhone)) return true;
-                String core9 = tokenNormPhone.startsWith("0") ? tokenNormPhone.substring(1) : tokenNormPhone;
-                if (!core9.isEmpty() && targetDigits.contains(core9)) return true;
-            }
-
-            String tokenDigits = normalizeDigitsOnly(token);
-            if (tokenDigits.length() >= 7 && targetDigits.contains(tokenDigits)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static boolean canSendReplyToTarget(Context ctx, String channelEnableKey, String allowedListKey, String senderKey, String senderTitle) {
-        boolean isChannelGenerallyOn = isChannelEnabled(ctx, channelEnableKey);
-        String allowedList = getAllowedReplyTargets(ctx, allowedListKey);
-        boolean hasCustomAllowedList = (allowedList != null && !allowedList.trim().isEmpty());
-
-        if (hasCustomAllowedList) {
-            // إذا تم تحديد أرقام مخصصة لهذه القناة: يتم إرسال الرد فقط للأرقام/الحسابات الموجودة في القائمة المخصصة (سواء كان الخيار العام مفعلاً أم لا)
-            return isSenderInAllowedReplyList(allowedList, senderKey, senderTitle);
-        }
-        // إذا كانت القائمة المخصصة فارغة: يعتمد على تفعيل خيار القناة العام
-        return isChannelGenerallyOn;
     }
 
     public void syncWebUiState() {
@@ -1695,33 +1508,32 @@ public class MainActivity extends Activity {
         if (sender == null || sender.trim().isEmpty() || message == null || message.trim().isEmpty()) return;
         if ("WEB".equalsIgnoreCase(sender) || "XONE1".equalsIgnoreCase(sender) || "SKY_WEB".equalsIgnoreCase(sender)) return;
 
-        // فحص صلاحية إرسال الردود للقناة المستهدفة وقائمة الأرقام المخصصة لكل قناة قبل الإرسال للزبون
+        // فحص صلاحية إرسال الردود للقناة المستهدفة قبل الإرسال للزبون
         boolean isWaTarget = sender.contains("_wa_") || sender.startsWith("wa_");
         boolean isTgTarget = sender.contains("_tg_") || sender.startsWith("tg_");
         boolean isMsgTarget = sender.contains("_msg_") || sender.startsWith("msg_");
 
-        WhatsAppReplyAction waAction = waReplyMap.get(sender);
-        String senderTitle = (waAction != null && waAction.senderTitle != null) ? waAction.senderTitle : "";
-
-        if (isWaTarget && !canSendReplyToTarget(ctx, "reply_whatsapp", "allowed_reply_whatsapp", sender, senderTitle)) {
-            if (instance != null) instance.appendUiLog("🔇 تم كتم إرسال رد واتساب (غير مدرج ضمن الأرقام المسموحة أو القناة متوقفة): " + (!senderTitle.isEmpty() ? senderTitle : sender));
+        if (isWaTarget && !isChannelEnabled(ctx, "reply_whatsapp")) {
+            if (instance != null) instance.appendUiLog("🔇 تم كتم إرسال رد واتساب (حسب إعدادات الإرسال)");
             return;
         }
-        if (isTgTarget && !canSendReplyToTarget(ctx, "reply_telegram", "allowed_reply_telegram", sender, senderTitle)) {
-            if (instance != null) instance.appendUiLog("🔇 تم كتم إرسال رد تيليجرام (غير مدرج ضمن الأرقام المسموحة أو القناة متوقفة): " + (!senderTitle.isEmpty() ? senderTitle : sender));
+        if (isTgTarget && !isChannelEnabled(ctx, "reply_telegram")) {
+            if (instance != null) instance.appendUiLog("🔇 تم كتم إرسال رد تيليجرام (حسب إعدادات الإرسال)");
             return;
         }
-        if (isMsgTarget && !canSendReplyToTarget(ctx, "reply_messenger", "allowed_reply_messenger", sender, senderTitle)) {
-            if (instance != null) instance.appendUiLog("🔇 تم كتم إرسال رد مسنجر (غير مدرج ضمن الأرقام المسموحة أو القناة متوقفة): " + (!senderTitle.isEmpty() ? senderTitle : sender));
+        if (isMsgTarget && !isChannelEnabled(ctx, "reply_messenger")) {
+            if (instance != null) instance.appendUiLog("🔇 تم كتم إرسال رد مسنجر (حسب إعدادات الإرسال)");
             return;
         }
-        if (!isWaTarget && !isTgTarget && !isMsgTarget && !canSendReplyToTarget(ctx, "reply_sms", "allowed_reply_sms", sender, senderTitle)) {
-            if (instance != null) instance.appendUiLog("🔇 تم كتم إرسال رد SMS (الرقم غير مخصص للإرسال أو القناة متوقفة): " + sender);
+        if (!isWaTarget && !isTgTarget && !isMsgTarget && !isChannelEnabled(ctx, "reply_sms")) {
+            if (instance != null) instance.appendUiLog("🔇 تم كتم إرسال رد SMS للرقم: " + sender);
             return;
         }
 
         String cleanReply = sanitizeBrandMessage(message).trim();
         lastSentSmsBody = cleanReply;
+
+        WhatsAppReplyAction waAction = waReplyMap.get(sender);
         if (waAction != null) {
             try {
                 Intent localIntent = new Intent();
@@ -2211,30 +2023,6 @@ public class MainActivity extends Activity {
         @JavascriptInterface
         public boolean isReplyMessengerEnabled() { return isChannelEnabled(ctx, "reply_messenger"); }
 
-        @JavascriptInterface
-        public void openCustomAllowedTargetsDialog() {
-            new Handler(Looper.getMainLooper()).post(() -> {
-                if (instance != null) instance.showCustomAllowedTargetsDialog();
-            });
-        }
-
-        @JavascriptInterface
-        public String getAllowedReplySms() { return getAllowedReplyTargets(ctx, "allowed_reply_sms"); }
-
-        @JavascriptInterface
-        public String getAllowedReplyWa() { return getAllowedReplyTargets(ctx, "allowed_reply_whatsapp"); }
-
-        @JavascriptInterface
-        public String getAllowedReplyTg() { return getAllowedReplyTargets(ctx, "allowed_reply_telegram"); }
-
-        @JavascriptInterface
-        public String getAllowedReplyMessenger() { return getAllowedReplyTargets(ctx, "allowed_reply_messenger"); }
-
-        @JavascriptInterface
-        public void saveAllowedReplyTargetsFromWeb(final String smsTargets, final String waTargets, final String tgTargets, final String msgTargets) {
-            saveAllAllowedReplyTargets(ctx, smsTargets, waTargets, tgTargets, msgTargets);
-        }
-
         // --- واجهات إدارة قائمة الاستثناءات والمجموعات ---
         @JavascriptInterface
         public String getBlacklist() {
@@ -2480,14 +2268,6 @@ public class MainActivity extends Activity {
                     .putBoolean("reply_messenger", intent.getBooleanExtra("reply_messenger", true))
                     .commit();
             }
-            if (intent != null && intent.getBooleanExtra("sync_allowed_reply_targets", false)) {
-                getSharedPreferences("BrandSimConfig", Context.MODE_PRIVATE).edit()
-                    .putString("allowed_reply_sms", intent.getStringExtra("allowed_reply_sms") != null ? intent.getStringExtra("allowed_reply_sms") : "")
-                    .putString("allowed_reply_whatsapp", intent.getStringExtra("allowed_reply_whatsapp") != null ? intent.getStringExtra("allowed_reply_whatsapp") : "")
-                    .putString("allowed_reply_telegram", intent.getStringExtra("allowed_reply_telegram") != null ? intent.getStringExtra("allowed_reply_telegram") : "")
-                    .putString("allowed_reply_messenger", intent.getStringExtra("allowed_reply_messenger") != null ? intent.getStringExtra("allowed_reply_messenger") : "")
-                    .commit();
-            }
             if (intent != null && (intent.hasExtra("sms_target_phone") || intent.hasExtra("sms_raw_body"))) {
                 String phone = intent.getStringExtra("sms_target_phone");
                 String sender = intent.getStringExtra("sms_sender");
@@ -2729,7 +2509,7 @@ public class MainActivity extends Activity {
                     }
                 }
 
-                WhatsAppReplyAction replyAction = extractReplyAction(notif, sbn.getKey(), title);
+                WhatsAppReplyAction replyAction = extractReplyAction(notif, sbn.getKey());
                 String senderPhoneFromTitle = extractCleanPhone(title, false);
                 String prefix = isWa ? "wa_" : (isMsg ? "msg_" : "tg_");
                 String senderKey = senderPhoneFromTitle != null ? (senderPhoneFromTitle + "_" + prefix + Math.abs(title.hashCode())) : (prefix + Math.abs(title.hashCode()));
@@ -2784,18 +2564,18 @@ public class MainActivity extends Activity {
             } catch (Exception e) {}
         }
 
-        private WhatsAppReplyAction extractReplyAction(Notification notif, String sbnKey, String senderTitle) {
+        private WhatsAppReplyAction extractReplyAction(Notification notif, String sbnKey) {
             try {
                 if (notif.actions != null) {
                     for (Notification.Action a : notif.actions) {
                         if (a != null && a.getRemoteInputs() != null && a.getRemoteInputs().length > 0 && a.actionIntent != null) {
-                            return new WhatsAppReplyAction(a.actionIntent, a.getRemoteInputs(), sbnKey, senderTitle);
+                            return new WhatsAppReplyAction(a.actionIntent, a.getRemoteInputs(), sbnKey);
                         }
                     }
                 }
                 for (Notification.Action a : new Notification.WearableExtender(notif).getActions()) {
                     if (a != null && a.getRemoteInputs() != null && a.getRemoteInputs().length > 0 && a.actionIntent != null) {
-                        return new WhatsAppReplyAction(a.actionIntent, a.getRemoteInputs(), sbnKey, senderTitle);
+                        return new WhatsAppReplyAction(a.actionIntent, a.getRemoteInputs(), sbnKey);
                     }
                 }
             } catch (Exception e) {}
