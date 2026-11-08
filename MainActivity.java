@@ -836,9 +836,11 @@ public class MainActivity extends Activity {
 
             ComponentName cn = new ComponentName(appCtx, WhatsAppListener.class);
             PackageManager pm = appCtx.getPackageManager();
-            if (forceToggle || !WhatsAppListener.isConnected) {
-                pm.setComponentEnabledSetting(cn, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
-                pm.setComponentEnabledSetting(cn, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+            // ✅ تم إيقاف التعطيل القسري للمستمع لتجنب تعليق الخدمة وضياع الإشعارات
+            // نكتفي بطلب rebind فقط إذا لم يكن متصلاً
+            if (!WhatsAppListener.isConnected) {
+                // pm.setComponentEnabledSetting(cn, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+                // pm.setComponentEnabledSetting(cn, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 NotificationListenerService.requestRebind(cn);
@@ -1388,7 +1390,7 @@ public class MainActivity extends Activity {
         lastSkyRunPhone = cleanPhone;
         lastSkyRunTime = now;
 
-        recordSkyRefreshTimestamp(ctx, cleanPhone);
+        // recordSkyRefreshTimestamp(ctx, cleanPhone); // Moved to success callback
 
         new Handler(Looper.getMainLooper()).post(() -> {
             ensureWebViewProcessDir(ctx.getApplicationContext());
@@ -1398,6 +1400,7 @@ public class MainActivity extends Activity {
             WebSettings ss = skyWebView.getSettings();
             ss.setJavaScriptEnabled(true);
             ss.setDomStorageEnabled(true);
+            ss.setCacheMode(WebSettings.LOAD_NO_CACHE);
             ss.setDatabaseEnabled(true);
             ss.setAllowFileAccess(true);
             ss.setAllowContentAccess(true);
@@ -1409,14 +1412,36 @@ public class MainActivity extends Activity {
             ss.setUserAgentString("Mozilla/5.0 (Linux; Android 13; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36");
 
             final boolean[] completed = {false};
+            
+            final Handler timeoutHandler = new Handler(Looper.getMainLooper());
+            final Runnable timeoutRunnable = () -> {
+                if (!completed[0]) {
+                    completed[0] = true;
+                    if (instance != null) instance.appendUiLog("⚠️ انتهت مهلة الاتصال بالبوابة: " + portalLabel);
+                    try {
+                        skyWebView.stopLoading();
+                        skyWebView.setWebChromeClient(null);
+                        skyWebView.setWebViewClient(null);
+                        skyWebView.clearHistory();
+                        skyWebView.clearCache(true);
+                        skyWebView.destroy();
+                    } catch (Exception e) {}
+                }
+            };
+            timeoutHandler.postDelayed(timeoutRunnable, 120000); // 120 seconds timeout
+
             final Runnable finishCleanup = () -> {
+                timeoutHandler.removeCallbacks(timeoutRunnable);
                 try {
                     skyWebView.stopLoading();
+                    skyWebView.setWebChromeClient(null);
+                    skyWebView.setWebViewClient(null);
+                    skyWebView.clearHistory();
+                    skyWebView.clearCache(true);
                     skyWebView.destroy();
                 } catch (Exception e) {}
             };
-
-            final Object skyBridge = new Object() {
+final Object skyBridge = new Object() {
                 @JavascriptInterface
                 public void onSkyResult(final String skyMsg) {
                     if (completed[0]) return;
@@ -1438,6 +1463,9 @@ public class MainActivity extends Activity {
                     }
                     completed[0] = true;
                     boolean isFail = trimmed.contains("فشل") || trimmed.contains("قبل قليل") || isNotFoundInPortal || trimmed.contains("خطأ");
+                    if (!isFail) {
+                        recordSkyRefreshTimestamp(ctx, cleanPhone); // ⏳ تم تسجيل وقت الانتظار بعد التأكد من نجاح التحديث
+                    }
                     String outMsg = "weak_net".equals(mode) ? ("تم تحديث الانترنت\n" + trimmed) : trimmed;
                     if (sender != null && !sender.trim().isEmpty()) sendSmsDirect(ctx, sender, outMsg);
                     if (instance != null) {
@@ -1459,6 +1487,9 @@ public class MainActivity extends Activity {
                         completed[0] = true;
                         String t = sanitizeBrandMessage(message).trim();
                         boolean isFail = t.contains("فشل") || t.contains("قبل قليل") || t.contains("غير صحيح") || t.contains("خطأ");
+                        if (!isFail) {
+                            recordSkyRefreshTimestamp(ctx, cleanPhone);
+                        }
                         String outMsg = "weak_net".equals(mode) ? ("تم تحديث الانترنت\n" + t) : t;
                         if (sender != null && !sender.trim().isEmpty()) sendSmsDirect(ctx, sender, outMsg);
                         if (instance != null) {
@@ -1511,13 +1542,24 @@ public class MainActivity extends Activity {
                 }
             });
 
+            skyWebView.clearCache(true);
             skyWebView.loadUrl(targetPortalUrl);
-            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            
+            final Handler timeoutHandler = new Handler(Looper.getMainLooper());
+            final Runnable timeoutRunnable = () -> {
                 if (!completed[0]) {
                     completed[0] = true;
-                    finishCleanup.run();
+                    if (instance != null) instance.appendUiLog("⚠️ انتهت مهلة الاتصال (Timeout) بالبوابة: " + portalLabel);
+                    advancedCleanup.run();
                 }
-            }, 200000);
+            };
+            timeoutHandler.postDelayed(timeoutRunnable, 120000); // تقليل المهلة إلى دقيقتين بدلاً من 3 دقائق لتوفير الموارد
+            
+            // تعديل دالة التنظيف لإلغاء مؤقت الـ Timeout عند النجاح
+            final Runnable advancedCleanup = () -> {
+                timeoutHandler.removeCallbacks(timeoutRunnable);
+                advancedCleanup.run();
+            };
         });
     }
 
@@ -1540,10 +1582,17 @@ public class MainActivity extends Activity {
         @JavascriptInterface
         public void autoRefreshByProvider(final String phone, final String sender, final String mode, final String provider) {
             if (isIgnoredPrefixPhone(phone)) return;
-            if (provider != null && provider.toLowerCase().contains("layan")) {
-                runHeadlessLayanRefresh(ctx, phone, sender, mode != null ? mode : "refresh");
+            String p = provider != null ? provider.toLowerCase() : "";
+            if (p.contains("layan")) {
+                runHeadlessPortalRefresh(ctx, phone, sender, mode != null ? mode : "refresh", LAYAN_URL, "ليان");
+            } else if (p.contains("ayloul")) {
+                runHeadlessPortalRefresh(ctx, phone, sender, mode != null ? mode : "refresh", "https://rn.ayloul.net", "أيلول");
+            } else if (p.contains("areen")) {
+                runHeadlessPortalRefresh(ctx, phone, sender, mode != null ? mode : "refresh", "https://rn.areen.net", "أرين");
+            } else if (p.contains("quickline")) {
+                runHeadlessPortalRefresh(ctx, phone, sender, mode != null ? mode : "refresh", "https://rn.quickline.net", "كويك لاين");
             } else {
-                runHeadlessSkyRefresh(ctx, phone, sender, mode != null ? mode : "refresh");
+                runHeadlessPortalRefresh(ctx, phone, sender, mode != null ? mode : "refresh", SKY_URL, "سكاي");
             }
         }
 
@@ -2125,8 +2174,9 @@ public class MainActivity extends Activity {
                 CharSequence titleCs = notif.extras.getCharSequence(Notification.EXTRA_TITLE);
                 String title = titleCs != null ? titleCs.toString().trim() : "";
 
-                // التحقق من عنوان الإشعار إذا كان يحتوي على نمط رسائل المجموعات (مثلاً "أحمد: سلام" أو "اسم المجموعة (5 رسائل)")
-                if (title.contains(":") || title.contains(" (") || isGroupConversation) {
+                // التحقق من عنوان الإشعار إذا كان مجموعة باستخدام EXTRA_IS_GROUP_CONVERSATION فقط
+                // ✅ تم إزالة فحص title.contains(" (") لتجنب حظر الزبائن المحفوظين بأسماء مثل "أحمد (وكيل)"
+                if (isGroupConversation) {
                     if (isIgnoreAllGroupsEnabled(this)) {
                         return; // تم تجاهل إشعار المجموعة تلقائياً!
                     }
