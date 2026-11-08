@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>مركز الدعم والتحديث - BRAND SIM 🌟</title>
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --accent: #38bdf8;
+            --accent-hover: #0284c7;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 14px;
+            line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        .header-title h1 {
+            font-size: 1.25rem;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .header-title p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+        .status-badge {
+            background: rgba(34, 197, 94, 0.15);
+            color: var(--success);
+            border: 1px solid rgba(34, 197, 94, 0.4);
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .status-badge.off {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--danger);
+            border-color: rgba(239, 68, 68, 0.4);
+        }
+        .notice-banner {
+            background: rgba(245, 158, 11, 0.12);
+            border-right: 4px solid var(--warning);
+            color: #fde68a;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 0.82rem;
+            margin-bottom: 16px;
+            display: none;
+        }
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .card-title {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .input-group {
+            margin-bottom: 12px;
+        }
+        .input-group label {
+            display: block;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+        .input-field {
+            width: 100%;
+            padding: 12px 14px;
+            background: #0f172a;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-main);
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+            text-align: right;
+            direction: ltr;
+        }
+        .input-field:focus {
+            border-color: var(--accent);
+        }
+        .btn-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .btn {
+            border: none;
+            border-radius: 12px;
+            padding: 12px 14px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.1s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            color: #fff;
+        }
+        .btn:active {
+            transform: scale(0.98);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #0284c7, #0369a1);
+            grid-column: span 2;
+        }
+        .btn-secondary {
+            background: #334155;
+            color: #e2e8f0;
+        }
+        .btn-success {
+            background: linear-gradient(135deg, #16a34a, #15803d);
+        }
+        .btn-warning {
+            background: linear-gradient(135deg, #d97706, #b45309);
+        }
+        #messageBox {
+            display: none;
+            padding: 14px;
+            border-radius: 12px;
+            margin-top: 12px;
+            font-size: 0.9rem;
+            white-space: pre-line;
+        }
+        #messageBox.success {
+            display: block;
+            background: rgba(34, 197, 94, 0.15);
+            border: 1px solid rgba(34, 197, 94, 0.4);
+            color: #bbf7d0;
+        }
+        #messageBox.warning {
+            display: block;
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            color: #fef08a;
+        }
+        #messageBox.error {
+            display: block;
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            color: #fecaca;
+        }
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+        .log-box {
+            background: #090d16;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 10px;
+            height: 210px;
+            overflow-y: auto;
+            font-size: 0.78rem;
+            color: #cbd5e1;
+            direction: rtl;
+        }
+        .log-entry {
+            padding: 5px 0;
+            border-bottom: 1px dashed #1e293b;
+        }
+        .log-entry:last-child {
+            border-bottom: none;
+        }
+        .log-time {
+            color: var(--accent);
+            font-size: 0.72rem;
+            margin-left: 6px;
+        }
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            z-index: 999;
+        }
+        .modal {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 88vh;
+            overflow-y: auto;
+            padding: 16px;
+        }
+        .modal h3 {
+            color: var(--accent);
+            margin-bottom: 10px;
+            font-size: 1.05rem;
+        }
+        .modal textarea {
+            width: 100%;
+            min-height: 180px;
+            background: #0f172a;
+            color: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 0.82rem;
+            margin-bottom: 12px;
+            direction: rtl;
+        }
+        .apn-chip {
+            display: inline-block;
+            background: #0f172a;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 6px 10px;
+            margin: 3px;
+            font-size: 0.78rem;
+            color: #38bdf8;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="header-title">
+            <h1>🌟 BRAND SIM</h1>
+            <p>منظومة التحديث التلقائي والدعم الفني الذكي v2.0</p>
+        </div>
+        <div id="aiStatusBadge" class="status-badge" onclick="toggleAiAgent()">🤖 الدعم الذكي: نشط</div>
+    </div>
+
+    <div id="shabbatBanner" class="notice-banner">
+        ⚠️ تنبيه: اليوم السبت — قد يواجه نظام تفعيل شرائح <b>رامي ليفي (Rami Levy)</b> بطئاً أو تعليقاً مؤقتاً من الشركة الأم. الخلل عام ويُعالج تلقائياً.
+    </div>
+
+    <!-- قسم التحديث السريع وفحص السيريال -->
+    <div class="card">
+        <div class="card-title">
+            <span>⚡ التحديث الفوري والاستعلام (أونلاين / أوفلاين)</span>
+        </div>
+        <div class="input-group">
+            <label>أدخل رقم الشريحة (05XXXXXXXX) أو السيريال (ICCID 89972...):</label>
+            <input type="text" id="phoneInput" class="input-field" placeholder="053XXXXXXX / 89972...">
+        </div>
+        <div class="btn-grid">
+            <button class="btn btn-primary" onclick="triggerManualRefresh('refresh')">🔄 تحديث وتنشيط الشريحة الآن</button>
+            <button class="btn btn-secondary" onclick="triggerManualRefresh('details')">📊 استعلام تفاصيل الحزمة</button>
+            <button class="btn btn-secondary" onclick="triggerOfflineSmsRefresh()">📡 تحديث أوفلاين (SMS)</button>
+        </div>
+        <div id="messageBox"></div>
+    </div>
+
+    <!-- قسم التشخيص السريع وإعدادات APN المدمجة من التغذية الراجعة -->
+    <div class="card">
+        <div class="card-title">
+            <span>🛠️ مرجع الدعم التقني السريع (APN & Troubleshooting)</span>
+        </div>
+        <div style="margin-bottom: 8px;">
+            <span class="apn-chip">ألوها / موبايل APN: <b>prime</b></span>
+            <span class="apn-chip">ألوها بديل: <b>apn.x2one.com</b></span>
+            <span class="apn-chip">كود/eSIM بدون 4G: <b>فعل التجوال الدولي</b></span>
+            <span class="apn-chip">الاستخدام العادل (ألوها): <b>4-5 جيجا يومياً</b></span>
+        </div>
+        <p style="font-size: 0.78rem; color: var(--text-muted);">
+            • عند تقييد السرعة في (ألوها/موبايل) بسبب تجاوز الاستخدام العادل، الحل الوحيد هو نقل الرقم لشركة أخرى (رامي ليفي / وي / هوت).<br>
+            • قبل بيع أي شريحة <b>eSIM</b>، يتم تنبيه الزبون تلقائياً بضرورة امتلاك جهاز داعم (آيفون أو سامسونج ألترا).
+        </p>
+    </div>
+
+    <!-- لوحة التحكم السريع بالمستقبلات والوكيل الذكي -->
+    <div class="card">
+        <div class="card-title">
+            <span>⚙️ إدارة القنوات وقاعدة المعرفة (customers.json)</span>
+        </div>
+        <div class="quick-actions">
+            <button class="btn btn-secondary" onclick="openChannelsConfig()">📥 قنوات الاستقبال</button>
+            <button class="btn btn-secondary" onclick="openReplyChannelsConfig()">📤 قنوات إرسال الرد</button>
+            <button class="btn btn-secondary" onclick="openBlacklistModal()">🚫 قائمة الاستثناءات</button>
+            <button class="btn btn-secondary" onclick="openPricesModal()">🏷️ الأسعار وقاعدة المعرفة</button>
+            <button class="btn btn-warning" style="grid-column: span 2;" onclick="openApiKeyModal()">🔑 إعداد مفتاح Gemini API وتجربة الرد الذكي</button>
+        </div>
+    </div>
+
+    <!-- سجل العمليات الحية -->
+    <div class="card">
+        <div class="card-title">
+            <span>📋 سجل التحديثات والردود الذكية المباشر</span>
+            <button class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.75rem;" onclick="clearLogs()">مسح السجل</button>
+        </div>
+        <div id="aiLogsContainer" class="log-box">
+            <div class="log-entry"><span class="log-time">[النظام]</span> تم تحميل قاعدة بيانات التغذية الراجعة (customers.json) بنجاح.</div>
+        </div>
+    </div>
+
+    <!-- نافذة استثناء الأرقام والمجموعات -->
+    <div id="blacklistModal" class="modal-overlay">
+        <div class="modal">
+            <h3>🚫 استثناء الأرقام والمجموعات (عدم الرد)</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">اكتب كل اسم أو رقم في سطر مستقل (مثل: كويك لاين، رامز):</p>
+            <textarea id="blacklistTextarea"></textarea>
+            <div class="btn-grid">
+                <button class="btn btn-success" onclick="saveBlacklistFromModal()">حفظ القائمة</button>
+                <button class="btn btn-secondary" onclick="closeModals()">إغلاق</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة تعديل الأسعار وقاعدة المعرفة customers.json -->
+    <div id="pricesModal" class="modal-overlay">
+        <div class="modal">
+            <h3>🏷️ قاعدة بيانات الدعم والمبيعات (customers.json)</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">تُستخدم هذه البيانات لتغذية الرد الآلي التقني ودعم المبيعات والوكلاء دون مسح بياناتك السابقة:</p>
+            <textarea id="knowledgeTextarea" style="min-height: 260px; direction: ltr; text-align: left; font-family: monospace;"></textarea>
+            <div class="btn-grid">
+                <button class="btn btn-success" onclick="saveKnowledgeFromModal()">حفظ وتحديث التغذية</button>
+                <button class="btn btn-secondary" onclick="closeModals()">إغلاق</button>
+            </div>
+        </div>
+    </div>
+
+<script>
+    // قاعدة المعرفة الافتراضية المدمجة من ملف customers.json
+    const DEFAULT_KNOWLEDGE_BASE = {
+    "brand_sim_system": {
+        "metadata": {
+            "system_name": "BRAND SIM 🌟",
+            "version": "2.0",
+            "description": "قاعدة بيانات موسعة لتشغيل الرد الآلي وتوجيه الوكلاء والزبائن",
+            "working_hours": {
+                "Sun_Thu": "10:00 - 22:00",
+                "Fri": "13:00 - 19:00",
+                "Sat": "10:00 - 19:00"
+            },
+            "links": {
+                "refresh_sim": "https://brand-sim.com/refresh.html",
+                "check_balance": "https://brand-sim.com/check.html",
+                "network_check": "https://groupahmed2020-byte.github.io/Ahmed.news/",
+                "network_coverage_map": "https://brand-sim.com/Location.html"
+            }
+        },
+        "technical_support": {
+            "no_internet_with_signal": {
+                "issue": "وجود إشارة شبكة (4G) ولكن لا يوجد اتصال بالإنترنت",
+                "diagnosis_and_solutions": [
+                    "تأكد من تفعيل بيانات الهاتف وإلغاء وضع الطيران.",
+                    "لشرائح (Aloha) أو (Mobile): أضف نقطة وصول جديدة. الاسم: prime | APN: prime (أو الاسم: aloha | APN: apn.x2one.com).",
+                    "لشرائح (Hot Mobile): اختر نقطة وصول Hot Mobile من إعدادات الشبكة.",
+                    "قم بإعادة تشغيل الهاتف بعد حفظ الإعدادات والانتظار من 5 إلى 10 دقائق."
+                ]
+            },
+            "fair_usage_policy_throttling": {
+                "issue": "تقييد سرعة الإنترنت والشبكة بطيئة جداً (خاصة شرائح ألوها وموبايل)",
+                "diagnosis": "تم الدخول في وضعية 'تقييد سرعة الإنترنت' بسبب الاستهلاك العالي للبيانات (تجاوز الحد اليومي الآمن 4 إلى 5 جيجا).",
+                "solution": "للأسف لا يوجد حل برمجي أو من الدعم الفني لإرجاع السرعة. الحل الوحيد هو نقل الرقم لشركة أخرى (رامي ليفي، وي، هوت موبايل) أو الاستمرار بالسرعة البطيئة حتى تتجدد الباقة."
+            },
+            "no_4g_on_esim_or_code": {
+                "issue": "شريحة إلكترونية (eSIM) أو كود متصلة بالشبكة لكن لا يظهر 4G أو الإنترنت معطل",
+                "solution": "توجيه الزبون فوراً لتفعيل خيار 'التجوال الدولي' (Data Roaming) من إعدادات شبكة الجوال."
+            },
+            "sim_not_supported_x_mark": {
+                "issue": "ظهور علامة X على الشبكة رغم تفعيل الشريحة بنجاح من الدعم الفني",
+                "solution": "يحدث هذا بسبب عدم توافق الشريحة الحديثة مع الهاتف القديم (أو العكس)، يُرجى تجربة الشريحة في جهاز آخر."
+            },
+            "refresh_html_error": {
+                "issue": "ظهور رسالة 'الرقم غير مسجل' في صفحة التحديث الآلي",
+                "solution": "غالباً ما يكون النظام أو الموقع قيد التطوير أو التحديث، أو أن الرقم قيد التفعيل حالياً في السيرفر. يُرجى الانتظار والمحاولة لاحقاً."
+            },
+            "system_downtime_rami_levy": {
+                "issue": "تأخر تفعيل شرائح رامي ليفي (Rami Levy) أو تعليق التفعيل",
+                "solution": "غالباً ما يعلق نظام رامي ليفي أيام السبت (Shabbat) بسبب الإجازات في الشركة الأم. يجب إبلاغ الزبون بالانتظار وأن الخلل عام وليس من الوكيل."
+            }
+        },
+        "agent_guidelines_and_rules": {
+            "new_agent_requirements": "يُشترط دفع مسبق بقيمة 150 شيكل لفتح لوحة الشحن (وكالة جديدة).",
+            "sim_physical_validation": "لفحص الشريحة البلاستيكية والتأكد أنها غير مستخدمة (جديدة): يجب أن تكون النحاسة الخاصة بها تلمع وخالية من أي خدوش أو خطوط احتكاك تدل على إدخالها في هاتف مسبقاً.",
+            "anti_spam_policy": "يُمنع منعاً باتاً استخدام الأرقام (الشرائح) لإرسال رسائل وهمية أو احتيالية (Spam/Phishing) بأسماء بنوك أو محافظ إلكترونية. في حال اكتشاف ذلك، سيتم حظر حساب الوكيل (اليوزر) فوراً واحتساب غرامة 1 شيكل لكل رسالة زائدة.",
+            "esim_sales_rule": "قبل بيع الشريحة الإلكترونية (eSIM)، يجب سؤال الزبون عن نوع هاتفه والتأكد أنه يدعم التقنية (مثل أجهزة الآيفون الحديثة، سامسونج ألترا).",
+            "testing_sims": "الشركات لا توفر شرائح أو أكواد تجريبية مجانية. أي تجربة أو تبديل للشريحة قد يكلف الوكيل 10 شيكل، لذلك يجب التأكد من التغطية قبل البيع.",
+            "customer_service_tone": "تجنب إلقاء اللوم على الزبون. في حال وجود عطل من المصدر (مثل تأخر التفعيل)، اشرح أن الخلل عام وأن الدعم التقني يتابع الأمر لضمان عدم خسارة تقييم الزبون."
+        },
+        "pricing_rules_and_companies_analysis": {
+            "hot_mobile": {
+                "arabic_name": "هوت موبايل",
+                "features": "إنترنت قوي جداً ومستقر، تغطية جيدة في معظم المناطق.",
+                "pricing_context": "تجديد الباقة لـ 3 شهور بـ 120 شيكل، بيع الشريحة الجديدة 3 شهور بـ 180 شيكل."
+            },
+            "pelephone": {
+                "arabic_name": "بيليفون",
+                "features": "تغطية ممتازة جداً وأبراج قوية (خاصة في المناطق الشمالية والحدودية مثل زيكيم).",
+                "notes": "يُفضل بيعها كباقات شهرية، لأن الشركة الأم تقوم أحياناً بسحب عروض الـ 3 شهور فجأة مما يسبب حرجاً للوكلاء مع الزبائن."
+            },
+            "rami_levy": {
+                "arabic_name": "رامي ليفي",
+                "features": "أسعار ممتازة للوكلاء وتجديد سلس لـ 3 شهور بشكل متتالي. يعمل على أبراج بيليفون.",
+                "notes": "نظامهم التقني قد يتعطل ويكون بطيئاً في الاستجابة والتفعيل، خصوصاً في عطلة نهاية الأسبوع."
+            },
+            "wecom": {
+                "arabic_name": "ويكوم",
+                "features": "مطلوبة بشدة وعليها سحب قوي في مناطق الجنوب.",
+                "notes": "أسعار تجديدها لـ 3 شهور مستقرة وتعتبر رخيصة نسبياً للوكيل."
+            },
+            "aloha_and_mobile": {
+                "arabic_name": "ألوها وموبايل",
+                "features": "شرائح اقتصادية تعمل على أبراج (هوت موبايل وبيليفون). سعر الشريحة الفارغة حوالي 50-55 شيكل.",
+                "notes": "تخضع لسياسة استخدام عادل صارمة (سقف استهلاك آمن 4 جيجا يومياً)، تجاوزها يؤدي لتقييد السرعة بشكل دائم."
+            },
+            "partner": {
+                "arabic_name": "بارتنر",
+                "features": "شبكة ممتازة، ولكن يُنصح بالتعامل معها عبر مزودي خدمة محددين (مثل ليان) لتجنب الأسعار المرتفعة جداً في أنظمة أخرى (مثل سكاي)."
+            }
+        },
+        "service_providers_comparison": {
+            "Layan": "الشركة الأفضل حالياً باعتراف الجميع (سرعة رد، دعم تقني ممتاز، أسعار وعروض مستقرة).",
+            "Quick_Line": "الفتى المدلل لشركة سيلكوم، قدرة قوية على اتخاذ قرارات من الشركات الأم، ممتازة في توفير عروض غير موجودة لدى غيرها.",
+            "Sky": "ممتازة جداً في خطوط بيليفون وتفعيلاتها.",
+            "Aloha_Direct": "أسعارها منافسة جداً لكن الدعم الفني الخاص بها يُعتبر ضعيفاً."
+        }
+    }
+};
+
+    let activeKnowledgeBase = DEFAULT_KNOWLEDGE_BASE;
+
+    function loadSystemKnowledge() {
+        try {
+            if (window.AndroidBridge && window.AndroidBridge.getSystemKnowledgeBase) {
+                const raw = window.AndroidBridge.getSystemKnowledgeBase();
+                if (raw && raw.trim().length > 10) {
+                    activeKnowledgeBase = JSON.parse(raw);
+                    return;
+                }
+            }
+            const localSaved = localStorage.getItem('brand_sim_knowledge_v2');
+            if (localSaved) {
+                activeKnowledgeBase = JSON.parse(localSaved);
+            }
+        } catch (e) {
+            activeKnowledgeBase = DEFAULT_KNOWLEDGE_BASE;
+        }
+    }
+
+    function checkSaturdayBanner() {
+        const today = new Date().getDay(); // 6 = Saturday
+        const banner = document.getElementById('shabbatBanner');
+        if (today === 6 && banner) {
+            banner.style.display = 'block';
+        }
+    }
+
+    window.showMessage = function(type, msg) {
+        const box = document.getElementById('messageBox');
+        if (!box) return;
+        let finalMsg = msg || '';
+
+        // تحسين رسالة "الرقم غير مسجل" بناءً على التغذية الراجعة
+        if (finalMsg.includes('غير مسجل') || finalMsg.includes('غير صحيح')) {
+            finalMsg = "⏳ الرقم قيد المعالجة أو التفعيل في منظومة براند سيم (BRAND SIM)، أو أن النظام قيد التحديث حالياً.\nيرجى الانتظار بضع دقائق وإعادة تشغيل الجهاز ثم المحاولة مجدداً.";
+            type = 'warning';
+        }
+
+        box.className = type === 'success' ? 'success' : (type === 'warning' ? 'warning' : 'error');
+        box.innerText = finalMsg;
+        box.style.display = 'block';
+        window.logAiAgent("📢 حالة: " + finalMsg.replace(/\n/g, ' '));
+    };
+
+    window.logAiAgent = function(text) {
+        const container = document.getElementById('aiLogsContainer');
+        if (!container) return;
+        const now = new Date();
+        const timeStr = now.toTimeString().split(' ')[0];
+        const div = document.createElement('div');
+        div.className = 'log-entry';
+        div.innerHTML = `<span class="log-time">[${timeStr}]</span> ${text}`;
+        container.prepend(div);
+    };
+
+    function clearLogs() {
+        const container = document.getElementById('aiLogsContainer');
+        if (container) container.innerHTML = '';
+    }
+
+    window.syncAiStatusUi = function() {
+        const badge = document.getElementById('aiStatusBadge');
+        if (!badge) return;
+        let enabled = true;
+        try {
+            if (window.AndroidBridge && window.AndroidBridge.isAiAgentEnabled) {
+                enabled = window.AndroidBridge.isAiAgentEnabled();
+            }
+        } catch (e) {}
+        if (enabled) {
+            badge.className = 'status-badge';
+            badge.innerText = '🤖 الدعم الذكي: نشط';
+        } else {
+            badge.className = 'status-badge off';
+            badge.innerText = '⛔ الدعم الذكي: متوقف';
+        }
+    };
+
+    function toggleAiAgent() {
+        try {
+            if (window.AndroidBridge && window.AndroidBridge.isAiAgentEnabled) {
+                const current = window.AndroidBridge.isAiAgentEnabled();
+                window.AndroidBridge.setAiAgentEnabled(!current);
+                window.syncAiStatusUi();
+            }
+        } catch (e) {}
+    }
+
+    function triggerManualRefresh(mode) {
+        const val = (document.getElementById('phoneInput').value || '').trim();
+        if (!val) {
+            window.showMessage('warning', '⚠️ يرجى إدخال رقم الشريحة أو السيريال أولاً.');
+            return;
+        }
+        const cleanDigits = val.replace(/[^0-9]/g, '');
+        if (cleanDigits.length >= 18) {
+            window.executeSmsAutoRefresh(cleanDigits, 'WEB', 'iccid_lookup', val, 'استعلام يدوي');
+        } else {
+            window.executeSmsAutoRefresh(cleanDigits, 'WEB', mode, val, 'تحديث يدوي');
+        }
+    }
+
+    function triggerOfflineSmsRefresh() {
+        const val = (document.getElementById('phoneInput').value || '').trim();
+        if (!val) {
+            window.showMessage('warning', '⚠️ أدخل رقم الشريحة لإرسال نبضة تحديث أوفلاين عبر SMS.');
+            return;
+        }
+        window.location.href = `sms:0599783984?body=${encodeURIComponent('تحديث ' + val)}`;
+    }
+
+    // الدالة الرئيسية لمعالجة طلبات التحديث، فحص الحزمة، وفحص السيريال من الـ Service
+    window.executeSmsAutoRefresh = function(phone, sender, mode, rawBody, senderTitle) {
+        loadSystemKnowledge();
+        const cleanTarget = (phone || '').replace(/[^0-9]/g, '');
+        window.logAiAgent(`🔄 معالجة طلب (${mode}) للهدف: ${cleanTarget} | المرسل: ${senderTitle || sender}`);
+
+        if (mode === 'iccid_lookup') {
+            let simType = "شريحة براند سيم";
+            if (cleanTarget.startsWith("8997207")) simType = "هوت موبايل (Hot Mobile)";
+            else if (cleanTarget.startsWith("8997250")) simType = "بيليفون / رامي ليفي (Pelephone)";
+            else if (cleanTarget.startsWith("8997202")) simType = "سيلكوم / ويكوم (Cellcom)";
+            else if (cleanTarget.startsWith("8997201")) simType = "بارتنر / 019 (Partner)";
+
+            const msg = `💳 رقم السيريال (ICCID):
+${cleanTarget}
+📌 الشبكة المطابقة: ${simType}
+⏳ جاري فحص الرقم المرتبط وتفعيله في منظومة BRAND SIM. يرجى إعادة تشغيل الجهاز بعد 5 دقائق.`;
+            if (window.AndroidBridge && sender && sender !== 'WEB') {
+                window.AndroidBridge.sendSmsReply(sender, msg);
+            } else {
+                window.showMessage('success', msg);
+            }
+            return;
+        }
+
+        if (mode === 'details') {
+            const msg = `📊 استعلام تفاصيل اشتراك الرقم: ${cleanTarget}
+للاطلاع الفوري على الرصيد المتبقي وتاريخ انتهاء الحزمة، تفضل بزيارة صفحة الفحص الذاتي:
+https://brand-sim.com/check.html
+🌟 مركز الدعم لـ BRAND SIM`;
+            if (window.AndroidBridge && sender && sender !== 'WEB') {
+                window.AndroidBridge.sendSmsReply(sender, msg);
+            } else {
+                window.showMessage('success', msg);
+            }
+            return;
+        }
+
+        // فحص الكولداون قبل إرسال طلب التحديث لـ Sky
+        if (window.AndroidBridge && window.AndroidBridge.getSkyCooldownRemainingMs) {
+            const rem = window.AndroidBridge.getSkyCooldownRemainingMs(cleanTarget);
+            if (rem > 0) {
+                const rejectMsg = window.AndroidBridge.getSkyCooldownRejectMsg(cleanTarget);
+                if (sender && sender !== 'WEB') {
+                    window.AndroidBridge.sendSmsReply(sender, rejectMsg);
+                } else {
+                    window.showMessage('warning', rejectMsg);
+                }
+                return;
+            }
+        }
+
+        // إطلاق التحديث الفعلي عبر Headless WebView في الجافا
+        if (window.AndroidBridge && window.AndroidBridge.autoRefreshSkyWithMode) {
+            window.showMessage('warning', `⏳ جاري تحديث وتنشيط الرقم ${cleanTarget} في السيرفر... يرجى الانتظار.`);
+            window.AndroidBridge.autoRefreshSkyWithMode(cleanTarget, sender === 'WEB' ? '' : sender, mode || 'refresh');
+        }
+    };
+
+    // محرك الرد التقني والمبيعات المحلي السريع (Rule-Based Fallback) + Gemini AI
+    function buildRuleBasedSupportReply(rawText) {
+        const t = (rawText || '').toLowerCase();
+
+        // 1. مشكلة إشارة بدون إنترنت أو إعدادات APN
+        if ((t.includes('فش نت') || t.includes('ما في نت') || t.includes('بدون نت') || t.includes('بدون انترنت') || t.includes('إشارة بدون') || t.includes('اعدادات') || t.includes('apn') || t.includes('نقطة وصول')) && !t.includes('تقييد')) {
+            if (t.includes('الوها') || t.includes('ألوها') || t.includes('aloha') || t.includes('موبايل')) {
+                return "🌐 لتفعيل الإنترنت على شريحة (ألوها / موبايل):
+1️⃣ ادخل إلى الإعدادات > شبكات الهواتف > أسماء نقاط الوصول (APN).
+2️⃣ اضغط إضافة (+) واكتب:
+• الاسم (Name): prime
+• نقطة الوصول (APN): prime
+(أو APN بديل: apn.x2one.com)
+3️⃣ احفظ الإعدادات وفعّل التجوال الدولي ثم أعد تشغيل الجوال. 🌟";
+            }
+            if (t.includes('هوت') || t.includes('hot')) {
+                return "🌐 لتفعيل الإنترنت على شريحة هوت موبايل:
+1️⃣ ادخل إلى الإعدادات > أسماء نقاط الوصول (APN) واختر نقطة (Hot Mobile).
+2️⃣ تأكد من تفعيل التجوال الدولي ثم أعد تشغيل الهاتف وانتظر 5 دقائق.
+رابط التحديث الذاتي: https://brand-sim.com/refresh.html 🌟";
+            }
+            return "🛠️ لحل مشكلة وجود إرسال بدون إنترنت أو غياب إشارة 4G:
+1️⃣ فعّل خيار (التجوال الدولي / Data Roaming) من إعدادات الشبكة.
+2️⃣ تأكد من نقطة الوصول (APN):
+- لشرائح ألوها وموبايل: الاسم prime و APN هو prime
+- لشرائح هوت موبايل: اختر نقطة Hot Mobile
+- للشرائح الأخرى أو الكود: APN هو internet
+3️⃣ أعد تشغيل الجهاز بعد الحفظ. 🌟";
+        }
+
+        // 2. مشكلة عدم ظهور 4G في الشرائح الإلكترونية أو الأكواد
+        if (t.includes('4g') || t.includes('تجوال') || (t.includes('كود') && t.includes('نت'))) {
+            return "📶 لظهور إشارة 4G وتفعيل الإنترنت على شرائح الكود أو eSIM:
+يرجى الدخول إلى إعدادات الهاتف > شبكة الهواتف المحمولة > وتفعيل خيار (التجوال الدولي / Data Roaming)، وإذا لزم الأمر أضف نقطة وصول APN باسم internet. 🌟";
+        }
+
+        // 3. تقييد السرعة والاستخدام العادل
+        if (t.includes('تقييد') || t.includes('بطيء جدا') || t.includes('استخدام عادل') || t.includes('خلصت السرعة')) {
+            return "⚠️ في حال دخول الرقم في وضعية (تقييد سرعة الإنترنت) نتيجة تجاوز سقف الاستخدام العادل اليومي (4 إلى 5 جيجا يومياً في ألوها/موبايل)، للأسف لا يزول التقييد برمجياً والحل الوحيد هو نقل الرقم إلى شركة أخرى (مثل رامي ليفي أو وي أو هوت موبايل) أو الاستمرار بالسرعة الحالية. 🌟";
+        }
+
+        // 4. استفسار عن شريحة إلكترونية eSIM أو كود
+        if (t.includes('ايسم') || t.includes('ايسيم') || t.includes('esim') || t.includes('الكترونية') || t.includes('إلكترونية') || t.includes('باركود')) {
+            return "📱 الشرائح الإلكترونية (eSIM / باركود) متوفرة لجميع الشبكات (هوت، بارتنر، بيليفون، سيلكوم، ألوها)!
+⚠️ ملاحظة هامة قبل الحجز: الشريحة الإلكترونية تحتاج جهازاً يدعم تقنية eSIM (مثل آيفون الحديث أو سامسونج Ultra).
+ما هو نوع جهازك والشبكة المطلوبة لنزودك بالعرض الأنسب؟ 🌟";
+        }
+
+        // 5. استفسار عن رامي ليفي أو تأخر التفعيل
+        if (t.includes('رامي ليفي') || t.includes('رامي هليفي')) {
+            return "📌 شرائح رامي ليفي ممتازة وتعمل على أبراج بيليفون القوية مع إمكانية التجديد لـ 3 شهور متتالية.
+(ملاحظة: قد يتأخر التفعيل أحياناً خاصة أيام السبت بسبب صيانة أو تعليق الموقع من الشركة الأم). 🌟";
+        }
+
+        // 6. استفسار عن فحص التغطية أو أفضل شبكة
+        if (t.includes('افضل شريحة') || t.includes('أفضل شريحة') || t.includes('احسن شريحة') || t.includes('تغطية') || t.includes('ارسال')) {
+            return "📡 في مناطق الشمال تتفوق شبكات (بيليفون ورامي ليفي وهوت موبايل)، وفي الجنوب تتألق (ويكوم وهوت وألوها).
+لفحص قوة الأبراج والتغطية في مكانك بدقة، افتح الرابط التالي:
+https://groupahmed2020-byte.github.io/Ahmed.news/
+أو خريطة الأبراج: https://brand-sim.com/Location.html 🌟";
+        }
+
+        return "";
+    }
+
+    // الدالة التي يستدعيها RefreshService للرد الذكي على واتساب وتيليجرام ومسنجر
+    window.executeAiCustomerSupport = function(sender, rawBody, senderTitle) {
+        loadSystemKnowledge();
+        window.logAiAgent(`💬 استفسار وارد من (${senderTitle || sender}): ${rawBody}`);
+
+        // أولاً: فحص إذا كان هناك رد تقني دقيق جاهز فوراً
+        const fastRuleReply = buildRuleBasedSupportReply(rawBody);
+
+        const systemPrompt = `أنت موظف الدعم الفني والمبيعات الذكي لمنظومة (BRAND SIM 🌟) بإدارة أسامة سالم.
+رد باللهجة الفلسطينية المحترمة والودودة وبشكل مختصر ومباشر وعملي جداً كأنك إنسان حقيقي وليس روبوت.
+اعتمد حصرياً على قاعدة المعرفة والتغذية الراجعة التالية الخاصة بنا:
+${JSON.stringify(activeKnowledgeBase)}
+
+قواعد صارمة للرد:
+1. إذا سأل الزبون عن مشكلة (إشارة بدون إنترنت / فش نت): اطلب منه تفعيل التجوال الدولي، وإذا كانت شريحته ألوها أو موبايل يضيف APN باسم prime و نقطة وصول prime (أو apn.x2one.com)، وإذا هوت موبايل يختار نقطة هوت موبايل ويعيد تشغيل الجوال.
+2. إذا سأل عن شريحة إلكترونية (eSIM / كود): نبهه فوراً أنها تحتاج جهاز آيفون أو سامسونج ألترا يدعم eSIM قبل الشراء.
+3. إذا اشتكى من تقييد السرعة في ألوها/موبايل: وضح بلطف أن تجاوز الاستخدام العادل (4-5 جيجا يومياً) يقيد السرعة ولا يُحل إلا بنقل الرقم لشركة أخرى (رامي ليفي، وي، هوت).
+4. إذا سأل عن تأخر تفعيل رامي ليفي: طمئنه أن بوابة الشركة الأم تعلق أحياناً (خصوصاً أيام السبت) والخلل عام ويُتابع.
+5. إذا سأل عن الأسعار أو الحجز: وجهه للموقع https://brand-sim.com/ أو اذكر الأسعار من قاعدة البيانات (مثلاً تجديد هوت 3 شهور 120 شيكل، جديد 180 شيكل، ألوها شهر 50 شيكل، بارتنر/بيليفون كود عرض 40 شيكل وبدون عرض 60 شيكل).
+6. للوكلاء: فتح لوحة شحن يتطلب دفع مسبق 150 شيكل، الشريحة البلاستيكية الجديدة (تكت/نانو) تكون نحاستها لامعة بلا خطوط، ويمنع استخدام الأرقام للـ Spam.
+
+اسم المرسل: ${senderTitle || 'زبوننا الكريم'}
+رسالة الزبون: ${rawBody}
+الرد المقترح:`;
+
+        try {
+            if (window.AndroidBridge && window.AndroidBridge.askGeminiNative) {
+                const aiReply = window.AndroidBridge.askGeminiNative(systemPrompt);
+                const finalReply = (aiReply && aiReply.trim().length > 5) ? aiReply.trim() : fastRuleReply;
+                if (finalReply) {
+                    window.logAiAgent(`✅ رد الدعم الذكي إلى (${senderTitle}): ${finalReply}`);
+                    window.AndroidBridge.sendSmsReply(sender, finalReply);
+                    return;
+                }
+            }
+        } catch (e) {}
+
+        if (fastRuleReply && window.AndroidBridge) {
+            window.logAiAgent(`⚡ رد تقني مباشر إلى (${senderTitle}): ${fastRuleReply}`);
+            window.AndroidBridge.sendSmsReply(sender, fastRuleReply);
+        }
+    };
+
+    // دوال فتح النوافذ والإعدادات
+    function openChannelsConfig() {
+        if (window.AndroidBridge && window.AndroidBridge.openChannelsDialog) {
+            window.AndroidBridge.openChannelsDialog();
+        }
+    }
+    function openReplyChannelsConfig() {
+        if (window.AndroidBridge && window.AndroidBridge.openReplyChannelsDialog) {
+            window.AndroidBridge.openReplyChannelsDialog();
+        }
+    }
+    function openApiKeyModal() {
+        if (window.AndroidBridge && window.AndroidBridge.openGeminiApiKeyDialog) {
+            window.AndroidBridge.openGeminiApiKeyDialog();
+        }
+    }
+    window.openBlacklistModal = function() {
+        const modal = document.getElementById('blacklistModal');
+        const area = document.getElementById('blacklistTextarea');
+        if (window.AndroidBridge && window.AndroidBridge.getBlacklist) {
+            area.value = window.AndroidBridge.getBlacklist();
+        } else {
+            area.value = "كويك لاين\nرامز";
+        }
+        modal.style.display = 'flex';
+    };
+    function saveBlacklistFromModal() {
+        const val = document.getElementById('blacklistTextarea').value;
+        if (window.AndroidBridge && window.AndroidBridge.saveBlacklistData) {
+            window.AndroidBridge.saveBlacklistData(val);
+        }
+        closeModals();
+        window.showMessage('success', '✅ تم حفظ قائمة الاستثناءات بنجاح!');
+    }
+    window.openPricesModal = function() {
+        loadSystemKnowledge();
+        const modal = document.getElementById('pricesModal');
+        const area = document.getElementById('knowledgeTextarea');
+        area.value = JSON.stringify(activeKnowledgeBase, null, 2);
+        modal.style.display = 'flex';
+    };
+    function saveKnowledgeFromModal() {
+        const raw = document.getElementById('knowledgeTextarea').value;
+        try {
+            const parsed = JSON.parse(raw);
+            activeKnowledgeBase = parsed;
+            localStorage.setItem('brand_sim_knowledge_v2', JSON.stringify(parsed));
+            if (window.AndroidBridge && window.AndroidBridge.saveSystemKnowledgeBase) {
+                window.AndroidBridge.saveSystemKnowledgeBase(JSON.stringify(parsed));
+            }
+            if (window.AndroidBridge && window.AndroidBridge.saveCustomPricesJson) {
+                window.AndroidBridge.saveCustomPricesJson(JSON.stringify(parsed));
+            }
+            closeModals();
+            window.showMessage('success', '✅ تم تحديث قاعدة بيانات التغذية الراجعة والأسعار بنجاح!');
+        } catch (e) {
+            alert('⚠️ خطأ في صيغة JSON، يرجى التأكد من الفواصل والأقواس.');
+        }
+    }
+    function closeModals() {
+        document.getElementById('blacklistModal').style.display = 'none';
+        document.getElementById('pricesModal').style.display = 'none';
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        loadSystemKnowledge();
+        checkSaturdayBanner();
+        window.syncAiStatusUi();
+    });
+</script>
+</body>
+</html>
