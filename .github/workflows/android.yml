@@ -94,7 +94,7 @@ jobs:
           EOF
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.5'
 
@@ -106,3 +106,4 @@ jobs:
         with:
           name: BRAND-SIM-APK
           path: app/build/outputs/apk/debug/app-debug.apk
+          
