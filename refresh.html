@@ -211,12 +211,6 @@
             background: linear-gradient(135deg, #0284c7, #0369a1);
             grid-column: span 2;
         }
-        .btn-layan {
-            background: linear-gradient(135deg, #0d9488, #0f766e);
-        }
-        .btn-sky {
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
-        }
         .btn-secondary {
             background: #334155;
             color: #e2e8f0;
@@ -255,6 +249,18 @@
             background: rgba(239, 68, 68, 0.15);
             border: 1px solid rgba(239, 68, 68, 0.4);
             color: #fecaca;
+        }
+        #aiTestResultBox {
+            display: none;
+            background: rgba(147, 51, 234, 0.12);
+            border: 1px solid rgba(147, 51, 234, 0.4);
+            color: #e9d5ff;
+            padding: 12px;
+            border-radius: 12px;
+            margin-top: 10px;
+            font-size: 0.88rem;
+            white-space: pre-line;
+            direction: rtl;
         }
         .quick-actions {
             display: grid;
@@ -362,7 +368,7 @@
     <div class="header">
         <div class="header-title">
             <h1>🌟 BRAND SIM</h1>
-            <p>منظومة التحديث (ليان + سكاي) والدعم الذكي v3.0</p>
+            <p>منظومة التحديث الذكي والدعم الفني v3.1</p>
         </div>
         <div id="aiStatusBadge" class="status-badge" onclick="toggleAiAgent()">🤖 الدعم الذكي: نشط</div>
     </div>
@@ -371,10 +377,10 @@
         ⚠️ تنبيه: اليوم السبت — قد يواجه نظام تفعيل شرائح <b>رامي ليفي (Rami Levy)</b> بطئاً أو تعليقاً مؤقتاً من الشركة الأم. الخلل عام ويُعالج تلقائياً.
     </div>
 
-    <!-- قسم التحديث السريع وفحص السيريال (ليان + سكاي + كويك لاين) -->
+    <!-- قسم التحديث الذكي المفصول عن فحص السيريال -->
     <div class="card">
         <div class="card-title">
-            <span>⚡ التحديث الفوري وفحص السيريال (ليان / سكاي / كويك)</span>
+            <span>⚡ التحديث الذكي وفحص السيريال المباشر</span>
             <span id="subsCountBadge" class="stats-pill">مشتركين: 891</span>
         </div>
         <div class="input-group">
@@ -382,11 +388,9 @@
             <input type="text" id="phoneInput" class="input-field" placeholder="054XXXXXXX / 89972...">
         </div>
         <div class="btn-grid">
-            <button class="btn btn-primary" onclick="triggerManualRefresh('refresh', 'auto')">🔄 تحديث ذكي تلقائي / فحص السيريال الآن</button>
-            <button class="btn btn-layan" onclick="triggerManualRefresh('refresh', 'Layan')">🟢 تحديث عبر بوابة ليان</button>
-            <button class="btn btn-sky" onclick="triggerManualRefresh('refresh', 'Sky')">🔵 تحديث عبر بوابة سكاي</button>
-            <button class="btn btn-secondary" onclick="triggerManualRefresh('details', 'auto')">📊 استعلام تفاصيل الحزمة</button>
-            <button class="btn btn-secondary" onclick="triggerOfflineSmsRefresh()">📡 تحديث أوفلاين (SMS)</button>
+            <button class="btn btn-primary" onclick="triggerManualRefresh('refresh')">🔄 تحديث ذكي تلقائي للشريحة الآن</button>
+            <button class="btn btn-success" onclick="triggerManualRefresh('iccid_lookup')">💳 فحص ورشح بيانات السيريال (ICCID)</button>
+            <button class="btn btn-secondary" onclick="triggerManualRefresh('details')">📊 استعلام تفاصيل الحزمة</button>
         </div>
         <div id="messageBox"></div>
     </div>
@@ -408,7 +412,7 @@
         </div>
     </div>
 
-    <!-- قسم تجربة وفحص رد Gemini المباشر -->
+    <!-- محاكي واختبار رد موظف الدعم الذكي (Gemini AI) مع صندوق النتائج المخصص -->
     <div class="card">
         <div class="card-title">
             <span>🤖 محاكي واختبار رد موظف الدعم الذكي (Gemini AI)</span>
@@ -419,9 +423,10 @@
         <div class="btn-grid">
             <button class="btn btn-warning" style="grid-column: span 2;" onclick="testGeminiSupportNow()">✨ اختبار رد Gemini الذكي الآن</button>
         </div>
+        <div id="aiTestResultBox"></div>
     </div>
 
-    <!-- قسم التشخيص السريع وإعدادات APN -->
+    <!-- مرجع الدعم التقني السريع -->
     <div class="card">
         <div class="card-title">
             <span>🛠️ مرجع الدعم التقني السريع (APN & Troubleshooting)</span>
@@ -434,7 +439,7 @@
         </div>
     </div>
 
-    <!-- لوحة التحكم السريع بالمستقبلات والوكيل الذكي -->
+    <!-- لوحة التحكم السريع -->
     <div class="card">
         <div class="card-title">
             <span>⚙️ إدارة القنوات وقاعدة المعرفة (customers.json)</span>
@@ -455,7 +460,7 @@
             <button class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.75rem;" onclick="clearLogs()">مسح السجل</button>
         </div>
         <div id="aiLogsContainer" class="log-box">
-            <div class="log-entry"><span class="log-time">[النظام]</span> تم تحميل 891 مشترك (سكاي + كويك لاين + ليان) وتفعيل بوابتي التحديث (rn.layan-t.net & rn.sky-5g.net).</div>
+            <div class="log-entry"><span class="log-time">[النظام]</span> تم تحميل 891 مشترك (سكاي + كويك لاين + ليان) وتفصيل أزرار التحديث الذكي وفحص السيريال بنجاح.</div>
         </div>
     </div>
 
@@ -506,7 +511,6 @@
     </div>
 
 <script>
-    // قاعدة المعرفة الشاملة (تضم 891 مشترك من سكاي + كويك لاين + ليان + قواعد الرد الذكي)
     const DEFAULT_KNOWLEDGE_BASE = {
   "brand_sim_system": {
     "metadata": {
@@ -11312,10 +11316,8 @@
     }
   ]
 };
-
     let activeKnowledgeBase = JSON.parse(JSON.stringify(DEFAULT_KNOWLEDGE_BASE));
 
-    // تنظيف الأرقام والسيريال من أي مسافات أو علامات تنصيص (' في سكاي) أو رموز مخفية (‌ في ليان)
     function cleanDigitsOnly(val) {
         if (val === null || val === undefined) return '';
         const str = String(val);
@@ -11329,7 +11331,6 @@
         return out;
     }
 
-    // استخراج ذكي لرقم الهاتف يعالج صيغ سكاي مثل 0502318519_24082025 وصيغ كويك لاين بدون صفر مثل 552730712
     function normalizePhoneFormat(rawPhone) {
         if (rawPhone === null || rawPhone === undefined) return '';
         let str = String(rawPhone).trim();
@@ -11345,7 +11346,6 @@
         return d;
     }
 
-    // دمج ذكي للكائنات
     function deepMergeObjects(target, source) {
         if (!target || typeof target !== 'object') target = {};
         if (!source || typeof source !== 'object') return target;
@@ -11363,7 +11363,6 @@
         return out;
     }
 
-    // دمج ذكي لقوائم المشتركين (Upsert)
     function mergeSubscriberLists(oldList, newList) {
         const map = new Map();
         const processList = (list) => {
@@ -11394,7 +11393,6 @@
         return Array.from(map.values());
     }
 
-    // دمج ذكي لنماذج تدريب محادثات واتساب
     function mergeWhatsappExamples(oldEx, newEx) {
         const map = new Map();
         const addList = (arr) => {
@@ -11488,7 +11486,6 @@
         updateCountersUi();
     }
 
-    // البحث عن مشترك عبر السيريال (يدعم ليان، كويك لاين، وسكاي حتى لو كان السيريال 18 أو 19 أو 20 رقماً)
     function findSubscriberByIccid(rawIccid) {
         const target = cleanDigitsOnly(rawIccid);
         if (!target || target.length < 10) return null;
@@ -11519,29 +11516,23 @@
         return null;
     }
 
-    // محلل شامل ودقيق لملفات الإكسل: سكاي + كويك لاين + ليان + أرين
     function parseSpreadsheetRowsUniversal(rows, fileName) {
         const result = [];
         if (!Array.isArray(rows) || rows.length === 0) return result;
-
-        // فحص الترويسة لتحديد نوع الملف بدقة
         let headerRowIdx = -1;
         let colMap = null;
 
         for (let r = 0; r < Math.min(rows.length, 5); r++) {
             const rowStr = (rows[r] || []).map(x => String(x || '').trim()).join(' | ');
             if (rowStr.includes('رقم الهاتف') && rowStr.includes('رقم الشريحة')) {
-                // ملف سكاي (Sky): اسم الوكيل(0) | رقم الهاتف(1) | اسم الزبون(2) | رقم الشريحة(3) | الحالة(4) | شركة الاتصالات(5) | تاريخ نهاية الرزمة(6) | ... | الرزمة(8)
                 headerRowIdx = r;
                 colMap = { type: 'Sky', phone: 1, customer: 2, iccid: 3, status: 4, company: 5, end_date: 6, pkg: 8, agent: 0 };
                 break;
             } else if (rowStr.includes('SIM#') || rowStr.includes('טלפון')) {
-                // ملف كويك لاين (QuickLine): SIM#(1) | שם הלקוח(3) | טלפון(5) | סטטוס(6) | חברה(8) | חבילה(9) | מפיץ(10) | ת. ניתוק(11) | ת. חיבור(13)
                 headerRowIdx = r;
                 colMap = { type: 'QuickLine', iccid: 1, customer: 3, phone: 5, status: 6, company: 8, pkg: 9, agent: 10, end_date: 11, start_date: 13 };
                 break;
             } else if (rowStr.includes('الاشتراك') && rowStr.includes('رقم الشريحة')) {
-                // ملف ليان (Layan): الاشتراك(0) | رقم الشريحة(1) | الشركة(2) | اسم الحزمة(3) | الزبون(4) | البائع(5) | تاريخ البداية(6) | تاريخ النهاية(7) | الحالة(9)
                 headerRowIdx = r;
                 colMap = { type: 'Layan', phone: 0, iccid: 1, company: 2, pkg: 3, customer: 4, agent: 5, start_date: 6, end_date: 7, status: 9 };
                 break;
@@ -11574,7 +11565,6 @@
                 continue;
             }
 
-            // الفحص التلقائي الذكي لأي جدول غير معروف الهيكلة
             let foundPhone = '';
             let foundIccid = '';
             for (let c = 0; c < row.length; c++) {
@@ -11656,10 +11646,10 @@
         event.target.value = '';
     }
 
-    // تحليل نصوص محادثات واتساب المصدرة (.txt أو ملصقة) وتحويلها إلى أمثلة تدريبية لـ Gemini
     function parseAndStoreWhatsappChatText(rawText) {
         if (!rawText || !rawText.trim()) return 0;
-        const lines = rawText.split(/\r?\n/);
+        const lines = rawText.split(/?
+/);
         const messages = [];
         const waRegex = /^(?:\[?\d{1,4}[\/\-\.]\d{1,2}[\/\-\.]\d{1,4}[،,]?\s+\d{1,2}:\d{2}(?::\d{2})?(?:\s*[APMapmصم]{1,2})?\]?\s*[\-–]?\s*)?([^:]{2,35}):\s*(.+)$/;
 
@@ -11691,7 +11681,6 @@
             }
         }
 
-        // إذا كان النص عبارة عن فقرات نصية مباشرة بدون طوابع زمنية
         if (extractedPairs.length === 0 && rawText.trim().length > 10) {
             extractedPairs.push({
                 customer_query: "توجيه وتغذية راجعة من محادثات واتساب سابقة",
@@ -11737,16 +11726,19 @@
     }
 
     function testGeminiSupportNow() {
+        loadSystemKnowledge();
         const q = (document.getElementById('testAiInput').value || '').trim();
+        const resBox = document.getElementById('aiTestResultBox');
         if (!q) {
-            window.showMessage('warning', '⚠️ اكتب سؤال زبون في الحقل أولاً لتجربة رد Gemini الذكي.');
+            resBox.style.display = 'block';
+            resBox.innerText = '⚠️ اكتب سؤال زبون في الحقل أولاً لتجربة رد Gemini الذكي.';
             return;
         }
-        window.showMessage('warning', '⏳ جاري توليد رد الدعم الذكي عبر Gemini AI...');
+        resBox.style.display = 'block';
+        resBox.innerText = '⏳ جاري توليد رد الدعم الذكي عبر Gemini AI...';
         window.executeAiCustomerSupport('WEB', q, 'تجربة محاكي الواجهة');
     }
 
-    // إدارة زر الإعدادات العائم والقائمة المنسدلة
     function handleGearClick(e) {
         if (e) e.stopPropagation();
         if (window.AndroidBridge && window.AndroidBridge.openSettingsMenu) {
@@ -11784,14 +11776,21 @@
         let finalMsg = msg || '';
 
         if ((finalMsg.includes('غير مسجل') || finalMsg.includes('غير صحيح')) && !finalMsg.includes('رقم السيريال')) {
-            finalMsg = "⏳ الرقم قيد المعالجة أو التفعيل في منظومة براند سيم (BRAND SIM)، أو أن النظام قيد التحديث حالياً.\nيرجى الانتظار بضع دقائق وإعادة تشغيل الجهاز ثم المحاولة مجدداً.";
+            finalMsg = "⏳ الرقم قيد المعالجة أو التفعيل في منظومة براند سيم (BRAND SIM)، أو أن النظام قيد التحديث حالياً.
+يرجى الانتظار بضع دقائق وإعادة تشغيل الجهاز ثم المحاولة مجدداً.";
             type = 'warning';
         }
 
         box.className = type === 'success' ? 'success' : (type === 'warning' ? 'warning' : 'error');
         box.innerText = finalMsg;
         box.style.display = 'block';
-        window.logAiAgent("📢 حالة: " + finalMsg.replace(/\n/g, ' '));
+
+        const testResBox = document.getElementById('aiTestResultBox');
+        if (testResBox && testResBox.style.display === 'block') {
+            testResBox.innerText = finalMsg;
+        }
+        window.logAiAgent("📢 حالة: " + finalMsg.replace(/
+/g, ' '));
     };
 
     window.logAiAgent = function(text) {
@@ -11838,30 +11837,22 @@
         } catch (e) {}
     }
 
-    function triggerManualRefresh(mode, portalChoice) {
+    function triggerManualRefresh(mode) {
         const val = (document.getElementById('phoneInput').value || '').trim();
         if (!val) {
             window.showMessage('warning', '⚠️ يرجى إدخال رقم الشريحة أو السيريال أولاً.');
             return;
         }
         const cleanDigits = cleanDigitsOnly(val);
-        if (cleanDigits.length >= 16) {
-            window.executeSmsAutoRefresh(cleanDigits, 'WEB', 'iccid_lookup', val, 'استعلام يدوي');
+        if (mode === 'iccid_lookup' || cleanDigits.length >= 16) {
+            window.executeSmsAutoRefresh(cleanDigits, 'WEB', 'iccid_lookup', val, 'فحص سيريال يدوي');
+        } else if (mode === 'details') {
+            window.executeSmsAutoRefresh(cleanDigits, 'WEB', 'details', val, 'استعلام يدوي');
         } else {
-            window.executeSmsAutoRefresh(cleanDigits, 'WEB', mode, val, portalChoice || 'auto');
+            window.executeSmsAutoRefresh(cleanDigits, 'WEB', 'refresh', val, 'تحديث ذكي يدوي');
         }
     }
 
-    function triggerOfflineSmsRefresh() {
-        const val = (document.getElementById('phoneInput').value || '').trim();
-        if (!val) {
-            window.showMessage('warning', '⚠️ أدخل رقم الشريحة لإرسال نبضة تحديث أوفلاين عبر SMS (تُستخدم عندما يكون الإنترنت مقطوعاً لديك).');
-            return;
-        }
-        window.location.href = `sms:0599783984?body=${encodeURIComponent('تحديث ' + val)}`;
-    }
-
-    // الدالة الرئيسية لمعالجة طلبات التحديث (ليان + سكاي)، فحص الحزمة، وفحص السيريال (ليان + كويك + سكاي)
     window.executeSmsAutoRefresh = function(phone, sender, mode, rawBody, senderTitle) {
         loadSystemKnowledge();
         const cleanTarget = cleanDigitsOnly(phone);
@@ -11870,11 +11861,17 @@
         if (mode === 'iccid_lookup' || cleanTarget.length >= 16) {
             const sub = findSubscriberByIccid(cleanTarget);
             if (sub && sub.phone) {
-                const custName = (sub.customer && sub.customer !== 'NaN') ? `👤 المشترك: ${sub.customer}\n` : '';
-                const pkgInfo = sub.package ? `📦 الباقة: ${sub.package} (${sub.company || ''})\n` : '';
-                const expInfo = sub.end_date ? `📅 تاريخ الانتهاء: ${sub.end_date}\n` : '';
-                const provInfo = sub.provider ? `🏢 المزود: ${sub.provider}\n` : '';
-                const msg = `✅ رقم الشريحة المرتبط بالسيريال (${cleanTarget}) هو:\n📞 ${sub.phone}\n${custName}${pkgInfo}${expInfo}${provInfo}🌟 مركز الدعم لـ BRAND SIM`;
+                const custName = (sub.customer && sub.customer !== 'NaN') ? `👤 المشترك: ${sub.customer}
+` : '';
+                const pkgInfo = sub.package ? `📦 الباقة: ${sub.package} (${sub.company || ''})
+` : '';
+                const expInfo = sub.end_date ? `📅 تاريخ الانتهاء: ${sub.end_date}
+` : '';
+                const provInfo = sub.provider ? `🏢 المزود: ${sub.provider}
+` : '';
+                const msg = `✅ رقم الشريحة المرتبط بالسيريال (${cleanTarget}) هو:
+📞 ${sub.phone}
+${custName}${pkgInfo}${expInfo}${provInfo}🌟 مركز الدعم لـ BRAND SIM`;
                 if (window.AndroidBridge && sender && sender !== 'WEB') {
                     window.AndroidBridge.sendSmsReply(sender, msg);
                 } else {
@@ -11891,7 +11888,8 @@
             else if (cleanTarget.startsWith("8997209") || cleanTarget.startsWith("8997212")) simType = "ويكوم / ليان (We4G)";
             else if (cleanTarget.startsWith("8997219")) simType = "موبايل 019 (019 Mobile)";
 
-            const notFoundMsg = `⚠️ عذراً، رقم السيريال (${cleanTarget}) غير مسجل حالياً في الملفات المرفوعة (${simType}).\nيرجى التأكد من الرقم أو رفع أحدث ملف اشتراكات.`;
+            const notFoundMsg = `⚠️ عذراً، رقم السيريال (${cleanTarget}) غير مسجل حالياً في الملفات المرفوعة (${simType}).
+يرجى التأكد من الرقم أو رفع أحدث ملف اشتراكات.`;
             if (window.AndroidBridge && sender && sender !== 'WEB') {
                 window.AndroidBridge.sendSmsReply(sender, notFoundMsg);
             } else {
@@ -11904,9 +11902,16 @@
 
         if (mode === 'details') {
             if (matchedSub) {
-                const custName = (matchedSub.customer && matchedSub.customer !== 'NaN') ? `👤 الاسم: ${matchedSub.customer}\n` : '';
-                const iccidLine = matchedSub.iccid ? `💳 السيريال: ${matchedSub.iccid}\n` : '';
-                const msg = `📊 تفاصيل اشتراك الرقم: ${matchedSub.phone}\n${custName}🏢 الشركة: ${matchedSub.company || 'براند سيم'} (${matchedSub.provider || ''})\n📦 الحزمة: ${matchedSub.package || 'فعالة'}\n📅 تاريخ الانتهاء: ${matchedSub.end_date || 'متاح'}\n📌 الحالة: ${matchedSub.status || 'فعال'}\n${iccidLine}🌟 مركز الدعم لـ BRAND SIM`;
+                const custName = (matchedSub.customer && matchedSub.customer !== 'NaN') ? `👤 الاسم: ${matchedSub.customer}
+` : '';
+                const iccidLine = matchedSub.iccid ? `💳 السيريال: ${matchedSub.iccid}
+` : '';
+                const msg = `📊 تفاصيل اشتراك الرقم: ${matchedSub.phone}
+${custName}🏢 الشركة: ${matchedSub.company || 'براند سيم'} (${matchedSub.provider || ''})
+📦 الحزمة: ${matchedSub.package || 'فعالة'}
+📅 تاريخ الانتهاء: ${matchedSub.end_date || 'متاح'}
+📌 الحالة: ${matchedSub.status || 'فعال'}
+${iccidLine}🌟 مركز الدعم لـ BRAND SIM`;
                 if (window.AndroidBridge && sender && sender !== 'WEB') {
                     window.AndroidBridge.sendSmsReply(sender, msg);
                 } else {
@@ -11915,7 +11920,10 @@
                 return;
             }
 
-            const msg = `📊 استعلام تفاصيل اشتراك الرقم: ${cleanTarget}\nللاطلاع الفوري على الرصيد المتبقي وتاريخ انتهاء الحزمة، تفضل بزيارة صفحة الفحص الذاتي:\nhttps://brand-sim.com/check.html\n🌟 مركز الدعم لـ BRAND SIM`;
+            const msg = `📊 استعلام تفاصيل اشتراك الرقم: ${cleanTarget}
+للاطلاع الفوري على الرصيد المتبقي وتاريخ انتهاء الحزمة، تفضل بزيارة صفحة الفحص الذاتي:
+https://brand-sim.com/check.html
+🌟 مركز الدعم لـ BRAND SIM`;
             if (window.AndroidBridge && sender && sender !== 'WEB') {
                 window.AndroidBridge.sendSmsReply(sender, msg);
             } else {
@@ -11924,35 +11932,15 @@
             return;
         }
 
-        // فحص الكولداون قبل إرسال طلب التحديث
-        if (window.AndroidBridge && window.AndroidBridge.getSkyCooldownRemainingMs) {
-            const rem = window.AndroidBridge.getSkyCooldownRemainingMs(cleanTarget);
-            if (rem > 0) {
-                const rejectMsg = window.AndroidBridge.getSkyCooldownRejectMsg(cleanTarget);
-                if (sender && sender !== 'WEB') {
-                    window.AndroidBridge.sendSmsReply(sender, rejectMsg);
-                } else {
-                    window.showMessage('warning', rejectMsg);
-                }
-                return;
-            }
-        }
-
-        // تحديد بوابة التحديث المناسبة: ليان (https://rn.layan-t.net/) أو سكاي (https://rn.sky-5g.net)
         let targetProvider = 'Sky';
-        if (senderTitle === 'Layan') {
-            targetProvider = 'Layan';
-        } else if (senderTitle === 'Sky') {
-            targetProvider = 'Sky';
-        } else if (matchedSub && matchedSub.provider) {
+        if (matchedSub && matchedSub.provider) {
             if (String(matchedSub.provider).toLowerCase().includes('layan')) {
                 targetProvider = 'Layan';
             }
         }
 
         if (window.AndroidBridge) {
-            const portalNameAr = targetProvider === 'Layan' ? 'بوابة ليان (rn.layan-t.net)' : 'بوابة سكاي + ليان التلقائية';
-            window.showMessage('warning', `⏳ جاري تحديث وتنشيط الرقم ${cleanTarget} عبر ${portalNameAr}... يرجى الانتظار.`);
+            window.showMessage('warning', `⏳ جاري التحديث الذكي للرقم ${cleanTarget} عبر السيرفر... يرجى الانتظار.`);
             if (targetProvider === 'Layan' && window.AndroidBridge.autoRefreshLayanWithMode) {
                 window.AndroidBridge.autoRefreshLayanWithMode(cleanTarget, sender === 'WEB' ? '' : sender, mode || 'refresh');
             } else if (window.AndroidBridge.autoRefreshSkyWithMode) {
@@ -11961,10 +11949,8 @@
         }
     };
 
-    // محرك الرد التقني والمبيعات المحلي السريع
     function buildRuleBasedSupportReply(rawText) {
         const t = (rawText || '').toLowerCase();
-
         if ((t.includes('فش نت') || t.includes('ما في نت') || t.includes('بدون نت') || t.includes('بدون انترنت') || t.includes('إشارة بدون') || t.includes('اعدادات') || t.includes('apn') || t.includes('نقطة وصول')) && !t.includes('تقييد')) {
             if (t.includes('الوها') || t.includes('ألوها') || t.includes('aloha') || t.includes('موبايل')) {
                 return `🌐 لتفعيل الإنترنت على شريحة (ألوها / موبايل):
@@ -11975,12 +11961,6 @@
 (أو APN بديل: apn.x2one.com)
 3️⃣ احفظ الإعدادات وفعّل التجوال الدولي ثم أعد تشغيل الجوال. 🌟`;
             }
-            if (t.includes('هوت') || t.includes('hot')) {
-                return `🌐 لتفعيل الإنترنت على شريحة هوت موبايل:
-1️⃣ ادخل إلى الإعدادات > أسماء نقاط الوصول (APN) واختر نقطة (Hot Mobile).
-2️⃣ تأكد من تفعيل التجوال الدولي ثم أعد تشغيل الهاتف وانتظر 5 دقائق.
-رابط التحديث الذاتي: https://brand-sim.com/refresh.html 🌟`;
-            }
             return `🛠️ لحل مشكلة وجود إرسال بدون إنترنت أو غياب إشارة 4G:
 1️⃣ فعّل خيار (التجوال الدولي / Data Roaming) من إعدادات الشبكة.
 2️⃣ تأكد من نقطة الوصول (APN):
@@ -11989,38 +11969,13 @@
 - للشرائح الأخرى أو الكود: APN هو internet
 3️⃣ أعد تشغيل الجهاز بعد الحفظ. 🌟`;
         }
-
         if (t.includes('4g') || t.includes('تجوال') || (t.includes('كود') && t.includes('نت'))) {
             return `📶 لظهور إشارة 4G وتفعيل الإنترنت على شرائح الكود أو eSIM:
-يرجى الدخول إلى إعدادات الهاتف > شبكة الهواتف المحمولة > وتفعيل خيار (التجوال الدولي / Data Roaming)، وإذا لزم الأمر أضف نقطة وصول APN باسم internet. 🌟`;
+يرجى الدخول إلى إعدادات الهاتف > شبكة الهواتف المحمولة > وتفعيل خيار (التجوال الدولي / Data Roaming). 🌟`;
         }
-
-        if (t.includes('تقييد') || t.includes('بطيء جدا') || t.includes('استخدام عادل') || t.includes('خلصت السرعة')) {
-            return `⚠️ في حال دخول الرقم في وضعية (تقييد سرعة الإنترنت) نتيجة تجاوز سقف الاستخدام العادل اليومي (4 إلى 5 جيجا يومياً في ألوها/موبايل)، للأسف لا يزول التقييد برمجياً والحل الوحيد هو نقل الرقم إلى شركة أخرى (مثل رامي ليفي أو وي أو هوت موبايل) أو الاستمرار بالسرعة الحالية. 🌟`;
-        }
-
-        if (t.includes('ايسم') || t.includes('ايسيم') || t.includes('esim') || t.includes('الكترونية') || t.includes('إلكترونية') || t.includes('باركود')) {
-            return `📱 الشرائح الإلكترونية (eSIM / باركود) متوفرة لجميع الشبكات (هوت، بارتنر، بيليفون، سيلكوم، ألوها)!
-⚠️ ملاحظة هامة قبل الحجز: الشريحة الإلكترونية تحتاج جهازاً يدعم تقنية eSIM (مثل آيفون الحديث أو سامسونج Ultra).
-ما هو نوع جهازك والشبكة المطلوبة لنزودك بالعرض الأنسب؟ 🌟`;
-        }
-
-        if (t.includes('رامي ليفي') || t.includes('رامي هليفي')) {
-            return `📌 شرائح رامي ليفي ممتازة وتعمل على أبراج بيليفون القوية مع إمكانية التجديد لـ 3 شهور متتالية.
-(ملاحظة: قد يتأخر التفعيل أحياناً خاصة أيام السبت بسبب صيانة أو تعليق الموقع من الشركة الأم). 🌟`;
-        }
-
-        if (t.includes('افضل شريحة') || t.includes('أفضل شريحة') || t.includes('احسن شريحة') || t.includes('تغطية') || t.includes('ارسال')) {
-            return `📡 في مناطق الشمال تتفوق شبكات (بيليفون ورامي ليفي وهوت موبايل)، وفي الجنوب تتألق (ويكوم وهوت وألوها).
-لفحص قوة الأبراج والتغطية في مكانك بدقة، افتح الرابط التالي:
-https://groupahmed2020-byte.github.io/Ahmed.news/
-أو خريطة الأبراج: https://brand-sim.com/Location.html 🌟`;
-        }
-
         return "";
     }
 
-    // الدالة التي يستدعيها RefreshService للرد الذكي عبر Gemini AI بالاعتماد على القواعد + محادثات الواتساب المدربة
     window.executeAiCustomerSupport = function(sender, rawBody, senderTitle) {
         loadSystemKnowledge();
         window.logAiAgent(`💬 استفسار وارد من (${senderTitle || sender}): ${rawBody}`);
@@ -12028,7 +11983,6 @@ https://groupahmed2020-byte.github.io/Ahmed.news/
         const fastRuleReply = buildRuleBasedSupportReply(rawBody);
         const rulesOnlyKb = Object.assign({}, activeKnowledgeBase);
         delete rulesOnlyKb.subscribers;
-
         const waExamples = (activeKnowledgeBase.whatsapp_training_examples || []).slice(-25);
 
         const systemPrompt = `أنت موظف الدعم الفني والمبيعات الذكي لمنظومة (BRAND SIM 🌟) بإدارة أسامة سالم.
@@ -12036,15 +11990,8 @@ https://groupahmed2020-byte.github.io/Ahmed.news/
 اعتمد على قاعدة المعرفة التالية:
 ${JSON.stringify(rulesOnlyKb.brand_sim_system || {})}
 
-نماذج من محادثات واتساب سابقة (تعلم منها أسلوب الرد والتعامل مع الزبائن):
+نماذج من محادثات واتساب سابقة:
 ${JSON.stringify(waExamples)}
-
-قواعد صارمة للرد:
-1. إذا سأل الزبون عن مشكلة (إشارة بدون إنترنت / فش نت): اطلب منه تفعيل التجوال الدولي، وإذا كانت شريحته ألوها أو موبايل يضيف APN باسم prime و نقطة وصول prime (أو apn.x2one.com)، وإذا هوت موبايل يختار نقطة هوت موبايل ويعيد تشغيل الجوال.
-2. إذا سأل عن شريحة إلكترونية (eSIM / كود): نبهه فوراً أنها تحتاج جهاز آيفون أو سامسونج ألترا يدعم eSIM قبل الشراء.
-3. إذا اشتكى من تقييد السرعة في ألوها/موبايل: وضح بلطف أن تجاوز الاستخدام العادل (4-5 جيجا يومياً) يقيد السرعة ولا يُحل إلا بنقل الرقم لشركة أخرى (رامي ليفي، وي، هوت).
-4. إذا سأل عن تأخر تفعيل رامي ليفي: طمئنه أن بوابة الشركة الأم تعلق أحياناً (خصوصاً أيام السبت) والخلل عام ويُتابع.
-5. إذا سأل عن الأسعار أو الحجز: وجهه للموقع https://brand-sim.com/ أو اذكر الأسعار من قاعدة البيانات.
 
 اسم المرسل: ${senderTitle || 'زبوننا الكريم'}
 رسالة الزبون: ${rawBody}
@@ -12059,11 +12006,19 @@ ${JSON.stringify(waExamples)}
             try {
                 if (window.AndroidBridge && window.AndroidBridge.askGeminiNative) {
                     const aiReply = window.AndroidBridge.askGeminiNative(systemPrompt);
-                    const finalReply = (aiReply && aiReply.trim().length > 5) ? aiReply.trim() : fastRuleReply;
+                    const finalReply = (aiReply && aiReply.trim().length > 3) ? aiReply.trim() : fastRuleReply;
                     if (finalReply) {
                         window.logAiAgent(`✅ رد الدعم الذكي إلى (${senderTitle}): ${finalReply}`);
-                        if (sender === 'WEB') window.showMessage('success', finalReply);
-                        else window.AndroidBridge.sendSmsReply(sender, finalReply);
+                        if (sender === 'WEB') {
+                            window.showMessage('success', finalReply);
+                            const tBox = document.getElementById('aiTestResultBox');
+                            if (tBox) {
+                                tBox.style.display = 'block';
+                                tBox.innerText = "🤖 رد Gemini الذكي:\n\n" + finalReply;
+                            }
+                        } else {
+                            window.AndroidBridge.sendSmsReply(sender, finalReply);
+                        }
                         return;
                     }
                 }
@@ -12071,13 +12026,20 @@ ${JSON.stringify(waExamples)}
 
             if (fastRuleReply) {
                 window.logAiAgent(`⚡ رد تقني مباشر إلى (${senderTitle}): ${fastRuleReply}`);
-                if (sender === 'WEB') window.showMessage('success', fastRuleReply);
-                else if (window.AndroidBridge) window.AndroidBridge.sendSmsReply(sender, fastRuleReply);
+                if (sender === 'WEB') {
+                    window.showMessage('success', fastRuleReply);
+                    const tBox = document.getElementById('aiTestResultBox');
+                    if (tBox) {
+                        tBox.style.display = 'block';
+                        tBox.innerText = "⚡ رد تقني مباشر:\n\n" + fastRuleReply;
+                    }
+                } else if (window.AndroidBridge) {
+                    window.AndroidBridge.sendSmsReply(sender, fastRuleReply);
+                }
             }
         }, 50);
     };
 
-    // دوال فتح النوافذ والإعدادات
     function openChannelsConfig() {
         if (window.AndroidBridge && window.AndroidBridge.openChannelsDialog) {
             window.AndroidBridge.openChannelsDialog();
@@ -12099,7 +12061,8 @@ ${JSON.stringify(waExamples)}
         if (window.AndroidBridge && window.AndroidBridge.getBlacklist) {
             area.value = window.AndroidBridge.getBlacklist();
         } else {
-            area.value = "كويك لاين\nرامز";
+            area.value = "كويك لاين
+رامز";
         }
         modal.style.display = 'flex';
     };
@@ -12124,7 +12087,7 @@ ${JSON.stringify(waExamples)}
             const parsed = JSON.parse(raw);
             persistMergedKnowledge(parsed);
             closeModals();
-            window.showMessage('success', `✅ تم دمج وتحديث قاعدة البيانات بنجاح دون حذف البيانات القديمة! (إجمالي المشتركين: ${activeKnowledgeBase.subscribers.length})`);
+            window.showMessage('success', `✅ تم دمج وتحديث قاعدة البيانات بنجاح! (إجمالي المشتركين: ${activeKnowledgeBase.subscribers.length})`);
         } catch (e) {
             alert('⚠️ خطأ في صيغة JSON، يرجى التأكد من الفواصل والأقواس.');
         }
