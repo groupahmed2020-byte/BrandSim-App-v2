@@ -43,28 +43,14 @@ import java.util.regex.*;
 public class MainActivity extends Activity {
     private WebView mainWebView;
     private FrameLayout rootLayout;
-    private TextView floatingSettingsBtn;
     public static MainActivity instance;
+    public static ValueCallback<Uri[]> filePathCallback;
+    private static final int FILE_CHOOSER_RESULT_CODE = 5173;
     public static String lastSentSmsBody = "";
-    private static final String GATEWAY_API_URL = "https://script.google.com/macros/s/AKfycbxpvDw2RXxnPflfrPHIgki51Qovtk9BS7p30tK8aoBIUXD6Hqs6SDsnxMYMX9AJo6OP/exec";
     private static final String SKY_URL = "https://rn.sky-5g.net";
-    private static final String LAYAN_URL = "https://rn.layan-t.net/";
-    private static final String QUICKLINE_URL = "https://rn.quickline.net";
-    private static final String AREEN_URL = "https://rn.areen.net";
-    private static final String AYLOUL_URL = "https://rn.ayloul.net";
-    private static final long GATEWAY_COOLDOWN_MS = 3L * 60L * 60L * 1000L; // 3 ساعات لبوابة التحديث العامة
-    private static final long SKY_PORTAL_COOLDOWN_MS = 20L * 60L * 1000L;   // 20 دقيقة لبوابة سكاي المباشرة (مطابق لـ customers.json)
-    public static final String MSG_INVALID_PHONE = "يرجى إدخال رقم هاتف صحيح مكون من 10 أرقام ويبدأ بـ 05";
-    public static final String MSG_NOT_AUTHORIZED = "عذراً، هذا الرقم غير مسجل في منظومة براند سيم (BRAND SIM) ولا يمكن تحديثه.";
-    public static final String MSG_EXPIRED_SUB = "الرقم منتهي اشتراكه، الرجاء التواصل مع المندوب من أجل التجديد";
-    public static final String MSG_COOLDOWN_PREFIX = "عذراً، لقد قمت بتحديث هذا الرقم مسبقاً.\nالوقت المتبقي لمعاودة التحديث: ";
-    public static final String MSG_DEFAULT_SUCCESS = "تم إرسال طلب تحديث وتنشيط الرقم بنجاح!";
-    public static final String MSG_DEFAULT_ERROR = "تعذر تحديث الرقم حالياً، يرجى التأكد من الرقم أو المحاولة لاحقاً.";
-    public ValueCallback<Uri[]> fileUploadCallback;
-    private static final int FILE_CHOOSER_RESULT_CODE = 202;
+    private static final long SKY_COOLDOWN_MS = 20L * 60L * 1000L; // 20 دقيقة
     public static final String DEFAULT_GEMINI_API_KEY = "AIzaSyDMLJgPX2MeOP3sdfNDWV6PSUj8FgqP3O8";
     private static boolean webViewDataDirConfigured = false;
-    private static volatile String cachedKnowledgeJson = null;
     public static final Map<String, WhatsAppReplyAction> waReplyMap = new ConcurrentHashMap<>();
 
     // قائمة الاستثناءات الافتراضية
@@ -104,30 +90,6 @@ public class MainActivity extends Activity {
         rootLayout = new FrameLayout(this);
         mainWebView = new WebView(this);
         rootLayout.addView(mainWebView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-
-        // إنشاء زر أيقونة الإعدادات العائم والأنيق أعلى يمين الشاشة
-        floatingSettingsBtn = new TextView(this);
-        floatingSettingsBtn.setText("⚙️");
-        floatingSettingsBtn.setTextSize(20f);
-        floatingSettingsBtn.setTextColor(Color.parseColor("#38BDF8"));
-        floatingSettingsBtn.setGravity(Gravity.CENTER);
-        float density = getResources().getDisplayMetrics().density;
-        int btnSize = (int) (46 * density);
-        GradientDrawable btnBg = new GradientDrawable();
-        btnBg.setShape(GradientDrawable.OVAL);
-        btnBg.setColor(Color.parseColor("#E61E293B"));
-        btnBg.setStroke((int) (1.5f * density), Color.parseColor("#38BDF8"));
-        floatingSettingsBtn.setBackground(btnBg);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            floatingSettingsBtn.setElevation(10f * density);
-        }
-        FrameLayout.LayoutParams btnParams = new FrameLayout.LayoutParams(btnSize, btnSize);
-        btnParams.gravity = Gravity.TOP | Gravity.RIGHT;
-        btnParams.topMargin = (int) (16 * density);
-        btnParams.rightMargin = (int) (16 * density);
-        floatingSettingsBtn.setOnClickListener(v -> showSettingsDropdownMenu(floatingSettingsBtn));
-        rootLayout.addView(floatingSettingsBtn, btnParams);
-
         setContentView(rootLayout);
         configureWebView(mainWebView, this);
         mainWebView.loadUrl("file:///android_asset/refresh.html");
@@ -393,7 +355,16 @@ public class MainActivity extends Activity {
         } catch (Exception e) {}
     }
 
-    public static String readAssetsCustomersJson(Context ctx) {
+    
+    public static String loadKnowledgeBaseFromAssetsOrPrefs(Context ctx) {
+        try {
+            String customKb = ctx.getApplicationContext()
+                .getSharedPreferences("BrandSimConfig", Context.MODE_PRIVATE)
+                .getString("custom_knowledge_json", "");
+            if (customKb != null && !customKb.trim().isEmpty()) {
+                return customKb.trim();
+            }
+        } catch (Exception ignored) {}
         try {
             InputStream is = ctx.getApplicationContext().getAssets().open("customers.json");
             BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
@@ -409,177 +380,6 @@ public class MainActivity extends Activity {
         }
     }
 
-    public static JSONObject deepMergeJsonObjects(JSONObject target, JSONObject source) {
-        if (target == null) target = new JSONObject();
-        if (source == null) return target;
-        try {
-            Iterator<String> keys = source.keys();
-            while (keys.hasNext()) {
-                String key = keys.next();
-                Object srcVal = source.opt(key);
-                if (srcVal == null || srcVal == JSONObject.NULL) continue;
-                if ("subscribers".equals(key) || "customers".equals(key) || "whatsapp_training_examples".equals(key)) {
-                    continue; // تدمج القوائم بشكل مخصص عبر دوال الدمج الخاصة بها
-                }
-                Object tgtVal = target.opt(key);
-                if (srcVal instanceof JSONObject && tgtVal instanceof JSONObject) {
-                    target.put(key, deepMergeJsonObjects((JSONObject) tgtVal, (JSONObject) srcVal));
-                } else {
-                    target.put(key, srcVal);
-                }
-            }
-        } catch (Exception ignored) {}
-        return target;
-    }
-
-    public static String normalizeDigitsOnly(String val) {
-        if (val == null) return "";
-        StringBuilder sb = new StringBuilder();
-        for (char c : val.toCharArray()) {
-            if (c >= '٠' && c <= '٩') sb.append((char) ('0' + (c - '٠')));
-            else if (c >= '۰' && c <= '۹') sb.append((char) ('0' + (c - '۰')));
-            else if (c >= '0' && c <= '9') sb.append(c);
-        }
-        return sb.toString();
-    }
-
-    public static JSONArray mergeSubscribersArrays(JSONArray oldArr, JSONArray newArr) {
-        Map<String, JSONObject> mergedMap = new LinkedHashMap<>();
-        JSONArray[] arrays = new JSONArray[]{oldArr, newArr};
-        for (JSONArray arr : arrays) {
-            if (arr == null) continue;
-            for (int i = 0; i < arr.length(); i++) {
-                JSONObject item = arr.optJSONObject(i);
-                if (item == null) continue;
-                String phone = normalizeDigitsOnly(item.optString("phone", item.optString("الاشتراك", "")));
-                if (phone.startsWith("00972") || phone.startsWith("00970")) phone = "0" + phone.substring(5);
-                else if ((phone.startsWith("972") || phone.startsWith("970")) && phone.length() >= 11) phone = "0" + phone.substring(3);
-                else if (phone.length() == 9 && phone.startsWith("5")) phone = "0" + phone;
-                if (phone.length() > 10 && phone.startsWith("05")) phone = phone.substring(0, 10);
-
-                String iccid = normalizeDigitsOnly(item.optString("iccid", item.optString("رقم الشريحة", item.optString("serial", ""))));
-                if (iccid.length() < 10) iccid = "";
-                if (phone.isEmpty() && iccid.isEmpty()) continue;
-                try {
-                    if (!phone.isEmpty()) item.put("phone", phone);
-                    if (!iccid.isEmpty()) item.put("iccid", iccid);
-                } catch (Exception ignored) {}
-                // توحيد الأولوية مع refresh.html لمنع تكرار المشترك عند تحديث السيريال لاحقاً
-                String key = !phone.isEmpty() ? ("PHONE_" + phone) : ("ICCID_" + iccid);
-                if (mergedMap.containsKey(key)) {
-                    JSONObject existing = mergedMap.get(key);
-                    Iterator<String> ks = item.keys();
-                    while (ks.hasNext()) {
-                        String k = ks.next();
-                        String v = item.optString(k, "").trim();
-                        if (!v.isEmpty() && !"nan".equalsIgnoreCase(v) && !"null".equalsIgnoreCase(v)) {
-                            try { existing.put(k, item.get(k)); } catch (Exception ignored) {}
-                        }
-                    }
-                } else {
-                    mergedMap.put(key, item);
-                }
-            }
-        }
-        JSONArray result = new JSONArray();
-        for (JSONObject obj : mergedMap.values()) {
-            result.put(obj);
-        }
-        return result;
-    }
-
-    public static JSONArray mergeWhatsappExamplesArrays(JSONArray oldArr, JSONArray newArr) {
-        Map<String, JSONObject> map = new LinkedHashMap<>();
-        JSONArray[] arrays = new JSONArray[]{oldArr, newArr};
-        for (JSONArray arr : arrays) {
-            if (arr == null) continue;
-            for (int i = 0; i < arr.length(); i++) {
-                JSONObject ex = arr.optJSONObject(i);
-                if (ex == null) continue;
-                String q = ex.optString("customer_query", "").trim();
-                String r = ex.optString("ideal_reply", "").trim();
-                if (q.isEmpty() || r.isEmpty()) continue;
-                String key = q.length() > 80 ? q.substring(0, 80) : q;
-                map.put(key, ex);
-            }
-        }
-        JSONArray result = new JSONArray();
-        for (JSONObject obj : map.values()) {
-            result.put(obj);
-        }
-        return result;
-    }
-
-    public static synchronized String mergeAndSaveKnowledgeBase(Context ctx, String incomingJsonStr) {
-        try {
-            String assetsRaw = readAssetsCustomersJson(ctx);
-            String savedRaw = ctx.getApplicationContext()
-                .getSharedPreferences("BrandSimConfig", Context.MODE_PRIVATE)
-                .getString("custom_knowledge_json", "");
-
-            JSONObject baseObj = new JSONObject();
-            if (assetsRaw != null && !assetsRaw.isEmpty()) {
-                try { baseObj = new JSONObject(assetsRaw); } catch (Exception ignored) {}
-            }
-            JSONArray mergedSubs = baseObj.optJSONArray("subscribers");
-            if (mergedSubs == null) mergedSubs = baseObj.optJSONArray("customers");
-            JSONArray mergedWaEx = baseObj.optJSONArray("whatsapp_training_examples");
-
-            if (savedRaw != null && !savedRaw.trim().isEmpty()) {
-                try {
-                    JSONObject savedObj = new JSONObject(savedRaw);
-                    baseObj = deepMergeJsonObjects(baseObj, savedObj);
-                    JSONArray sSubs = savedObj.optJSONArray("subscribers");
-                    if (sSubs == null) sSubs = savedObj.optJSONArray("customers");
-                    mergedSubs = mergeSubscribersArrays(mergedSubs, sSubs);
-                    JSONArray sWa = savedObj.optJSONArray("whatsapp_training_examples");
-                    mergedWaEx = mergeWhatsappExamplesArrays(mergedWaEx, sWa);
-                } catch (Exception ignored) {}
-            }
-
-            if (incomingJsonStr != null && !incomingJsonStr.trim().isEmpty()) {
-                String trimmed = incomingJsonStr.trim();
-                if (trimmed.startsWith("[")) {
-                    JSONArray inArr = new JSONArray(trimmed);
-                    mergedSubs = mergeSubscribersArrays(mergedSubs, inArr);
-                } else {
-                    JSONObject inObj = new JSONObject(trimmed);
-                    baseObj = deepMergeJsonObjects(baseObj, inObj);
-                    JSONArray inSubs = inObj.optJSONArray("subscribers");
-                    if (inSubs == null) inSubs = inObj.optJSONArray("customers");
-                    mergedSubs = mergeSubscribersArrays(mergedSubs, inSubs);
-                    JSONArray inWa = inObj.optJSONArray("whatsapp_training_examples");
-                    mergedWaEx = mergeWhatsappExamplesArrays(mergedWaEx, inWa);
-                }
-            }
-
-            if (mergedSubs != null) {
-                baseObj.put("subscribers", mergedSubs);
-            }
-            if (mergedWaEx != null) {
-                baseObj.put("whatsapp_training_examples", mergedWaEx);
-            }
-
-            String finalStr = baseObj.toString();
-            cachedKnowledgeJson = finalStr;
-            ctx.getApplicationContext()
-                .getSharedPreferences("BrandSimConfig", Context.MODE_PRIVATE)
-                .edit()
-                .putString("custom_knowledge_json", finalStr)
-                .commit();
-            return finalStr;
-        } catch (Exception e) {
-            return incomingJsonStr != null ? incomingJsonStr : (cachedKnowledgeJson != null ? cachedKnowledgeJson : "");
-        }
-    }
-
-    public static String loadKnowledgeBaseFromAssetsOrPrefs(Context ctx) {
-        if (cachedKnowledgeJson != null && !cachedKnowledgeJson.isEmpty()) {
-            return cachedKnowledgeJson;
-        }
-        return mergeAndSaveKnowledgeBase(ctx, null);
-    }
-
     public static String callGeminiApiDirect(Context ctx, String fullPrompt) {
         String apiKey = getSavedGeminiApiKey(ctx);
         if (apiKey == null || apiKey.trim().isEmpty()) {
@@ -593,7 +393,7 @@ public class MainActivity extends Activity {
                 conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
                 conn.setConnectTimeout(10000);
-                conn.setReadTimeout(12000);
+                conn.setReadTimeout(20000);
                 conn.setDoOutput(true);
                 conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
 
@@ -610,7 +410,7 @@ public class MainActivity extends Activity {
 
                 JSONObject genConfig = new JSONObject();
                 genConfig.put("temperature", 0.25);
-                genConfig.put("maxOutputTokens", 350);
+                genConfig.put("maxOutputTokens", 900);
                 payload.put("generationConfig", genConfig);
 
                 byte[] outBytes = payload.toString().getBytes(StandardCharsets.UTF_8);
@@ -885,6 +685,11 @@ public class MainActivity extends Activity {
             lastRebindTime = now;
 
             ComponentName cn = new ComponentName(appCtx, WhatsAppListener.class);
+            PackageManager pm = appCtx.getPackageManager();
+            if (forceToggle || !WhatsAppListener.isConnected) {
+                pm.setComponentEnabledSetting(cn, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+                pm.setComponentEnabledSetting(cn, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+            }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 NotificationListenerService.requestRebind(cn);
             }
@@ -911,23 +716,24 @@ public class MainActivity extends Activity {
         wv.addJavascriptInterface(new WebAppInterface(ctx.getApplicationContext()), "AndroidBridge");
         wv.setWebChromeClient(new WebChromeClient() {
             @Override
-            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
-                if (instance == null) return false;
+            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallbackParam, FileChooserParams fileChooserParams) {
                 try {
-                    if (instance.fileUploadCallback != null) {
-                        instance.fileUploadCallback.onReceiveValue(null);
+                    if (filePathCallback != null) {
+                        filePathCallback.onReceiveValue(null);
                     }
-                    instance.fileUploadCallback = filePathCallback;
+                    filePathCallback = filePathCallbackParam;
                     Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                     intent.addCategory(Intent.CATEGORY_OPENABLE);
                     intent.setType("*/*");
-                    intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                    instance.startActivityForResult(Intent.createChooser(intent, "اختر ملفات الإكسل أو JSON أو محادثات واتساب"), FILE_CHOOSER_RESULT_CODE);
-                    return true;
+                    Intent chooser = Intent.createChooser(intent, "اختر ملف (Excel / JSON / TXT)");
+                    if (instance != null) {
+                        instance.startActivityForResult(chooser, FILE_CHOOSER_RESULT_CODE);
+                        return true;
+                    }
                 } catch (Exception e) {
-                    instance.fileUploadCallback = null;
-                    return false;
+                    filePathCallback = null;
                 }
+                return false;
             }
         });
         wv.setWebViewClient(new WebViewClient());
@@ -1012,8 +818,7 @@ public class MainActivity extends Activity {
         try {
             Context appCtx = context.getApplicationContext();
             Intent restartIntent = new Intent(appCtx, SmsReceiver.class);
-            // ✅ مطابق تماماً لـ AndroidManifest.xml و SmsReceiver
-            restartIntent.setAction("com.brandsim.refresh.RESTART_SERVICE");
+            restartIntent.setAction("com.brandsim.refresh.RESTORE_SERVICE");
             int flags = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE : PendingIntent.FLAG_UPDATE_CURRENT;
             PendingIntent pi = PendingIntent.getBroadcast(appCtx, 777, restartIntent, flags);
             AlarmManager am = (AlarmManager) appCtx.getSystemService(Context.ALARM_SERVICE);
@@ -1065,31 +870,32 @@ public class MainActivity extends Activity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 101) checkSpecialPermissions();
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == FILE_CHOOSER_RESULT_CODE) {
-            if (fileUploadCallback == null) return;
+            if (filePathCallback == null) return;
             Uri[] results = null;
             if (resultCode == Activity.RESULT_OK && data != null) {
-                if (data.getClipData() != null) {
-                    int count = data.getClipData().getItemCount();
-                    results = new Uri[count];
-                    for (int i = 0; i < count; i++) {
-                        results[i] = data.getClipData().getItemAt(i).getUri();
+                String dataString = data.getDataString();
+                ClipData clipData = data.getClipData();
+                if (clipData != null) {
+                    results = new Uri[clipData.getItemCount()];
+                    for (int i = 0; i < clipData.getItemCount(); i++) {
+                        results[i] = clipData.getItemAt(i).getUri();
                     }
-                } else if (data.getData() != null) {
-                    results = new Uri[]{data.getData()};
+                } else if (dataString != null) {
+                    results = new Uri[]{Uri.parse(dataString)};
                 }
             }
-            fileUploadCallback.onReceiveValue(results);
-            fileUploadCallback = null;
+            filePathCallback.onReceiveValue(results);
+            filePathCallback = null;
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 101) checkSpecialPermissions();
     }
 
     private void checkSpecialPermissions() {
@@ -1248,211 +1054,22 @@ public class MainActivity extends Activity {
         if (cleanPhone == null || cleanPhone.isEmpty()) return 0L;
         try {
             SharedPreferences prefs = ctx.getApplicationContext().getSharedPreferences("BrandSimSkyCooldowns", Context.MODE_PRIVATE);
-            long unlockAt = prefs.getLong("sky_unlock_" + cleanPhone, 0L);
-            long now = System.currentTimeMillis();
-            if (unlockAt > now) {
-                return unlockAt - now;
-            }
             long lastTime = prefs.getLong("sky_last_" + cleanPhone, 0L);
             if (lastTime <= 0L) return 0L;
-            long elapsed = now - lastTime;
-            if (elapsed >= 0L && elapsed < GATEWAY_COOLDOWN_MS) {
-                return GATEWAY_COOLDOWN_MS - elapsed;
+            long elapsed = System.currentTimeMillis() - lastTime;
+            if (elapsed >= 0L && elapsed < SKY_COOLDOWN_MS) {
+                return SKY_COOLDOWN_MS - elapsed;
             }
         } catch (Exception e) {}
         return 0L;
     }
 
     public static void recordSkyRefreshTimestamp(Context ctx, String cleanPhone) {
-        recordSkyRefreshWithCustomDuration(ctx, cleanPhone, GATEWAY_COOLDOWN_MS);
-    }
-
-    public static void recordSkyRefreshWithCustomDuration(Context ctx, String cleanPhone, long durationMs) {
         if (cleanPhone == null || cleanPhone.isEmpty()) return;
         try {
-            long validDur = (durationMs > 0L && durationMs <= GATEWAY_COOLDOWN_MS * 2) ? durationMs : GATEWAY_COOLDOWN_MS;
-            long now = System.currentTimeMillis();
             SharedPreferences prefs = ctx.getApplicationContext().getSharedPreferences("BrandSimSkyCooldowns", Context.MODE_PRIVATE);
-            prefs.edit()
-                .putLong("sky_last_" + cleanPhone, now - (GATEWAY_COOLDOWN_MS - validDur))
-                .putLong("sky_unlock_" + cleanPhone, now + validDur)
-                .commit();
+            prefs.edit().putLong("sky_last_" + cleanPhone, System.currentTimeMillis()).commit();
         } catch (Exception e) {}
-    }
-
-    public static String formatRemainingArabicText(long ms) {
-        long totalSec = Math.max(1L, (ms + 999L) / 1000L);
-        long hours = totalSec / 3600L;
-        long minutes = (totalSec % 3600L) / 60L;
-        long seconds = totalSec % 60L;
-
-        List<String> parts = new ArrayList<>();
-        if (hours == 1) parts.add("ساعة واحدة");
-        else if (hours == 2) parts.add("ساعتين");
-        else if (hours > 2) parts.add(hours + " ساعات");
-
-        if (minutes == 1) parts.add("دقيقة واحدة");
-        else if (minutes == 2) parts.add("دقيقتين");
-        else if (minutes >= 3 && minutes <= 10) parts.add(minutes + " دقائق");
-        else if (minutes > 10) parts.add(minutes + " دقيقة");
-
-        if (hours == 0 && seconds > 0) {
-            if (seconds == 1) parts.add("ثانية واحدة");
-            else if (seconds == 2) parts.add("ثانيتين");
-            else if (seconds >= 3 && seconds <= 10) parts.add(seconds + " ثوانٍ");
-            else parts.add(seconds + " ثانية");
-        }
-        if (parts.isEmpty()) return seconds + " ثانية";
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < parts.size(); i++) {
-            if (i > 0) sb.append(" و ");
-            sb.append(parts.get(i));
-        }
-        return sb.toString();
-    }
-
-    public static boolean isCooldownServerResponse(JSONObject data) {
-        if (data == null) return false;
-        if (data.optBoolean("cooldown", false) || data.optBoolean("isCooldown", false)) return true;
-        String msg = data.optString("msg", data.optString("rawMsg", ""));
-        return Pattern.compile("قمت بتحديث.*مسبق|قمت بتحديث.*قبل|المحاولة.*بعد.*ساع|بعد\\s*3\\s*ساعات|لتكرار الطلب|3\\s*שעות|חמש שעות|רעננת.*לאחרונה|נסה.*בעוד", Pattern.CASE_INSENSITIVE).matcher(msg).find();
-    }
-
-    public static long extractServerRemainingMs(JSONObject data) {
-        if (data == null) return 0L;
-        String[] msFields = {"remainingMs", "cooldownMs", "timeLeftMs", "waitMs", "leftMs"};
-        for (String f : msFields) {
-            long val = data.optLong(f, 0L);
-            if (val > 0L) return val;
-        }
-        String[] secFields = {"remainingSeconds", "retryAfter", "secondsLeft", "waitSeconds", "leftSeconds"};
-        for (String f : secFields) {
-            long val = data.optLong(f, 0L);
-            if (val > 0L) return val * 1000L;
-        }
-        String[] minFields = {"remainingMinutes", "minutesLeft", "waitMinutes", "leftMinutes"};
-        for (String f : minFields) {
-            long val = data.optLong(f, 0L);
-            if (val > 0L) return val * 60000L;
-        }
-        String[] expFields = {"expiresAt", "cooldownUntil", "unlockAt", "nextAllowedAt"};
-        long now = System.currentTimeMillis();
-        for (String f : expFields) {
-            long val = data.optLong(f, 0L);
-            if (val > now) return val - now;
-        }
-        String msg = data.optString("msg", data.optString("rawMsg", ""));
-        Matcher clockMatch = Pattern.compile("(\\d{1,2}):(\\d{2})(?::(\\d{2}))?").matcher(msg);
-        if (clockMatch.find()) {
-            long h = Long.parseLong(clockMatch.group(1));
-            long m = Long.parseLong(clockMatch.group(2));
-            long s = clockMatch.group(3) != null ? Long.parseLong(clockMatch.group(3)) : 0L;
-            return ((h * 3600L) + (m * 60L) + s) * 1000L;
-        }
-        Matcher minMatch = Pattern.compile("(\\d+)\\s*(?:دقيقة|دقائق|דקות)").matcher(msg);
-        if (minMatch.find()) {
-            long totalMin = Long.parseLong(minMatch.group(1));
-            if (msg.contains("ساعتين") || msg.contains("שעתיים")) totalMin += 120L;
-            else if (msg.contains("ساعة") || msg.contains("שעה")) totalMin += 60L;
-            return totalMin * 60000L;
-        }
-        return 0L;
-    }
-
-    public static JSONObject findSubscriberInKnowledgeBase(Context ctx, String cleanPhone) {
-        if (cleanPhone == null || cleanPhone.isEmpty()) return null;
-        try {
-            String rawJson = loadKnowledgeBaseFromAssetsOrPrefs(ctx);
-            if (rawJson == null || rawJson.isEmpty()) return null;
-            JSONObject root = new JSONObject(rawJson);
-            JSONArray subs = root.optJSONArray("subscribers");
-            if (subs == null) return null;
-            for (int i = 0; i < subs.length(); i++) {
-                JSONObject sub = subs.optJSONObject(i);
-                if (sub == null) continue;
-                String p = normalizeDigitsOnly(sub.optString("phone", ""));
-                if (cleanPhone.equals(p)) return sub;
-            }
-        } catch (Exception ignored) {}
-        return null;
-    }
-
-    public static boolean isSubscriberRecordExpired(JSONObject sub) {
-        if (sub == null) return false;
-        if (sub.has("is_active") && !sub.optBoolean("is_active", true)) return true;
-        String status = sub.optString("status", "").trim();
-        if (status.contains("مفصول") || status.contains("معلق") || status.contains("ניתוק")) return true;
-        String endIso = sub.optString("end_date_iso", "").trim();
-        if (!endIso.isEmpty()) {
-            try {
-                java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                Date endDt = sdf.parse(endIso);
-                if (endDt != null && endDt.getTime() + 86399000L < System.currentTimeMillis()) {
-                    return true;
-                }
-            } catch (Exception ignored) {}
-        }
-        return false;
-    }
-
-    public static JSONObject callGatewayApiDirect(String cleanPhone, String lang) {
-        HttpURLConnection conn = null;
-        try {
-            URL url = new URL(GATEWAY_API_URL);
-            conn = (HttpURLConnection) url.openConnection();
-            conn.setInstanceFollowRedirects(true);
-            conn.setRequestMethod("POST");
-            conn.setConnectTimeout(15000);
-            conn.setReadTimeout(20000);
-            conn.setDoOutput(true);
-            conn.setRequestProperty("Content-Type", "text/plain;charset=utf-8");
-
-            JSONObject body = new JSONObject();
-            body.put("phone", cleanPhone);
-            body.put("lang", lang != null ? lang : "ar");
-            body.put("hp", "");
-            body.put("ts", System.currentTimeMillis());
-
-            byte[] outBytes = body.toString().getBytes(StandardCharsets.UTF_8);
-            try (OutputStream os = conn.getOutputStream()) {
-                os.write(outBytes);
-                os.flush();
-            }
-
-            int status = conn.getResponseCode();
-            if (status == HttpURLConnection.HTTP_MOVED_TEMP || status == HttpURLConnection.HTTP_MOVED_PERM || status == HttpURLConnection.HTTP_SEE_OTHER || status == 307 || status == 308) {
-                String newUrl = conn.getHeaderField("Location");
-                conn.disconnect();
-                if (newUrl != null && !newUrl.isEmpty()) {
-                    conn = (HttpURLConnection) new URL(newUrl).openConnection();
-                    conn.setRequestMethod("GET");
-                    conn.setConnectTimeout(15000);
-                    conn.setReadTimeout(20000);
-                    status = conn.getResponseCode();
-                }
-            }
-
-            InputStream is = (status >= 200 && status < 400) ? conn.getInputStream() : conn.getErrorStream();
-            if (is != null) {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
-                StringBuilder sb = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    sb.append(line);
-                }
-                reader.close();
-                String respStr = sb.toString().trim();
-                if (respStr.startsWith("{")) {
-                    return new JSONObject(respStr);
-                }
-            }
-        } catch (Exception ignored) {
-        } finally {
-            if (conn != null) {
-                try { conn.disconnect(); } catch (Exception ignored) {}
-            }
-        }
-        return null;
     }
 
     public static String sanitizeBrandMessage(String text) {
@@ -1475,33 +1092,38 @@ public class MainActivity extends Activity {
             return out;
         }
 
-        // تعريب رسائل مزودي الخدمة التي تظهر باللغة العبرية وفقاً للمرجع web-refresh.html
+        // تعريب رسائل مزودي الخدمة التي تظهر باللغة العبرية
         if (out.contains("חמש שעות") || out.contains("אפשרות לעשות רענון") || out.contains("רענון פעם אחת")) {
             return "⚠️ عذراً، يُسمح بتحديث هذا الرقم مرة واحدة فقط كل 5 ساعات.";
         }
         if (out.contains("בוצע בהצלחה") || out.contains("הרענון בוצע") || out.contains("עודכן בהצלחה")) {
-            return "✅ " + MSG_DEFAULT_SUCCESS;
+            return "✅ تم تحديث وتنشيط الرقم بنجاح!";
         }
-        if (out.contains("פג תוקף") || out.contains("ניתוק קבוע") || out.contains("מנותק")) {
-            return "⚠️ " + MSG_EXPIRED_SUB;
-        }
-        if (out.contains("אינו רשום") || out.contains("לא קיים") || out.contains("לא נמצא")) {
-            return "⚠️ " + MSG_NOT_AUTHORIZED;
-        }
-        if (out.contains("אינו תקין") || out.contains("לא תקין")) {
+        if (out.contains("אינו תקין") || out.contains("לא תקין") || out.contains("לא קיים") || out.contains("לא נמצא")) {
             return "⚠️ عذراً، الرقم غير صحيح أو غير نشط في النظام.";
         }
         if (Pattern.compile("[\\u0590-\\u05FF]{3,}").matcher(out).find()) {
             if (out.contains("שעות") || out.contains("דקות") || out.contains("רענון")) {
-                return "⚠️ " + MSG_COOLDOWN_PREFIX + "عدة ساعات";
+                return "⚠️ عذراً، تم تحديث هذا الرقم مؤخراً. يرجى الانتظار والمحاولة بعد عدة ساعات.";
             }
-            return "⚠️ " + MSG_DEFAULT_ERROR;
+            return "⚠️ تعذر تحديث الرقم حالياً من المصدر، يرجى المحاولة لاحقاً.";
         }
         return out;
     }
 
     public static String formatSkyCooldownMessage(String cleanPhone, long remainingMs) {
-        return MSG_COOLDOWN_PREFIX + formatRemainingArabicText(remainingMs);
+        long totalMinutes = Math.max(1L, (remainingMs + 59999L) / 60000L);
+        long hours = totalMinutes / 60L;
+        long mins = totalMinutes % 60L;
+        String timeStr;
+        if (hours > 0 && mins > 0) {
+            timeStr = hours + " ساعة و " + mins + " دقيقة";
+        } else if (hours > 0) {
+            timeStr = hours + " ساعة";
+        } else {
+            timeStr = mins + " دقيقة";
+        }
+        return "⚠️ عذراً، طلب التحديث للرقم " + cleanPhone + " مرفوض لتكرار الطلب.\nيُسمح بتحديث ارقام براند سيم مرة واحدة فقط بعد 20 دقيقة.\nيرجى المحاولة بعد مرور: " + timeStr + ".";
     }
 
     public static void sendSmsDirect(final Context ctx, final String sender, final String message) {
@@ -1587,16 +1209,7 @@ public class MainActivity extends Activity {
     private static long lastSkyRunTime = 0;
 
     @SuppressLint("SetJavaScriptEnabled")
-    public static void runHeadlessLayanRefresh(final Context ctx, final String phone, final String sender, final String mode) {
-        runHeadlessPortalRefresh(ctx, phone, sender, mode, LAYAN_URL, "ليان");
-    }
-
     public static void runHeadlessSkyRefresh(final Context ctx, final String phone, final String sender, final String mode) {
-        runHeadlessPortalRefresh(ctx, phone, sender, mode, SKY_URL, "سكاي");
-    }
-
-    @SuppressLint("SetJavaScriptEnabled")
-    public static void runHeadlessPortalRefresh(final Context ctx, final String phone, final String sender, final String mode, final String targetPortalUrl, final String portalLabel) {
         if (phone == null || isIgnoredPrefixPhone(phone)) return;
         final String cleanPhone = phone.replaceAll("[^0-9]", "");
 
@@ -1618,7 +1231,7 @@ public class MainActivity extends Activity {
         lastSkyRunPhone = cleanPhone;
         lastSkyRunTime = now;
 
-        final long portalCooldownMs = SKY_URL.equals(targetPortalUrl) ? SKY_PORTAL_COOLDOWN_MS : GATEWAY_COOLDOWN_MS;
+        recordSkyRefreshTimestamp(ctx, cleanPhone);
 
         new Handler(Looper.getMainLooper()).post(() -> {
             ensureWebViewProcessDir(ctx.getApplicationContext());
@@ -1628,7 +1241,6 @@ public class MainActivity extends Activity {
             WebSettings ss = skyWebView.getSettings();
             ss.setJavaScriptEnabled(true);
             ss.setDomStorageEnabled(true);
-            ss.setCacheMode(WebSettings.LOAD_NO_CACHE);
             ss.setDatabaseEnabled(true);
             ss.setAllowFileAccess(true);
             ss.setAllowContentAccess(true);
@@ -1640,32 +1252,9 @@ public class MainActivity extends Activity {
             ss.setUserAgentString("Mozilla/5.0 (Linux; Android 13; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36");
 
             final boolean[] completed = {false};
-
-            final Handler timeoutHandler = new Handler(Looper.getMainLooper());
-            final Runnable timeoutRunnable = () -> {
-                if (!completed[0]) {
-                    completed[0] = true;
-                    if (instance != null) instance.appendUiLog("⚠️ انتهت مهلة الاتصال بالبوابة: " + portalLabel);
-                    try {
-                        skyWebView.stopLoading();
-                        skyWebView.setWebChromeClient(null);
-                        skyWebView.setWebViewClient(null);
-                        skyWebView.clearHistory();
-                        skyWebView.clearCache(true);
-                        skyWebView.destroy();
-                    } catch (Exception e) {}
-                }
-            };
-            timeoutHandler.postDelayed(timeoutRunnable, 120000); // 120 seconds timeout
-
             final Runnable finishCleanup = () -> {
-                timeoutHandler.removeCallbacks(timeoutRunnable);
                 try {
                     skyWebView.stopLoading();
-                    skyWebView.setWebChromeClient(null);
-                    skyWebView.setWebViewClient(null);
-                    skyWebView.clearHistory();
-                    skyWebView.clearCache(true);
                     skyWebView.destroy();
                 } catch (Exception e) {}
             };
@@ -1679,28 +1268,14 @@ public class MainActivity extends Activity {
                     if (!cleanPhone.isEmpty() && cleanPhone.equals(trimmed.replaceAll("[^0-9]", ""))) return;
                     if (trimmed.matches("^0?5\\d{8}$")) return;
 
-                    boolean isNotFoundInPortal = trimmed.contains("غير صحيح") || trimmed.contains("غير صالح") || trimmed.contains("غير مسجل") || trimmed.contains("غير نشط") || trimmed.contains("لا يوجد");
-                    if (isNotFoundInPortal && SKY_URL.equals(targetPortalUrl)) {
-                        completed[0] = true;
-                        new Handler(Looper.getMainLooper()).postDelayed(finishCleanup, 500);
-                        if (instance != null) instance.appendUiLog("🔄 الرقم غير موجود في سكاي، جاري التحديث تلقائياً عبر بوابة ليان (rn.layan-t.net): " + cleanPhone);
-                        SharedPreferences prefs = ctx.getApplicationContext().getSharedPreferences("BrandSimSkyCooldowns", Context.MODE_PRIVATE);
-                        prefs.edit().remove("sky_last_" + cleanPhone).remove("sky_unlock_" + cleanPhone).commit();
-                        lastSkyRunPhone = "";
-                        runHeadlessPortalRefresh(ctx, cleanPhone, sender, mode, LAYAN_URL, "ليان");
-                        return;
-                    }
                     completed[0] = true;
-                    boolean isFail = trimmed.contains("فشل") || trimmed.contains("قبل قليل") || isNotFoundInPortal || trimmed.contains("خطأ");
-                    if (!isFail) {
-                        recordSkyRefreshWithCustomDuration(ctx, cleanPhone, portalCooldownMs);
-                    }
+                    boolean isFail = trimmed.contains("فشل") || trimmed.contains("قبل قليل") || trimmed.contains("غير صحيح") || trimmed.contains("غير صالح") || trimmed.contains("خطأ");
                     String outMsg = "weak_net".equals(mode) ? ("تم تحديث الانترنت\n" + trimmed) : trimmed;
                     if (sender != null && !sender.trim().isEmpty()) sendSmsDirect(ctx, sender, outMsg);
                     if (instance != null) {
                         instance.updateUiMessage(isFail ? "warning" : "success", outMsg);
                     }
-                    new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(ctx, "نتيجة التحديث (" + portalLabel + " - " + cleanPhone + "): " + outMsg, Toast.LENGTH_LONG).show());
+                    new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(ctx, "نتيجة براند سيم (" + cleanPhone + "): " + outMsg, Toast.LENGTH_LONG).show());
                     new Handler(Looper.getMainLooper()).postDelayed(finishCleanup, 2000);
                 }
 
@@ -1716,9 +1291,6 @@ public class MainActivity extends Activity {
                         completed[0] = true;
                         String t = sanitizeBrandMessage(message).trim();
                         boolean isFail = t.contains("فشل") || t.contains("قبل قليل") || t.contains("غير صحيح") || t.contains("خطأ");
-                        if (!isFail) {
-                            recordSkyRefreshWithCustomDuration(ctx, cleanPhone, portalCooldownMs);
-                        }
                         String outMsg = "weak_net".equals(mode) ? ("تم تحديث الانترنت\n" + t) : t;
                         if (sender != null && !sender.trim().isEmpty()) sendSmsDirect(ctx, sender, outMsg);
                         if (instance != null) {
@@ -1771,90 +1343,14 @@ public class MainActivity extends Activity {
                 }
             });
 
-            skyWebView.clearCache(true);
-            skyWebView.loadUrl(targetPortalUrl);
+            skyWebView.loadUrl(SKY_URL);
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                if (!completed[0]) {
+                    completed[0] = true;
+                    finishCleanup.run();
+                }
+            }, 200000);
         });
-    }
-
-    public static void runUnifiedGatewayOrPortalRefresh(final Context ctx, final String phone, final String sender, final String mode, final String preferredProvider) {
-        if (phone == null || isIgnoredPrefixPhone(phone)) return;
-        final String cleanPhone = extractCleanPhone(phone, false);
-        if (cleanPhone == null || !cleanPhone.matches("^05\\d{8}$")) {
-            if (sender != null && !sender.trim().isEmpty()) sendSmsDirect(ctx, sender, MSG_INVALID_PHONE);
-            if (instance != null) instance.updateUiMessage("warning", MSG_INVALID_PHONE);
-            return;
-        }
-
-        // 1. فحص صلاحية الاشتراك من قاعدة البيانات (customers.json)
-        final JSONObject subObj = findSubscriberInKnowledgeBase(ctx, cleanPhone);
-        if (subObj != null && isSubscriberRecordExpired(subObj)) {
-            if (sender != null && !sender.trim().isEmpty()) sendSmsDirect(ctx, sender, MSG_EXPIRED_SUB);
-            if (instance != null) instance.updateUiMessage("warning", MSG_EXPIRED_SUB);
-            return;
-        }
-
-        // 2. فحص فترة الانتظار (Cooldown)
-        long remMs = getSkyRemainingCooldownMs(ctx, cleanPhone);
-        if (remMs > 0L) {
-            String rejectMsg = formatSkyCooldownMessage(cleanPhone, remMs);
-            if (sender != null && !sender.trim().isEmpty()) sendSmsDirect(ctx, sender, rejectMsg);
-            if (instance != null) instance.updateUiMessage("warning", rejectMsg);
-            return;
-        }
-
-        // 3. الاتصال ببوابة GATEWAY_API_URL المرجعية أولاً في الخلفية، ثم التوجيه لبوابة المزود عند الحاجة
-        new Thread(() -> {
-            JSONObject data = callGatewayApiDirect(cleanPhone, "ar");
-            if (data != null) {
-                if (isCooldownServerResponse(data)) {
-                    long srvMs = extractServerRemainingMs(data);
-                    long finalCd = srvMs > 0L ? srvMs : GATEWAY_COOLDOWN_MS;
-                    recordSkyRefreshWithCustomDuration(ctx, cleanPhone, finalCd);
-                    String cdMsg = formatSkyCooldownMessage(cleanPhone, finalCd);
-                    if (sender != null && !sender.trim().isEmpty()) sendSmsDirect(ctx, sender, cdMsg);
-                    if (instance != null) instance.updateUiMessage("warning", cdMsg);
-                    return;
-                }
-
-                if (data.optBoolean("ok", false)) {
-                    long cdMs = data.optLong("cooldownMs", GATEWAY_COOLDOWN_MS);
-                    recordSkyRefreshWithCustomDuration(ctx, cleanPhone, cdMs > 0L ? cdMs : GATEWAY_COOLDOWN_MS);
-                    String rawMsg = data.optString("msg", MSG_DEFAULT_SUCCESS);
-                    String cleanMsg = sanitizeBrandMessage(rawMsg).trim();
-                    String outMsg = "weak_net".equals(mode) ? ("تم تحديث الانترنت\n" + cleanMsg) : cleanMsg;
-                    if (sender != null && !sender.trim().isEmpty()) sendSmsDirect(ctx, sender, outMsg);
-                    if (instance != null) instance.updateUiMessage("success", outMsg);
-                    new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(ctx, outMsg, Toast.LENGTH_LONG).show());
-                    return;
-                }
-
-                String errMsg = sanitizeBrandMessage(data.optString("msg", "")).trim();
-                if (!errMsg.isEmpty() && (errMsg.contains("منتهي") || errMsg.contains("غير مسجل"))) {
-                    if (subObj == null) {
-                        if (sender != null && !sender.trim().isEmpty()) sendSmsDirect(ctx, sender, errMsg);
-                        if (instance != null) instance.updateUiMessage("warning", errMsg);
-                        return;
-                    }
-                }
-            }
-
-            // Fallback إلى بوابة المزود الحقيقية عبر Headless WebView
-            String prov = (preferredProvider != null && !preferredProvider.isEmpty())
-                ? preferredProvider
-                : (subObj != null ? subObj.optString("provider", "Sky") : "Sky");
-            String pLower = prov.toLowerCase();
-            if (pLower.contains("layan")) {
-                runHeadlessPortalRefresh(ctx, cleanPhone, sender, mode, LAYAN_URL, "ليان");
-            } else if (pLower.contains("quick")) {
-                runHeadlessPortalRefresh(ctx, cleanPhone, sender, mode, QUICKLINE_URL, "كويك لاين");
-            } else if (pLower.contains("areen")) {
-                runHeadlessPortalRefresh(ctx, cleanPhone, sender, mode, AREEN_URL, "أرين");
-            } else if (pLower.contains("ayloul")) {
-                runHeadlessPortalRefresh(ctx, cleanPhone, sender, mode, AYLOUL_URL, "أيلول");
-            } else {
-                runHeadlessPortalRefresh(ctx, cleanPhone, sender, mode, SKY_URL, "سكاي");
-            }
-        }).start();
     }
 
     public static class WebAppInterface {
@@ -1864,30 +1360,7 @@ public class MainActivity extends Activity {
         @JavascriptInterface
         public void autoRefreshSkyWithMode(final String phone, final String sender, final String mode) {
             if (isIgnoredPrefixPhone(phone)) return;
-            runUnifiedGatewayOrPortalRefresh(ctx, phone, sender, mode != null ? mode : "refresh", "Sky");
-        }
-
-        @JavascriptInterface
-        public void autoRefreshLayanWithMode(final String phone, final String sender, final String mode) {
-            if (isIgnoredPrefixPhone(phone)) return;
-            runUnifiedGatewayOrPortalRefresh(ctx, phone, sender, mode != null ? mode : "refresh", "Layan");
-        }
-
-        @JavascriptInterface
-        public void autoRefreshByProvider(final String phone, final String sender, final String mode, final String provider) {
-            if (isIgnoredPrefixPhone(phone)) return;
-            String p = provider != null ? provider.toLowerCase() : "";
-            if (p.contains("layan")) {
-                runHeadlessPortalRefresh(ctx, phone, sender, mode != null ? mode : "refresh", LAYAN_URL, "ليان");
-            } else if (p.contains("ayloul")) {
-                runHeadlessPortalRefresh(ctx, phone, sender, mode != null ? mode : "refresh", AYLOUL_URL, "أيلول");
-            } else if (p.contains("areen")) {
-                runHeadlessPortalRefresh(ctx, phone, sender, mode != null ? mode : "refresh", AREEN_URL, "أرين");
-            } else if (p.contains("quickline") || p.contains("quick")) {
-                runHeadlessPortalRefresh(ctx, phone, sender, mode != null ? mode : "refresh", QUICKLINE_URL, "كويك لاين");
-            } else {
-                runHeadlessPortalRefresh(ctx, phone, sender, mode != null ? mode : "refresh", SKY_URL, "سكاي");
-            }
+            runHeadlessSkyRefresh(ctx, phone, sender, mode != null ? mode : "refresh");
         }
 
         @JavascriptInterface
@@ -1939,23 +1412,70 @@ public class MainActivity extends Activity {
         }
 
         @JavascriptInterface
-        public void askGeminiAndReplyAsync(final String fullPrompt, final String sender, final String senderTitle, final String fallbackReply) {
-            new Thread(() -> {
-                String aiReply = callGeminiApiDirect(ctx, fullPrompt);
-                String finalReply = (aiReply != null && aiReply.trim().length() > 3) ? aiReply.trim() : (fallbackReply != null ? fallbackReply.trim() : "");
-                if (finalReply.isEmpty()) {
-                    finalReply = "أهلاً بك في مركز دعم BRAND SIM 🌟\nيرجى تزويدنا برقم الشريحة (05XXXXXXXX) أو السيريال (89972...) أو استفسارك وسنقوم بخدمتك فوراً.";
-                }
-                final String msgToSend = finalReply;
-                if (instance != null) {
-                    instance.appendUiLog("🤖 رد Gemini الذكي إلى (" + (senderTitle != null && !senderTitle.isEmpty() ? senderTitle : sender) + "): " + msgToSend);
-                }
-                if (sender != null && !sender.isEmpty() && !"WEB".equalsIgnoreCase(sender)) {
-                    sendSmsDirect(ctx, sender, msgToSend);
+        public void openSettingsMenu() {
+            new Handler(Looper.getMainLooper()).post(() -> {
+                if (instance != null && instance.rootLayout != null) {
+                    instance.showSettingsDropdownMenu(instance.rootLayout);
                 } else if (instance != null) {
-                    instance.updateUiMessage("success", msgToSend);
+                    instance.showChannelsConfigDialog();
                 }
-            }).start();
+            });
+        }
+
+        @JavascriptInterface
+        public String getSubscribersJson() {
+            try {
+                java.io.File file = new java.io.File(ctx.getFilesDir(), "merged_subscribers.json");
+                if (file.exists()) {
+                    java.io.FileInputStream fis = new java.io.FileInputStream(file);
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8));
+                    StringBuilder sb = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) sb.append(line);
+                    reader.close();
+                    return sb.toString();
+                }
+            } catch (Exception e) {}
+            return "[]";
+        }
+
+        @JavascriptInterface
+        public void saveSubscribersJson(final String jsonStr) {
+            try {
+                java.io.File file = new java.io.File(ctx.getFilesDir(), "merged_subscribers.json");
+                java.io.FileOutputStream fos = new java.io.FileOutputStream(file, false);
+                fos.write((jsonStr != null ? jsonStr : "[]").getBytes(StandardCharsets.UTF_8));
+                fos.flush();
+                fos.close();
+            } catch (Exception e) {}
+        }
+
+        @JavascriptInterface
+        public String getWaTrainingJson() {
+            try {
+                java.io.File file = new java.io.File(ctx.getFilesDir(), "wa_training_samples.json");
+                if (file.exists()) {
+                    java.io.FileInputStream fis = new java.io.FileInputStream(file);
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8));
+                    StringBuilder sb = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) sb.append(line);
+                    reader.close();
+                    return sb.toString();
+                }
+            } catch (Exception e) {}
+            return "[]";
+        }
+
+        @JavascriptInterface
+        public void saveWaTrainingJson(final String jsonStr) {
+            try {
+                java.io.File file = new java.io.File(ctx.getFilesDir(), "wa_training_samples.json");
+                java.io.FileOutputStream fos = new java.io.FileOutputStream(file, false);
+                fos.write((jsonStr != null ? jsonStr : "[]").getBytes(StandardCharsets.UTF_8));
+                fos.flush();
+                fos.close();
+            } catch (Exception e) {}
         }
 
         @JavascriptInterface
@@ -2044,25 +1564,19 @@ public class MainActivity extends Activity {
             saveIgnoreAllGroups(ctx, ignore);
         }
 
-        @JavascriptInterface
-        public void openSettingsMenu() {
-            new Handler(Looper.getMainLooper()).post(() -> {
-                if (instance != null) {
-                    View anchor = instance.floatingSettingsBtn != null ? instance.floatingSettingsBtn : instance.mainWebView;
-                    instance.showSettingsDropdownMenu(anchor);
-                }
-            });
-        }
-
-        // --- واجهات قاعدة المعرفة والتغذية الراجعة (customers.json) مع الدمج الذكي والكاش السريع ---
+        // --- واجهات قاعدة المعرفة والتغذية الراجعة (customers.json) ---
         @JavascriptInterface
         public String getSystemKnowledgeBase() {
             return loadKnowledgeBaseFromAssetsOrPrefs(ctx);
         }
 
         @JavascriptInterface
-        public String saveSystemKnowledgeBase(final String jsonStr) {
-            return mergeAndSaveKnowledgeBase(ctx, jsonStr);
+        public void saveSystemKnowledgeBase(final String jsonStr) {
+            try {
+                ctx.getApplicationContext().getSharedPreferences("BrandSimConfig", Context.MODE_PRIVATE).edit()
+                    .putString("custom_knowledge_json", jsonStr != null ? jsonStr.trim() : "")
+                    .commit();
+            } catch (Exception e) {}
         }
 
         // --- واجهات حفظ ومزامنة أسعار المتجر والباقات ---
@@ -2468,9 +1982,10 @@ public class MainActivity extends Activity {
                 CharSequence titleCs = notif.extras.getCharSequence(Notification.EXTRA_TITLE);
                 String title = titleCs != null ? titleCs.toString().trim() : "";
 
-                if (isGroupConversation) {
+                // التحقق من عنوان الإشعار إذا كان يحتوي على نمط رسائل المجموعات (مثلاً "أحمد: سلام" أو "اسم المجموعة (5 رسائل)")
+                if (title.contains(":") || title.contains(" (") || isGroupConversation) {
                     if (isIgnoreAllGroupsEnabled(this)) {
-                        return; // تم تجاهل إشعار المجموعة تلقائياً
+                        return; // تم تجاهل إشعار المجموعة تلقائياً!
                     }
                 }
 
@@ -2669,14 +2184,14 @@ public class MainActivity extends Activity {
                 if (extractedPhone != null && !extractedPhone.isEmpty() && !isIgnoredPrefixPhone(extractedPhone)) {
                     boolean shouldRefresh = isPhoneOnlyMessage(body) || isExplicitRefreshRequestSms(body);
                     if (!shouldRefresh) {
+                        // تجاهل الرسالة إذا كانت استعلاماً عن تفاصيل أو دردشة عامة في تطبيق SMS الأساسي
                         return;
                     }
 
                     String mode = isWeakNetRequestSms(body) ? "weak_net" : "refresh";
                     String dedupKey = "SMS_REF:" + mode + ":" + extractedPhone + ":" + sender;
                     long now = SystemClock.elapsedRealtime();
-                    // ✅ تم إصلاح فحص منع التكرار
-                    if (dedupKey.equals(lastProcessedKey) && (now - lastProcessedTime) < 12000) return;
+                    if (dedupKey.endsWith(lastProcessedKey) && !lastProcessedKey.isEmpty() && (now - lastProcessedTime) < 12000) return;
                     lastProcessedKey = dedupKey;
                     lastProcessedTime = now;
                     String replyTarget = (sender == null || sender.contains("XONE") || !sender.matches("^[+0-9]+$")) ? extractedPhone : sender;
@@ -2693,6 +2208,8 @@ public class MainActivity extends Activity {
                     }, 8000);
                     return;
                 }
+
+                // تم إلغاء الرد الآلي العام (AI Agent) على رسائل تطبيق SMS الأساسي للهاتف بناءً على طلبك
             } catch (Exception e) {}
         }
     }

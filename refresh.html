@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>مركز الدعم والتحديث - BRAND SIM 🌟</title>
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <title>إدارة منظومة BRAND SIM 🌟 (نسخة المدير)</title>
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
     <style>
         :root {
-            --bg-dark: #0f172a;
-            --card-bg: #1e293b;
+            --bg-dark: #0b1120;
+            --card-bg: #151f32;
             --accent: #38bdf8;
             --accent-hover: #0284c7;
-            --success: #22c55e;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --purple: #a855f7;
+            --success: #16a34a;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --purple: #6d28d9;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --border-color: #334155;
+            --border-color: #26354d;
         }
         * {
             box-sizing: border-box;
@@ -29,157 +29,87 @@
             background-color: var(--bg-dark);
             color: var(--text-main);
             min-height: 100vh;
-            padding: 14px;
-            padding-top: 18px;
-            line-height: 1.6;
+            padding: 12px;
+            padding-top: 16px;
+            line-height: 1.55;
         }
-        .header {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 14px 16px;
-            padding-right: 64px;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-            position: relative;
-        }
-        .header-title h1 {
-            font-size: 1.2rem;
-            color: var(--accent);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .header-title p {
-            font-size: 0.76rem;
-            color: var(--text-muted);
-            margin-top: 2px;
-        }
-        .status-badge {
-            background: rgba(34, 197, 94, 0.15);
-            color: var(--success);
-            border: 1px solid rgba(34, 197, 94, 0.4);
-            padding: 6px 12px;
-            border-radius: 999px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-        .status-badge.off {
-            background: rgba(239, 68, 68, 0.15);
-            color: var(--danger);
-            border-color: rgba(239, 68, 68, 0.4);
-        }
-        .floating-gear-btn {
+        /* زر الترس العائم في أعلى اليمين كما في تصميمك */
+        .floating-gear {
             position: fixed;
-            top: 16px;
-            right: 16px;
+            top: 14px;
+            right: 14px;
             width: 46px;
             height: 46px;
             border-radius: 50%;
-            background: rgba(30, 41, 59, 0.95);
+            background: rgba(21, 31, 50, 0.92);
             border: 1.5px solid var(--accent);
-            color: var(--accent);
-            font-size: 20px;
+            color: #cbd5e1;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 1.35rem;
             cursor: pointer;
-            z-index: 1000;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.45);
-            transition: transform 0.2s, background 0.2s;
+            z-index: 900;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.45);
         }
-        .floating-gear-btn:active {
-            transform: scale(0.92);
-        }
-        .settings-dropdown-menu {
-            position: fixed;
-            top: 68px;
-            right: 16px;
-            width: 275px;
-            background: #1e293b;
-            border: 1px solid var(--accent);
-            border-radius: 14px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.65);
-            z-index: 1001;
-            display: none;
-            overflow: hidden;
-        }
-        .settings-dropdown-menu.open {
-            display: block;
-        }
-        .dropdown-item {
-            padding: 11px 14px;
-            font-size: 0.84rem;
-            color: var(--text-main);
-            border-bottom: 1px solid #334155;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: background 0.15s;
-        }
-        .dropdown-item:last-child {
-            border-bottom: none;
-        }
-        .dropdown-item:hover, .dropdown-item:active {
-            background: #0f172a;
-            color: var(--accent);
-        }
-        .notice-banner {
-            background: rgba(245, 158, 11, 0.12);
-            border-right: 4px solid var(--warning);
-            color: #fde68a;
-            padding: 10px 14px;
-            border-radius: 10px;
-            font-size: 0.82rem;
-            margin-bottom: 16px;
-            display: none;
+        .floating-gear:active {
+            transform: scale(0.93);
         }
         .card {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 16px;
+            border-radius: 18px;
             padding: 16px;
             margin-bottom: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.28);
+            position: relative;
         }
-        .card-title {
-            font-size: 0.96rem;
-            font-weight: 700;
-            margin-bottom: 12px;
-            color: var(--accent);
+        .card-header-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
-            gap: 6px;
+            gap: 8px;
+            margin-bottom: 10px;
+            padding-right: 42px; /* مساحة لزر الترس في البطاقة الأولى */
         }
-        .input-group {
-            margin-bottom: 12px;
+        .card-header-row.no-pad {
+            padding-right: 0;
         }
-        .input-group label {
+        .card-title {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--accent);
+        }
+        .pill-badge {
+            background: rgba(56, 189, 248, 0.13);
+            color: var(--accent);
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+        .input-label {
             display: block;
-            font-size: 0.82rem;
+            font-size: 0.84rem;
             color: var(--text-muted);
-            margin-bottom: 6px;
+            margin-bottom: 8px;
+            text-align: right;
         }
         .input-field {
             width: 100%;
-            padding: 12px 14px;
-            background: #0f172a;
+            padding: 13px 15px;
+            background: #090e1a;
             border: 1px solid var(--border-color);
-            border-radius: 12px;
+            border-radius: 13px;
             color: var(--text-main);
-            font-size: 1rem;
+            font-size: 1.05rem;
             outline: none;
-            transition: border-color 0.2s;
-            text-align: right;
+            margin-bottom: 12px;
+            text-align: center;
             direction: ltr;
+            font-weight: 600;
         }
         .input-field:focus {
             border-color: var(--accent);
@@ -191,9 +121,9 @@
         }
         .btn {
             border: none;
-            border-radius: 12px;
-            padding: 11px 12px;
-            font-size: 0.85rem;
+            border-radius: 13px;
+            padding: 12px 14px;
+            font-size: 0.92rem;
             font-weight: 700;
             cursor: pointer;
             transition: opacity 0.2s, transform 0.1s;
@@ -205,298 +135,255 @@
             text-align: center;
         }
         .btn:active {
-            transform: scale(0.98);
+            transform: scale(0.97);
         }
-        .btn-primary {
-            background: linear-gradient(135deg, #0284c7, #0369a1);
+        .btn-full {
             grid-column: span 2;
         }
-        .btn-secondary {
-            background: #334155;
-            color: #e2e8f0;
+        .btn-blue {
+            background: linear-gradient(135deg, #0284c7, #0369a1);
         }
-        .btn-success {
+        .btn-green {
             background: linear-gradient(135deg, #16a34a, #15803d);
         }
         .btn-purple {
-            background: linear-gradient(135deg, #9333ea, #7e22ce);
+            background: linear-gradient(135deg, #7c3aed, #5b21b6);
         }
-        .btn-warning {
+        .btn-amber {
             background: linear-gradient(135deg, #d97706, #b45309);
         }
+        .btn-dark {
+            background: #26354d;
+            color: #e2e8f0;
+        }
+        /* صندوق تفاصيل الاشتراك البني/الذهبي المطابق للصورة */
         #messageBox {
             display: none;
-            padding: 14px;
-            border-radius: 12px;
-            margin-top: 12px;
-            font-size: 0.9rem;
+            padding: 15px;
+            border-radius: 14px;
+            margin-top: 14px;
+            font-size: 0.92rem;
             white-space: pre-line;
             line-height: 1.65;
         }
+        #messageBox.details-card, #messageBox.warning {
+            display: block;
+            background: #2b2318;
+            border: 1px solid #785a28;
+            color: #fef3c7;
+        }
         #messageBox.success {
             display: block;
-            background: rgba(34, 197, 94, 0.15);
-            border: 1px solid rgba(34, 197, 94, 0.4);
+            background: rgba(22, 163, 74, 0.18);
+            border: 1px solid rgba(34, 197, 94, 0.45);
             color: #bbf7d0;
-        }
-        #messageBox.warning {
-            display: block;
-            background: rgba(245, 158, 11, 0.15);
-            border: 1px solid rgba(245, 158, 11, 0.4);
-            color: #fef08a;
         }
         #messageBox.error {
             display: block;
-            background: rgba(239, 68, 68, 0.15);
-            border: 1px solid rgba(239, 68, 68, 0.4);
+            background: rgba(220, 38, 38, 0.18);
+            border: 1px solid rgba(239, 68, 68, 0.5);
             color: #fecaca;
         }
-        .cooldown-timer-badge {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 8px;
-            padding: 6px 16px;
-            border-radius: 20px;
-            background: rgba(245, 158, 11, 0.2);
-            border: 1.5px solid rgba(251, 191, 36, 0.65);
-            color: #fff;
-            font-size: 1rem;
-            font-weight: 800;
-            direction: ltr;
-            letter-spacing: 2px;
-        }
-        #aiTestResultBox {
-            display: none;
-            background: rgba(147, 51, 234, 0.12);
-            border: 1px solid rgba(147, 51, 234, 0.4);
-            color: #e9d5ff;
-            padding: 12px;
-            border-radius: 12px;
-            margin-top: 10px;
-            font-size: 0.88rem;
-            white-space: pre-line;
-            direction: rtl;
-        }
-        .quick-actions {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
+        .sub-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
         }
         .log-box {
-            background: #090d16;
+            background: #070b14;
             border: 1px solid var(--border-color);
             border-radius: 12px;
             padding: 10px;
-            height: 210px;
+            height: 190px;
             overflow-y: auto;
             font-size: 0.78rem;
             color: #cbd5e1;
-            direction: rtl;
         }
         .log-entry {
             padding: 5px 0;
             border-bottom: 1px dashed #1e293b;
-        }
-        .log-entry:last-child {
-            border-bottom: none;
         }
         .log-time {
             color: var(--accent);
             font-size: 0.72rem;
             margin-left: 6px;
         }
+        /* النوافذ المنبثقة (Modals) */
         .modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.75);
+            background: rgba(0, 0, 0, 0.78);
             display: none;
             align-items: center;
             justify-content: center;
-            padding: 16px;
-            z-index: 1050;
+            padding: 14px;
+            z-index: 1000;
         }
         .modal {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 16px;
+            border-radius: 18px;
             width: 100%;
-            max-width: 520px;
+            max-width: 500px;
             max-height: 90vh;
             overflow-y: auto;
-            padding: 16px;
+            padding: 18px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
         }
         .modal h3 {
             color: var(--accent);
             margin-bottom: 8px;
-            font-size: 1.02rem;
+            font-size: 1.05rem;
         }
         .modal textarea {
             width: 100%;
-            min-height: 170px;
-            background: #0f172a;
+            min-height: 150px;
+            background: #090e1a;
             color: #f8fafc;
             border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 10px;
-            font-size: 0.82rem;
+            border-radius: 12px;
+            padding: 12px;
+            font-size: 0.86rem;
             margin-bottom: 12px;
-            direction: rtl;
+            outline: none;
         }
-        .apn-chip {
-            display: inline-block;
-            background: #0f172a;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 6px 10px;
-            margin: 3px;
-            font-size: 0.76rem;
-            color: #38bdf8;
+        .modal textarea:focus {
+            border-color: var(--accent);
         }
-        .stats-pill {
-            background: rgba(56, 189, 248, 0.15);
-            color: var(--accent);
-            border: 1px solid rgba(56, 189, 248, 0.35);
-            padding: 3px 10px;
-            border-radius: 999px;
-            font-size: 0.74rem;
+        .settings-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 10px;
         }
-    
-        /* Interactive Knowledge & Pricing Modal Styles */
-        .modal-large { max-width: 880px !important; width: 96% !important; max-height: 94vh !important; display: flex; flex-direction: column; padding: 20px !important; }
-        .modal-header-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
-        .modal-tabs { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 16px; padding-bottom: 4px; border-bottom: 1px solid var(--border-color); }
-        .tab-btn { background: #0f172a; border: 1px solid var(--border-color); color: var(--text-muted); padding: 8px 14px; border-radius: 10px; font-size: 0.82rem; font-weight: 700; cursor: pointer; white-space: nowrap; transition: all 0.2s; }
-        .tab-btn:hover { color: var(--accent); border-color: var(--accent); }
-        .tab-btn.active { background: rgba(56, 189, 248, 0.15); color: var(--accent); border-color: var(--accent); box-shadow: 0 0 10px rgba(56, 189, 248, 0.2); }
-        .tab-panel { display: none; overflow-y: auto; max-height: calc(92vh - 160px); padding-left: 4px; padding-right: 4px; }
-        .tab-panel.active { display: block; }
-        .price-cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; margin-bottom: 14px; }
-        .company-price-card { background: #090d16; border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 14px; position: relative; transition: border-color 0.2s; }
-        .company-price-card:hover { border-color: var(--accent); }
-        .table-filter-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
-        .filter-input { flex: 1 1 180px; padding: 8px 12px; background: #0f172a; border: 1px solid var(--border-color); border-radius: 8px; color: #fff; font-size: 0.82rem; outline: none; }
-        .interactive-table { width: 100%; border-collapse: collapse; font-size: 0.77rem; text-align: right; direction: rtl; }
-        .interactive-table th { position: sticky; top: 0; background: #1e293b; color: var(--accent); padding: 9px 10px; font-weight: 700; border-bottom: 1px solid var(--border-color); white-space: nowrap; z-index: 2; }
-        .interactive-table td { padding: 8px 10px; border-bottom: 1px solid #162032; color: #e2e8f0; white-space: nowrap; }
-        .interactive-table tr:hover { background: rgba(56, 189, 248, 0.05); }
     </style>
 </head>
 <body>
 
-    <!-- زر الإعدادات العائم أعلى اليمين + القائمة المنسدلة -->
-    <button class="floating-gear-btn" onclick="handleGearClick(event)" title="الإعدادات الشاملة">⚙️</button>
-    <div id="webDropdownMenu" class="settings-dropdown-menu">
-        <div class="dropdown-item" onclick="toggleChannelFromWeb('sms')">📡 استقبال رسائل SMS</div>
-        <div class="dropdown-item" onclick="toggleChannelFromWeb('wa')">💬 استقبال رسائل واتساب</div>
-        <div class="dropdown-item" onclick="toggleChannelFromWeb('tg')">✈️ استقبال رسائل تيليجرام</div>
-        <div class="dropdown-item" onclick="toggleChannelFromWeb('msg')">⚡ استقبال رسائل مسنجر</div>
-        <div class="dropdown-item" onclick="toggleAiAgent()">🤖 تشغيل/إيقاف موظف الدعم الذكي</div>
-        <div class="dropdown-item" onclick="openWhatsappTrainingModal()">💬 تدريب Gemini من محادثات واتساب</div>
-        <div class="dropdown-item" onclick="openReplyChannelsConfig()">📤 إعدادات إرسال الردود للزبائن</div>
-        <div class="dropdown-item" onclick="openBlacklistModal()">🚫 استثناء أرقام ومجموعات</div>
-        <div class="dropdown-item" onclick="openPricesModal()">🏷️ إدارة الأسعار ودمج الملفات</div>
-        <div class="dropdown-item" onclick="openApiKeyModal()">🔑 تعديل مفتاح GEMINI API</div>
-        <div class="dropdown-item" onclick="openChannelsConfig()">🛠️ التحكم الشامل والصلاحيات المقيدة</div>
-    </div>
+    <!-- أيقونة الإعدادات العائمة (تستجيب فوراً) -->
+    <div class="floating-gear" onclick="openMainSettingsModal()" title="الإعدادات الشاملة">⚙️</div>
 
-    <div class="header">
-        <div class="header-title">
-            <h1>🌟 BRAND SIM</h1>
-            <p>منظومة التحديث الذكي والدعم الفني v3.2</p>
-        </div>
-        <div id="aiStatusBadge" class="status-badge" onclick="toggleAiAgent()">🤖 الدعم الذكي: نشط</div>
-    </div>
-
-    <div id="shabbatBanner" class="notice-banner">
-        ⚠️ تنبيه: اليوم السبت — قد يواجه نظام تفعيل شرائح <b>رامي ليفي (Rami Levy)</b> بطئاً أو تعليقاً مؤقتاً من الشركة الأم. الخلل عام ويُعالج تلقائياً.
-    </div>
-
-    <!-- قسم التحديث الذكي المفصول عن فحص السيريال -->
+    <!-- البطاقة 1: التحديث الذكي وفحص السيريال المباشر (نسخة المدير الخاصة) -->
     <div class="card">
-        <div class="card-title">
-            <span>⚡ التحديث الذكي وفحص السيريال المباشر</span>
-            <span id="subsCountBadge" class="stats-pill">مشتركين: 888</span>
+        <div class="card-header-row">
+            <span class="card-title">التحديث الذكي وفحص السيريال المباشر</span>
+            <span id="subscribersCountBadge" class="pill-badge">مشتركين: 0</span>
         </div>
-        <div class="input-group">
-            <label>أدخل رقم الشريحة (05XXXXXXXX) أو السيريال (ICCID 89972...):</label>
-            <input type="text" id="phoneInput" class="input-field" placeholder="054XXXXXXX / 89972...">
-        </div>
+
+        <label class="input-label">أدخل رقم الشريحة (05XXXXXXXX) أو السيريال (ICCID 89972...):</label>
+        <input type="text" id="phoneInput" class="input-field" placeholder="054XXXXXXX / 89972...">
+
         <div class="btn-grid">
-            <button class="btn btn-primary" onclick="triggerManualRefresh('refresh')">🔄 تحديث ذكي تلقائي للشريحة الآن</button>
-            <button class="btn btn-success" onclick="triggerManualRefresh('iccid_lookup')">💳 فحص ICCID</button>
-            <button class="btn btn-secondary" onclick="triggerManualRefresh('details')">📊 استعلام تفاصيل الحزمة</button>
+            <button class="btn btn-blue btn-full" onclick="handleSmartRefreshClick()">🔄 تحديث ذكي تلقائي للشريحة الآن</button>
+            <button class="btn btn-green" onclick="handleIccidLookupClick()">💳 فحص ICCID</button>
+            <button class="btn btn-dark" onclick="handlePackageDetailsClick()">📊 استعلام تفاصيل الحزمة</button>
         </div>
+
         <div id="messageBox"></div>
     </div>
 
-    <!-- قسم رفع ودمج ملفات الاشتراكات + تدريب الواتساب -->
+    <!-- البطاقة 2: دمج ملفات المشتركين وتدريب الذكاء الاصطناعي -->
     <div class="card">
-        <div class="card-title">
-            <span>📂 دمج ملفات المشتركين وتدريب الذكاء الاصطناعي</span>
-            <span id="waTrainCountBadge" class="stats-pill">نماذج واتساب: 7</span>
+        <div class="card-header-row no-pad">
+            <span class="card-title">📂 دمج ملفات المشتركين وتدريب الذكاء الاصطناعي</span>
+            <span id="waSamplesCountBadge" class="pill-badge">نماذج واتساب: 8</span>
         </div>
-        <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 10px;">
-            ارفع ملفات الإكسل (<b>سكاي، ليان، كويك لاين، أرين، أيلول</b>) أو ملف <b>customers.json</b> أو <b>ملفات محادثات واتساب (.txt)</b> لتدريب Gemini على أسلوبك في الرد دون حذف أي بيانات سابقة:
+        <p class="sub-desc">
+            ارفع ملفات الإكسل (سكاي، ليان، كويك لاين، أرين، أيلول) أو ملف customers.json أو ملفات محادثات واتساب (.txt) لتدريب Gemini والرد باسم الزبون والوكيل:
         </p>
-        <input type="file" id="mergeFileInput" accept="*/*" multiple style="display:none" onchange="handleFilesMergeUpload(event)">
-        <input type="file" id="waChatFileInput" accept=".txt,.json,*/*" multiple style="display:none" onchange="handleWhatsappChatUpload(event)">
+
+        <!-- مدخلات الملفات المخفية -->
+        <input type="file" id="subscribersFileInput" accept=".xlsx,.xls,.csv,.json" multiple style="display:none" onchange="handleSubscribersFilesSelected(this.files)">
+        <input type="file" id="waTxtFileInput" accept=".txt,.json" multiple style="display:none" onchange="handleWaFileSelected(this.files)">
+
         <div class="btn-grid">
-            <button class="btn btn-success" onclick="document.getElementById('mergeFileInput').click()">➕ رفع ودمج (Excel / JSON)</button>
-            <button class="btn btn-purple" onclick="openWhatsappTrainingModal()">💬 تغذية محادثات واتساب</button>
+            <button class="btn btn-blue" onclick="document.getElementById('subscribersFileInput').click()">📥 رفع ملفات المشتركين (Excel/JSON)</button>
+            <button class="btn btn-purple" onclick="openWaTrainingModal()">💬 تغذية ومعالجة محادثات واتساب</button>
+            <button class="btn btn-dark" onclick="openPricesModal()">🏷️ قاعدة المعرفة والأسعار</button>
+            <button class="btn btn-dark" onclick="openAddSubscriberModal()">➕ إضافة/تعديل مشترك يدوياً</button>
         </div>
     </div>
 
-    <!-- محاكي واختبار رد موظف الدعم الذكي (Gemini AI) مع صندوق النتائج المخصص -->
+    <!-- البطاقة 3: مختبر فحص وتجربة Gemini AI المباشر -->
     <div class="card">
-        <div class="card-title">
-            <span>🤖 محاكي واختبار رد موظف الدعم الذكي (Gemini AI)</span>
+        <div class="card-header-row no-pad">
+            <span class="card-title">✨ اختبار رد Gemini الذكي الآن (AI)</span>
+            <span id="aiStatusBadge" class="pill-badge" style="cursor:pointer;" onclick="toggleAiAgentStatus()">🤖 نشط</span>
         </div>
-        <div class="input-group">
-            <input type="text" id="testAiInput" class="input-field" style="direction:rtl; text-align:right;" placeholder="اكتب سؤال زبون لتجربة رد جيميني (مثال: عندي شريحة الوها فش فيها نت)...">
-        </div>
+        <input type="text" id="testAiInput" class="input-field" style="direction:rtl; text-align:right; font-size:0.92rem;" placeholder="اكتب سؤال زبون لتجربة رد جيميني (مثال: عندي شريحة ألوها فش نت)...">
         <div class="btn-grid">
-            <button class="btn btn-warning" style="grid-column: span 2;" onclick="testGeminiSupportNow()">✨ اختبار رد Gemini الذكي الآن</button>
+            <button class="btn btn-amber btn-full" id="testAiBtn" onclick="testGeminiNow()">✨ اختبار رد Gemini الذكي الآن</button>
         </div>
-        <div id="aiTestResultBox"></div>
+        <div id="aiTestResultBox" style="display:none; margin-top:12px; padding:12px; border-radius:12px; background:#090e1a; border:1px solid var(--accent); color:#e2e8f0; font-size:0.88rem; white-space:pre-line;"></div>
     </div>
 
-    <!-- مرجع الدعم التقني السريع -->
+    <!-- البطاقة 4: سجل العمليات الحية -->
     <div class="card">
-        <div class="card-title">
-            <span>🛠️ مرجع الدعم التقني السريع (APN & Troubleshooting)</span>
+        <div class="card-header-row no-pad">
+            <span class="card-title">📋 سجل العمليات والردود التلقائية</span>
+            <button class="btn btn-dark" style="padding:4px 10px; font-size:0.75rem;" onclick="clearLogs()">مسح</button>
         </div>
-        <div style="margin-bottom: 8px;">
-            <span class="apn-chip">ألوها / موبايل APN: <b>prime</b></span>
-            <span class="apn-chip">ألوها بديل: <b>apn.x2one.com</b></span>
-            <span class="apn-chip">كود/eSIM بدون 4G: <b>فعل التجوال الدولي</b></span>
-            <span class="apn-chip">الاستخدام العادل (ألوها): <b>4-5 جيجا يومياً</b></span>
-        </div>
+        <div id="aiLogsContainer" class="log-box"></div>
     </div>
 
-    <!-- لوحة التحكم السريع -->
-    <div class="card">
-        <div class="card-title">
-            <span>⚙️ إدارة القنوات وقاعدة المعرفة (customers.json)</span>
-        </div>
-        <div class="quick-actions">
-            <button class="btn btn-secondary" onclick="openChannelsConfig()">📥 قنوات الاستقبال</button>
-            <button class="btn btn-secondary" onclick="openReplyChannelsConfig()">📤 قنوات إرسال الرد</button>
-            <button class="btn btn-secondary" onclick="openBlacklistModal()">🚫 قائمة الاستثناءات</button>
-            <button class="btn btn-secondary" onclick="openPricesModal()">🏷️ الأسعار وقاعدة المعرفة</button>
-            <button class="btn btn-warning" style="grid-column: span 2;" onclick="openApiKeyModal()">🔑 إعداد مفتاح Gemini API</button>
+    <!-- نافذة (Modal) تغذية ومعالجة محادثات واتساب لتدريب Gemini -->
+    <div id="waTrainingModal" class="modal-overlay">
+        <div class="modal">
+            <h3>💬 تغذية ومعالجة محادثات واتساب لتدريب Gemini</h3>
+            <p class="sub-desc">الصق نص محادثة واتساب هنا أو ارفع ملف تصدير محادثة واتساب (.txt). سيقوم النظام بتحليل رسائل الزبائن وردودك عليها وحفظها كذاكرة دائمة ليرد Gemini بنفس أسلوبك:</p>
+            <textarea id="waTrainingTextarea" placeholder="الصق محادثة واتساب هنا أو اضغط على زر (رفع ملف محادثة .txt) بالأسفل..."></textarea>
+            <div id="waFileStatusText" style="font-size:0.8rem; color:#38bdf8; margin-bottom:10px; display:none;"></div>
+            <div class="btn-grid">
+                <button class="btn btn-purple" onclick="document.getElementById('waTxtFileInput').click()">📄 رفع ملف محادثة (.txt)</button>
+                <button class="btn btn-green" onclick="analyzeAndSaveWaTraining()">🧠 تحليل وإضافة للتدريب</button>
+                <button class="btn btn-dark btn-full" onclick="closeAllModals()">إغلاق</button>
+            </div>
         </div>
     </div>
 
-    <!-- سجل العمليات الحية -->
-    <div class="card">
-        <div class="card-title">
-            <span>📋 سجل التحديثات والردود الذكية المباشر</span>
-            <button class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.75rem;" onclick="clearLogs()">مسح السجل</button>
+    <!-- نافذة (Modal) الإعدادات الشاملة (أيقونة الترس ⚙️) -->
+    <div id="mainSettingsModal" class="modal-overlay">
+        <div class="modal">
+            <h3>⚙️ إعدادات منظومة BRAND SIM الشاملة</h3>
+            <div class="settings-list">
+                <button class="btn btn-blue btn-full" onclick="closeAllModals(); openNativeChannelsDialog();">📥 تفعيل/إيقاف قنوات الاستقبال والرد الذكي</button>
+                <button class="btn btn-green btn-full" onclick="closeAllModals(); openNativeReplyChannelsDialog();">📤 التحكم بقنوات إرسال الردود للزبائن</button>
+                <button class="btn btn-amber btn-full" onclick="closeAllModals(); openGeminiKeyModal();">🔑 تعديل أو فحص مفتاح GEMINI API</button>
+                <button class="btn btn-dark btn-full" onclick="closeAllModals(); openBlacklistModal();">🚫 قائمة الاستثناءات (كويك لاين، رامز...)</button>
+                <button class="btn btn-dark btn-full" onclick="closeAllModals(); openPricesModal();">🏷️ تعديل الأسعار وقاعدة المعرفة (customers.json)</button>
+                <button class="btn btn-dark btn-full" onclick="closeAllModals()">إغلاق القائمة</button>
+            </div>
         </div>
-        <div id="aiLogsContainer" class="log-box">
-            <div class="log-entry"><span class="log-time">[النظام]</span> تم تهيئة منظومة براند سيم v3.2 وربط بوابة التحديث الموحدة (Gateway API) وقواعد التحقق من الصلاحية والانتظار بنجاح.</div>
+    </div>
+
+    <!-- نافذة (Modal) مفتاح Gemini API -->
+    <div id="geminiKeyModal" class="modal-overlay">
+        <div class="modal">
+            <h3>🔑 إعداد مفتاح Gemini API</h3>
+            <p class="sub-desc">أدخل مفتاح Gemini API الخاص بك (يبدأ بـ AIzaSy):</p>
+            <input type="text" id="geminiKeyInput" class="input-field" placeholder="AIzaSy...">
+            <div class="btn-grid">
+                <button class="btn btn-green" onclick="saveGeminiKeyFromModal()">حفظ وتفعيل</button>
+                <button class="btn btn-dark" onclick="closeAllModals()">إغلاق</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة (Modal) إضافة مشترك يدوياً للاختبار أو الإضافة السريعة -->
+    <div id="addSubModal" class="modal-overlay">
+        <div class="modal">
+            <h3>➕ إضافة / تحديث بيانات مشترك في براند سيم</h3>
+            <input type="text" id="subPhoneInp" class="input-field" placeholder="رقم الشريحة (مثال: 0547662808)">
+            <input type="text" id="subIccidInp" class="input-field" placeholder="السيريال ICCID (مثال: 89972010221061986299)">
+            <input type="text" id="subCustomerInp" class="input-field" style="direction:rtl;" placeholder="اسم الزبون (مثال: هاني السلطان)">
+            <input type="text" id="subAgentInp" class="input-field" style="direction:rtl;" placeholder="اسم الوكيل (مثال: بشير الأشقر - SIM TECH)">
+            <input type="text" id="subCompanyInp" class="input-field" style="direction:rtl;" placeholder="الشركة (مثال: Partner / Hot / Pelephone)">
+            <input type="text" id="subPkgInp" class="input-field" style="direction:rtl;" placeholder="الحزمة (مثال: 500 جيجا)">
+            <input type="text" id="subExpInp" class="input-field" placeholder="تاريخ الانتهاء (مثال: 08/10/2026 16:15)">
+            <div class="btn-grid">
+                <button class="btn btn-green" onclick="saveManualSubscriber()">حفظ المشترك</button>
+                <button class="btn btn-dark" onclick="closeAllModals()">إلغاء</button>
+            </div>
         </div>
     </div>
 
@@ -504,1052 +391,894 @@
     <div id="blacklistModal" class="modal-overlay">
         <div class="modal">
             <h3>🚫 استثناء الأرقام والمجموعات (عدم الرد)</h3>
-            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">اكتب كل اسم أو رقم في سطر مستقل (مثل: كويك لاين، رامز):</p>
+            <p class="sub-desc">اكتب كل اسم أو رقم في سطر مستقل (مثل: كويك لاين، رامز):</p>
             <textarea id="blacklistTextarea"></textarea>
             <div class="btn-grid">
-                <button class="btn btn-success" onclick="saveBlacklistFromModal()">حفظ القائمة</button>
-                <button class="btn btn-secondary" onclick="closeModals()">إغلاق</button>
+                <button class="btn btn-green" onclick="saveBlacklistFromModal()">حفظ القائمة</button>
+                <button class="btn btn-dark" onclick="closeAllModals()">إغلاق</button>
             </div>
         </div>
     </div>
 
-    <!-- نافذة تغذية ومعالجة محادثات واتساب لتدريب Gemini -->
-    <div id="waTrainingModal" class="modal-overlay">
-        <div class="modal">
-            <h3>💬 تغذية ومعالجة محادثات واتساب لتدريب Gemini</h3>
-            <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 8px;">
-                الصق نص محادثة واتساب هنا أو ارفع ملف تصدير محادثة واتساب (<code>.txt</code>). سيقوم النظام بتحليل رسائل الزبائن وردودك عليها وحفظها كذاكرة دائمة ليرد Gemini بنفس أسلوبك:
-            </p>
-            <textarea id="waRawChatTextarea" placeholder="مثال لصيغة محادثة واتساب أو أسئلة وأجوبة:
-[10/11/2026, 14:20] زبون: السلام عليكم الشريحة فاصلة نت
-[10/11/2026, 14:21] أسامة سالم: وعليكم السلام، ابعث رقم الشريحة لنعمللها تنشيط فوري على السيستم..."></textarea>
-            <div class="btn-grid" style="margin-bottom: 8px;">
-                <button class="btn btn-purple" onclick="document.getElementById('waChatFileInput').click()">📄 رفع ملف محادثة (.txt)</button>
-                <button class="btn btn-success" onclick="processAndSaveWhatsappTraining()">🧠 تحليل وإضافة للتدريب</button>
-            </div>
-            <div class="btn-grid">
-                <button class="btn btn-secondary" style="grid-column: span 2;" onclick="closeModals()">إغلاق</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- نافذة إدارة الأسعار وقاعدة المعرفة التفاعلية -->
+    <!-- نافذة تعديل الأسعار وقاعدة المعرفة customers.json -->
     <div id="pricesModal" class="modal-overlay">
-        <div class="modal modal-large">
-            <div class="modal-header-row">
-                <h3 style="color:var(--accent); margin:0;">🏷️ لوحة إدارة الأسعار وقاعدة المعرفة التفاعلية</h3>
-                <button class="btn btn-secondary" style="padding:4px 10px;" onclick="closeModals()">✕</button>
-            </div>
-            
-            <div class="modal-tabs">
-                <button class="tab-btn active" onclick="switchKnowledgeTab('pricesTab', this)">🏷️ أسعار الشركات والباقات</button>
-                <button class="tab-btn" onclick="switchKnowledgeTab('subscribersTab', this)">👥 قاعدة المشتركين والبحث</button>
-                <button class="tab-btn" onclick="switchKnowledgeTab('troubleshootTab', this)">🛠️ الدعم الفني و APN</button>
-                <button class="tab-btn" onclick="switchKnowledgeTab('rawJsonTab', this)">💾 تصدير ونسخ JSON</button>
-            </div>
-
-            <div id="pricesTab" class="tab-panel active">
-                <div id="interactivePricesGrid" class="price-cards-grid"></div>
-                <div class="btn-grid" style="margin-top:12px;">
-                    <button class="btn btn-success" onclick="saveInteractivePrices()">💾 حفظ تحديثات الأسعار</button>
-                    <button class="btn btn-purple" onclick="alert('لإضافة شركة يرجى تعديلها من تبويب JSON مؤقتاً')">➕ إضافة باقة / شركة</button>
-                </div>
-            </div>
-
-            <div id="subscribersTab" class="tab-panel">
-                <div class="table-filter-bar">
-                    <input type="text" id="interactiveSubSearch" class="filter-input" placeholder="🔍 بحث برقم الاشتراك أو السيريال..." oninput="renderInteractiveSubTable()">
-                    <select id="interactiveProviderFilter" class="filter-input" style="max-width:160px;" onchange="renderInteractiveSubTable()">
-                        <option value="">🏢 كل الشركات</option>
-                        <option value="Ayloul">أيلول (Ayloul)</option>
-                        <option value="Layan">ليان (Layan)</option>
-                        <option value="Sky">سكاي (Sky)</option>
-                        <option value="QuickLine">كويك لاين (QuickLine)</option>
-                        <option value="Areen">أرين (Areen)</option>
-                    </select>
-                </div>
-                <div style="max-height:380px; overflow-y:auto; border:1px solid var(--border-color); border-radius:10px;">
-                    <table class="interactive-table">
-                        <thead>
-                            <tr>
-                                <th>رقم الاشتراك</th>
-                                <th>السيريال (ICCID)</th>
-                                <th>الشركة</th>
-                                <th>الباقة</th>
-                                <th>تاريخ الانتهاء</th>
-                                <th>المزود</th>
-                                <th>الحالة</th>
-                            </tr>
-                        </thead>
-                        <tbody id="interactiveSubTbody"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div id="troubleshootTab" class="tab-panel">
-                <div id="interactiveTroubleContainer" style="display:grid; gap:10px; margin-bottom:12px;"></div>
-                <p style="font-size:0.78rem; color:var(--text-muted);">يمكنك أيضاً تعديل كافة تفاصيل الدعم الفني مباشرة من تبويب JSON.</p>
-            </div>
-
-            <div id="rawJsonTab" class="tab-panel">
-                <textarea id="knowledgeTextarea" style="width:100%; min-height:240px; font-family:monospace; direction:ltr; text-align:left; background:#0f172a; color:#f8fafc; border:1px solid var(--border-color); border-radius:10px; padding:10px;"></textarea>
-                <div class="btn-grid" style="margin-top:10px;">
-                    <button class="btn btn-success" onclick="saveKnowledgeFromModal()">💾 دمج وحفظ JSON</button>
-                    <button class="btn btn-purple" onclick="downloadKnowledgeFile()">📥 تحميل customers.json</button>
-                </div>
+        <div class="modal">
+            <h3>🏷️ قاعدة بيانات الدعم والمبيعات (customers.json)</h3>
+            <textarea id="knowledgeTextarea" style="min-height: 250px; direction: ltr; text-align: left; font-family: monospace;"></textarea>
+            <div class="btn-grid">
+                <button class="btn btn-green" onclick="saveKnowledgeFromModal()">حفظ التحديثات</button>
+                <button class="btn btn-dark" onclick="closeAllModals()">إغلاق</button>
             </div>
         </div>
     </div>
 
 <script>
-    // =========================================================================
-    // 1. الإعدادات المرجعية الموحدة (مطابقة لملف web-refresh.html و customers.json)
-    // =========================================================================
-    const GATEWAY_API_URL = "https://script.google.com/macros/s/AKfycbxpvDw2RXxnPflfrPHIgki51Qovtk9BS7p30tK8aoBIUXD6Hqs6SDsnxMYMX9AJo6OP/exec";
-    const COOLDOWN_MS = 3 * 60 * 60 * 1000; // 3 ساعات كما في المرجع web-refresh.html
-    const STORAGE_KEY = "brandsim_refresh_cooldowns";
-    const memoryCooldowns = {};
-    let countdownInterval = null;
-    let activeCooldownPhone = null;
-
-    const STANDARD_MESSAGES = Object.freeze({
-        ar: Object.freeze({
-            invalidPhone: "يرجى إدخال رقم هاتف صحيح مكون من 10 أرقام ويبدأ بـ 05",
-            notAuthorized: "عذراً، هذا الرقم غير مسجل في منظومة براند سيم (BRAND SIM) ولا يمكن تحديثه.",
-            expiredSub: "الرقم منتهي اشتراكه، الرجاء التواصل مع المندوب من أجل التجديد",
-            cooldownPrefix: "عذراً، لقد قمت بتحديث هذا الرقم مسبقاً.\nالوقت المتبقي لمعاودة التحديث: ",
-            cooldownReady: "انتهت فترة الانتظار! يمكنك تحديث الرقم الآن.",
-            defaultSuccess: "تم إرسال طلب تحديث وتنشيط الرقم بنجاح!",
-            defaultError: "تعذر تحديث الرقم حالياً، يرجى التأكد من الرقم أو المحاولة لاحقاً."
-        }),
-        he: Object.freeze({
-            invalidPhone: "נא להזין מספר טלפון תקין בן 10 ספרות המתחיל ב-05",
-            notAuthorized: "מספר זה אינו רשום במערכת BRAND SIM ולא ניתן לרענן אותו.",
-            expiredSub: "המנוי של מספר זה פג תוקף, אנא פנה לנציג לצורך חידוש.",
-            cooldownPrefix: "מספר זה כבר רוענן לאחרונה.\nהזמן שנותר לרענון חוזר: ",
-            cooldownReady: "זמן ההמתנה הסתיים! ניתן לרענן את המספר כעת.",
-            defaultSuccess: "המספר רוענן בהצלחה!",
-            defaultError: "פעולת הרענון נכשלה, בדוק את המספר או נסה שוב."
-        })
-    });
-
-    // قاعدة معرفة افتراضية خفيفة للطوارئ فقط (يتم جلب المشتركين تلقائياً من customers.json أو AndroidBridge)
+    // 1. قاعدة المعرفة الأساسية المدمجة من customers.json
     const DEFAULT_KNOWLEDGE_BASE = {
-  "brand_sim_system": {
-    "metadata": {
-      "system_name": "BRAND SIM 🌟",
-      "version": "3.2",
-      "description": "قاعدة بيانات موسعة لتشغيل الرد الآلي وتوجيه الوكلاء والزبائن",
-      "working_hours": {
-        "Sun_Thu": "10:00 - 22:00",
-        "Fri": "13:00 - 19:00",
-        "Sat": "10:00 - 19:00"
-      },
-      "links": {
-        "refresh_sim": "https://brand-sim.com/refresh.html",
-        "check_balance": "https://brand-sim.com/check.html",
-        "network_check": "https://groupahmed2020-byte.github.io/Ahmed.news/",
-        "network_coverage_map": "https://brand-sim.com/Location.html"
-      },
-      "last_updated": "2026-11-08",
-      "gateway_api_url": "https://script.google.com/macros/s/AKfycbxpvDw2RXxnPflfrPHIgki51Qovtk9BS7p30tK8aoBIUXD6Hqs6SDsnxMYMX9AJo6OP/exec",
-      "cooldown_ms": 10800000,
-      "sky_cooldown_ms": 1200000
-    },
-    "technical_support": {
-      "no_internet_with_signal": {
-        "issue": "وجود إشارة شبكة (4G) ولكن لا يوجد اتصال بالإنترنت",
-        "diagnosis_and_solutions": [
-          "تأكد من تفعيل بيانات الهاتف وإلغاء وضع الطيران.",
-          "لشرائح (Aloha) أو (Mobile): أضف نقطة وصول جديدة. الاسم: prime | APN: prime (أو الاسم: aloha | APN: apn.x2one.com).",
-          "لشرائح (Hot Mobile): اختر نقطة وصول Hot Mobile من إعدادات الشبكة.",
-          "قم بإعادة تشغيل الهاتف بعد حفظ الإعدادات والانتظار من 5 إلى 10 دقائق."
-        ]
-      },
-      "fair_usage_policy_throttling": {
-        "issue": "تقييد سرعة الإنترنت والشبكة بطيئة جداً (خاصة شرائح ألوها وموبايل)",
-        "diagnosis": "تم الدخول في وضعية 'تقييد سرعة الإنترنت' بسبب الاستهلاك العالي للبيانات (تجاوز الحد اليومي الآمن 4 إلى 5 جيجا).",
-        "solution": "للأسف لا يوجد حل برمجي أو من الدعم الفني لإرجاع السرعة. الحل الوحيد هو نقل الرقم لشركة أخرى (رامي ليفي، وي، هوت موبايل) أو الاستمرار بالسرعة البطيئة حتى تتجدد الباقة."
-      },
-      "no_4g_on_esim_or_code": {
-        "issue": "شريحة إلكترونية (eSIM) أو كود متصلة بالشبكة لكن لا يظهر 4G أو الإنترنت معطل",
-        "solution": "توجيه الزبون فوراً لتفعيل خيار 'التجوال الدولي' (Data Roaming) من إعدادات شبكة الجوال."
-      },
-      "sim_not_supported_x_mark": {
-        "issue": "ظهور علامة X على الشبكة رغم تفعيل الشريحة بنجاح من الدعم الفني",
-        "solution": "يحدث هذا بسبب عدم توافق الشريحة الحديثة مع الهاتف القديم (أو العكس)، يُرجى تجربة الشريحة في جهاز آخر."
-      },
-      "refresh_html_error": {
-        "issue": "ظهور رسالة 'الرقم غير مسجل' في صفحة التحديث الآلي",
-        "solution": "غالباً ما يكون النظام أو الموقع قيد التطوير أو التحديث، أو أن الرقم قيد التفعيل حالياً في السيرفر. يُرجى الانتظار والمحاولة لاحقاً."
-      },
-      "system_downtime_rami_levy": {
-        "issue": "تأخر تفعيل شرائح رامي ليفي (Rami Levy) أو تعليق التفعيل",
-        "solution": "غالباً ما يعلق نظام رامي ليفي أيام السبت (Shabbat) بسبب الإجازات في الشركة الأم. يجب إبلاغ الزبون بالانتظار وأن الخلل عام وليس من الوكيل."
-      }
-    },
-    "agent_guidelines_and_rules": {
-      "new_agent_requirements": "يُشترط دفع مسبق بقيمة 150 شيكل لفتح لوحة الشحن (وكالة جديدة).",
-      "sim_physical_validation": "لفحص الشريحة البلاستيكية والتأكد أنها غير مستخدمة (جديدة): يجب أن تكون النحاسة الخاصة بها تلمع وخالية من أي خدوش أو خطوط احتكاك تدل على إدخالها في هاتف مسبقاً.",
-      "anti_spam_policy": "يُمنع منعاً باتاً استخدام الأرقام (الشرائح) لإرسال رسائل وهمية أو احتيالية (Spam/Phishing) بأسماء بنوك أو محافظ إلكترونية. في حال اكتشاف ذلك، سيتم حظر حساب الوكيل (اليوزر) فوراً واحتساب غرامة 1 شيكل لكل رسالة زائدة.",
-      "esim_sales_rule": "قبل بيع الشريحة الإلكترونية (eSIM)، يجب سؤال الزبون عن نوع هاتفه والتأكد أنه يدعم التقنية (مثل أجهزة الآيفون الحديثة، سامسونج ألترا).",
-      "testing_sims": "الشركات لا توفر شرائح أو أكواد تجريبية مجانية. أي تجربة أو تبديل للشريحة قد يكلف الوكيل 10 شيكل، لذلك يجب التأكد من التغطية قبل البيع.",
-      "customer_service_tone": "تجنب إلقاء اللوم على الزبون. في حال وجود عطل من المصدر (مثل تأخر التفعيل)، اشرح أن الخلل عام وأن الدعم التقني يتابع الأمر لضمان عدم خسارة تقييم الزبون."
-    },
-    "pricing_rules_and_companies_analysis": {
-      "hot_mobile": {
-        "arabic_name": "هوت موبايل",
-        "features": "إنترنت قوي جداً ومستقر، تغطية جيدة في معظم المناطق.",
-        "pricing_context": "تجديد الباقة لـ 3 شهور بـ 120 شيكل، بيع الشريحة الجديدة 3 شهور بـ 180 شيكل."
-      },
-      "pelephone": {
-        "arabic_name": "بيليفون",
-        "features": "تغطية ممتازة جداً وأبراج قوية (خاصة في المناطق الشمالية والحدودية مثل زيكيم).",
-        "notes": "يُفضل بيعها كباقات شهرية، لأن الشركة الأم تقوم أحياناً بسحب عروض الـ 3 شهور فجأة مما يسبب حرجاً للوكلاء مع الزبائن."
-      },
-      "rami_levy": {
-        "arabic_name": "رامي ليفي",
-        "features": "أسعار ممتازة للوكلاء وتجديد سلس لـ 3 شهور بشكل متتالي. يعمل على أبراج بيليفون.",
-        "notes": "نظامهم التقني قد يتعطل ويكون بطيئاً في الاستجابة والتفعيل، خصوصاً في عطلة نهاية الأسبوع."
-      },
-      "wecom": {
-        "arabic_name": "ويكوم",
-        "features": "مطلوبة بشدة وعليها سحب قوي في مناطق الجنوب.",
-        "notes": "أسعار تجديدها لـ 3 شهور مستقرة وتعتبر رخيصة نسبياً للوكيل."
-      },
-      "aloha_and_mobile": {
-        "arabic_name": "ألوها وموبايل",
-        "features": "شرائح اقتصادية تعمل على أبراج (هوت موبايل وبيليفون). سعر الشريحة الفارغة حوالي 50-55 شيكل.",
-        "notes": "تخضع لسياسة استخدام عادل صارمة (سقف استهلاك آمن 4 جيجا يومياً)، تجاوزها يؤدي لتقييد السرعة بشكل دائم."
-      },
-      "partner": {
-        "arabic_name": "بارتنر",
-        "features": "شبكة ممتازة، ولكن يُنصح بالتعامل معها عبر مزودي خدمة محددين (مثل ليان) لتجنب الأسعار المرتفعة جداً في أنظمة أخرى (مثل سكاي)."
-      }
-    },
-    "service_providers_comparison": {
-      "Layan": "الشركة الأفضل حالياً باعتراف الجميع (سرعة رد، دعم تقني ممتاز، أسعار وعروض مستقرة).",
-      "Quick_Line": "الفتى المدلل لشركة سيلكوم، قدرة قوية على اتخاذ قرارات من الشركات الأم، ممتازة في توفير عروض غير موجودة لدى غيرها.",
-      "Sky": "ممتازة جداً في خطوط بيليفون وتفعيلاتها.",
-      "Aloha_Direct": "أسعارها منافسة جداً لكن الدعم الفني الخاص بها يُعتبر ضعيفاً."
-    },
-    "api_portals_and_gateways": {
-      "primary_gateway": "https://script.google.com/macros/s/AKfycbxpvDw2RXxnPflfrPHIgki51Qovtk9BS7p30tK8aoBIUXD6Hqs6SDsnxMYMX9AJo6OP/exec",
-      "provider_portals": {
-        "Sky": "https://rn.sky-5g.net",
-        "Layan": "https://rn.layan-t.net/",
-        "QuickLine": "https://rn.quickline.net",
-        "Areen": "https://rn.areen.net",
-        "Ayloul": "https://rn.ayloul.net"
-      },
-      "standard_responses": {
-        "ar": {
-          "invalidPhone": "يرجى إدخال رقم هاتف صحيح مكون من 10 أرقام ويبدأ بـ 05",
-          "notAuthorized": "عذراً، هذا الرقم غير مسجل في منظومة براند سيم (BRAND SIM) ولا يمكن تحديثه.",
-          "expiredSub": "الرقم منتهي اشتراكه، الرجاء التواصل مع المندوب من أجل التجديد",
-          "cooldownPrefix": "عذراً، لقد قمت بتحديث هذا الرقم مسبقاً.\nالوقت المتبقي لمعاودة التحديث: ",
-          "cooldownReady": "انتهت فترة الانتظار! يمكنك تحديث الرقم الآن.",
-          "defaultSuccess": "تم إرسال طلب تحديث وتنشيط الرقم بنجاح!",
-          "defaultError": "تعذر تحديث الرقم حالياً، يرجى التأكد من الرقم أو المحاولة لاحقاً."
-        },
-        "he": {
-          "invalidPhone": "נא להזין מספר טלפון תקין בן 10 ספרות המתחיל ב-05",
-          "notAuthorized": "מספר זה אינו רשום במערכת BRAND SIM ולא ניתן לרענן אותו.",
-          "expiredSub": "המנוי של מספר זה פג תוקף, אנא פנה לנציג לצורך חידוש.",
-          "cooldownPrefix": "מספר זה כבר רוענן לאחרונה.\nהזמן שנותר לרענון חוזר: ",
-          "cooldownReady": "זמן ההמתנה הסתיים! ניתן לרענן את המספר כעת.",
-          "defaultSuccess": "המספר רוענן בהצלחה!",
-          "defaultError": "פעולת הרענון נכשלה, בדוק את המספר או נסה שוב."
-        }
-      },
-      "portal_translations_map": {
-        "חמש שעות": "⚠️ عذراً، يُسمح بتحديث هذا الرقم مرة واحدة فقط كل 5 ساعات.",
-        "אפשרות לעשות רענון": "⚠️ عذراً، يُسمح بتحديث هذا الرقم مرة واحدة فقط كل عدة ساعات.",
-        "בוצע בהצלחה": "✅ تم تحديث وتنشيط الرقم بنجاح!",
-        "הרענון בוצע": "✅ تم تحديث وتنشيط الرقم بنجاح!",
-        "עודכן בהצלחה": "✅ تم تحديث وتنشيط الرقم بنجاح!",
-        "אינו תקין": "⚠️ عذراً، الرقم غير صحيح أو غير نشط في النظام.",
-        "לא קיים": "⚠️ عذراً، هذا الرقم غير مسجل في منظومة براند سيم (BRAND SIM) ولا يمكن تحديثه.",
-        "ניתוק קבוע": "مفصول نهائي"
-      }
-    }
-  },
-  "subscribers": [],
-  "whatsapp_training_examples": [
-    {
-      "customer_query": "الشريحة فيها ارسال 4G بس فش نت نهائي نوعها الوها",
-      "ideal_reply": "أهلاً بك 🌟 لتفعيل الإنترنت على شريحة ألوها: ادخل إلى الضبط > شبكات الهواتف > أسماء نقاط الوصول (APN) > أضف نقطة جديدة باسم prime والـ APN اكتب فيها prime ثم احفظها، وتأكد من تفعيل (التجوال الدولي) وأعد تشغيل الجوال."
-    },
-    {
-      "customer_query": "بدي شريحة الكترونية esim كيف طريقتها وبكم",
-      "ideal_reply": "أهلاً بك في BRAND SIM 🌟 الشرائح الإلكترونية (eSIM) متوفرة لجميع الشبكات (هوت، بارتنر، بيليفون، ويكوم، ألوها) وتتفعل فوراً عبر مسح الباركود! يرجى التأكد أولاً أن جهازك يدعم تقنية eSIM (مثل آيفون الحديث أو سامسونج ألترا). ابعثلنا نوع جهازك والشبكة المطلوبة لنزودك بالسعر فوراً."
-    },
-    {
-      "customer_query": "كم رقم شريحتي هاد السيريال 89972...",
-      "ideal_reply": "يتم فحص السيريال تلقائياً من قاعدة بيانات (ليان / كويك لاين / سكاي) وإرسال رقم الشريحة وتفاصيل الباقة وتاريخ الانتهاء فوراً للزبون."
-    },
-    {
-      "customer_query": "بدي احدث الشريحة او انشط الرقم فاصل نت 05XXXXXXXX",
-      "ideal_reply": "أهلاً بك في BRAND SIM 🌟 يتم فحص صلاحية الرقم وتنشيطه فوراً عبر بوابة الشركة الأم، أو يمكنك التحديث المباشر في أي وقت عبر الرابط: https://brand-sim.com/refresh.html"
-    },
-    {
-      "customer_query": "طلعلي الرقم غير مسجل في منظومة براند سيم",
-      "ideal_reply": "عذراً، هذا الرقم غير مسجل في منظومة براند سيم (BRAND SIM) ولا يمكن تحديثه. يرجى التأكد من كتابة الرقم بشكل صحيح (10 أرقام يبدأ بـ 05) أو إرسال رقم السيريال (ICCID 89972) لفحصه."
-    },
-    {
-      "customer_query": "الشريحة بطلت تشتغل او اعطاني الرقم منتهي اشتراكه",
-      "ideal_reply": "الرقم منتهي اشتراكه، الرجاء التواصل مع المندوب من أجل التجديد لتتمكن من استخدام الحزمة والإنترنت مجدداً 🌟"
-    },
-    {
-      "customer_query": "شريحة رامي ليفي معلقة او مش راضية تتفعل اليوم السبت",
-      "ideal_reply": "أهلاً بك 🌟 نظام تفعيل شرائح رامي ليفي (Rami Levy) يواجه أحياناً بطئاً أو تعليقاً مؤقتاً من الشركة الأم يوم السبت. الخلل عام من المصدر وسيعمل تلقائياً فور انتهاء التحديث، شاكرين تفهمك."
-    }
-  ]
-};
-    let activeKnowledgeBase = JSON.parse(JSON.stringify(DEFAULT_KNOWLEDGE_BASE));
-
-    // =========================================================================
-    // 2. دوال تنظيف الأرقام والتواريخ والترجمة الفورية لردود الشركات
-    // =========================================================================
-    function cleanDigitsOnly(val) {
-        if (val === null || val === undefined) return '';
-        const str = String(val);
-        let out = '';
-        for (let i = 0; i < str.length; i++) {
-            const c = str.charCodeAt(i);
-            if (c >= 0x0660 && c <= 0x0669) out += String.fromCharCode(48 + (c - 0x0660));
-            else if (c >= 0x06F0 && c <= 0x06F9) out += String.fromCharCode(48 + (c - 0x06F0));
-            else if (c >= 48 && c <= 57) out += str[i];
-        }
-        return out;
-    }
-
-    function normalizePhoneFormat(rawPhone) {
-        if (rawPhone === null || rawPhone === undefined) return '';
-        let str = String(rawPhone).trim();
-        if (str.includes('_')) str = str.split('_')[0];
-        let d = cleanDigitsOnly(str);
-        if (!d) return '';
-        if (d.indexOf("00972") === 0 || d.indexOf("00970") === 0) d = "0" + d.slice(5);
-        else if ((d.indexOf("972") === 0 || d.indexOf("970") === 0) && d.length >= 11) d = "0" + d.slice(3);
-        else if (d.length === 9 && d.indexOf("5") === 0) d = "0" + d;
-        if (d.length > 10 && d.indexOf("05") === 0) d = d.slice(0, 10);
-        const m = d.match(/^(05\d{8})$/);
-        return m ? m[1] : d;
-    }
-
-    function cleanPortalResponseText(s) {
-        let out = String(s || "")
-            .replace(/[\u0000-\u001F\u007F-\u009F<>]/g, "")
-            .replace(/^[⚠️✅❌⚡⏳\s]+/u, "")
-            .replace(/Sky\s*Telecom\s*2/gi, "Brand sim")
-            .replace(/Sky\s*Telecom/gi, "Brand sim")
-            .replace(/أرقام سكاي|ارقام سكاي/g, "ارقام براند سيم")
-            .trim();
-
-        const portalMap = (activeKnowledgeBase.brand_sim_system &&
-                           activeKnowledgeBase.brand_sim_system.api_portals_and_gateways &&
-                           activeKnowledgeBase.brand_sim_system.api_portals_and_gateways.portal_translations_map) || {};
-        for (const hebKey in portalMap) {
-            if (out.includes(hebKey)) {
-                return portalMap[hebKey].replace(/^[⚠️✅❌⚡⏳\s]+/u, "").trim();
+    "brand_sim_system": {
+        "metadata": {
+            "system_name": "BRAND SIM 🌟",
+            "version": "2.0",
+            "description": "قاعدة بيانات موسعة لتشغيل الرد الآلي وتوجيه الوكلاء والزبائن",
+            "working_hours": {
+                "Sun_Thu": "10:00 - 22:00",
+                "Fri": "13:00 - 19:00",
+                "Sat": "10:00 - 19:00"
+            },
+            "links": {
+                "refresh_sim": "https://brand-sim.com/refresh.html",
+                "check_balance": "https://brand-sim.com/check.html",
+                "network_check": "https://groupahmed2020-byte.github.io/Ahmed.news/",
+                "network_coverage_map": "https://brand-sim.com/Location.html"
             }
+        },
+        "technical_support": {
+            "no_internet_with_signal": {
+                "issue": "وجود إشارة شبكة (4G) ولكن لا يوجد اتصال بالإنترنت",
+                "diagnosis_and_solutions": [
+                    "تأكد من تفعيل بيانات الهاتف وإلغاء وضع الطيران.",
+                    "لشرائح (Aloha) أو (Mobile): أضف نقطة وصول جديدة. الاسم: prime | APN: prime (أو الاسم: aloha | APN: apn.x2one.com).",
+                    "لشرائح (Hot Mobile): اختر نقطة وصول Hot Mobile من إعدادات الشبكة.",
+                    "قم بإعادة تشغيل الهاتف بعد حفظ الإعدادات والانتظار من 5 إلى 10 دقائق."
+                ]
+            },
+            "fair_usage_policy_throttling": {
+                "issue": "تقييد سرعة الإنترنت والشبكة بطيئة جداً (خاصة شرائح ألوها وموبايل)",
+                "diagnosis": "تم الدخول في وضعية 'تقييد سرعة الإنترنت' بسبب الاستهلاك العالي للبيانات (تجاوز الحد اليومي الآمن 4 إلى 5 جيجا).",
+                "solution": "للأسف لا يوجد حل برمجي أو من الدعم الفني لإرجاع السرعة. الحل الوحيد هو نقل الرقم لشركة أخرى (رامي ليفي، وي، هوت موبايل) أو الاستمرار بالسرعة البطيئة حتى تتجدد الباقة."
+            },
+            "no_4g_on_esim_or_code": {
+                "issue": "شريحة إلكترونية (eSIM) أو كود متصلة بالشبكة لكن لا يظهر 4G أو الإنترنت معطل",
+                "solution": "توجيه الزبون فوراً لتفعيل خيار 'التجوال الدولي' (Data Roaming) من إعدادات شبكة الجوال."
+            },
+            "sim_not_supported_x_mark": {
+                "issue": "ظهور علامة X على الشبكة رغم تفعيل الشريحة بنجاح من الدعم الفني",
+                "solution": "يحدث هذا بسبب عدم توافق الشريحة الحديثة مع الهاتف القديم (أو العكس)، يُرجى تجربة الشريحة في جهاز آخر."
+            },
+            "refresh_html_error": {
+                "issue": "ظهور رسالة 'الرقم غير مسجل' في صفحة التحديث الآلي",
+                "solution": "غالباً ما يكون النظام أو الموقع قيد التطوير أو التحديث، أو أن الرقم قيد التفعيل حالياً في السيرفر. يُرجى الانتظار والمحاولة لاحقاً."
+            },
+            "system_downtime_rami_levy": {
+                "issue": "تأخر تفعيل شرائح رامي ليفي (Rami Levy) أو تعليق التفعيل",
+                "solution": "غالباً ما يعلق نظام رامي ليفي أيام السبت (Shabbat) بسبب الإجازات في الشركة الأم. يجب إبلاغ الزبون بالانتظار وأن الخلل عام وليس من الوكيل."
+            }
+        },
+        "agent_guidelines_and_rules": {
+            "new_agent_requirements": "يُشترط دفع مسبق بقيمة 150 شيكل لفتح لوحة الشحن (وكالة جديدة).",
+            "sim_physical_validation": "لفحص الشريحة البلاستيكية والتأكد أنها غير مستخدمة (جديدة): يجب أن تكون النحاسة الخاصة بها تلمع وخالية من أي خدوش أو خطوط احتكاك تدل على إدخالها في هاتف مسبقاً.",
+            "anti_spam_policy": "يُمنع منعاً باتاً استخدام الأرقام (الشرائح) لإرسال رسائل وهمية أو احتيالية (Spam/Phishing) بأسماء بنوك أو محافظ إلكترونية. في حال اكتشاف ذلك، سيتم حظر حساب الوكيل (اليوزر) فوراً واحتساب غرامة 1 شيكل لكل رسالة زائدة.",
+            "esim_sales_rule": "قبل بيع الشريحة الإلكترونية (eSIM)، يجب سؤال الزبون عن نوع هاتفه والتأكد أنه يدعم التقنية (مثل أجهزة الآيفون الحديثة، سامسونج ألترا).",
+            "testing_sims": "الشركات لا توفر شرائح أو أكواد تجريبية مجانية. أي تجربة أو تبديل للشريحة قد يكلف الوكيل 10 شيكل، لذلك يجب التأكد من التغطية قبل البيع.",
+            "customer_service_tone": "تجنب إلقاء اللوم على الزبون. في حال وجود عطل من المصدر (مثل تأخر التفعيل)، اشرح أن الخلل عام وأن الدعم التقني يتابع الأمر لضمان عدم خسارة تقييم الزبون."
+        },
+        "pricing_rules_and_companies_analysis": {
+            "hot_mobile": {
+                "arabic_name": "هوت موبايل",
+                "features": "إنترنت قوي جداً ومستقر، تغطية جيدة في معظم المناطق.",
+                "pricing_context": "تجديد الباقة لـ 3 شهور بـ 120 شيكل، بيع الشريحة الجديدة 3 شهور بـ 180 شيكل."
+            },
+            "pelephone": {
+                "arabic_name": "بيليفون",
+                "features": "تغطية ممتازة جداً وأبراج قوية (خاصة في المناطق الشمالية والحدودية مثل زيكيم).",
+                "notes": "يُفضل بيعها كباقات شهرية، لأن الشركة الأم تقوم أحياناً بسحب عروض الـ 3 شهور فجأة مما يسبب حرجاً للوكلاء مع الزبائن."
+            },
+            "rami_levy": {
+                "arabic_name": "رامي ليفي",
+                "features": "أسعار ممتازة للوكلاء وتجديد سلس لـ 3 شهور بشكل متتالي. يعمل على أبراج بيليفون.",
+                "notes": "نظامهم التقني قد يتعطل ويكون بطيئاً في الاستجابة والتفعيل، خصوصاً في عطلة نهاية الأسبوع."
+            },
+            "wecom": {
+                "arabic_name": "ويكوم",
+                "features": "مطلوبة بشدة وعليها سحب قوي في مناطق الجنوب.",
+                "notes": "أسعار تجديدها لـ 3 شهور مستقرة وتعتبر رخيصة نسبياً للوكيل."
+            },
+            "aloha_and_mobile": {
+                "arabic_name": "ألوها وموبايل",
+                "features": "شرائح اقتصادية تعمل على أبراج (هوت موبايل وبيليفون). سعر الشريحة الفارغة حوالي 50-55 شيكل.",
+                "notes": "تخضع لسياسة استخدام عادل صارمة (سقف استهلاك آمن 4 جيجا يومياً)، تجاوزها يؤدي لتقييد السرعة بشكل دائم."
+            },
+            "partner": {
+                "arabic_name": "بارتنر",
+                "features": "شبكة ممتازة، ولكن يُنصح بالتعامل معها عبر مزودي خدمة محددين (مثل ليان) لتجنب الأسعار المرتفعة جداً في أنظمة أخرى (مثل سكاي)."
+            }
+        },
+        "service_providers_comparison": {
+            "Layan": "الشركة الأفضل حالياً باعتراف الجميع (سرعة رد، دعم تقني ممتاز، أسعار وعروض مستقرة).",
+            "Quick_Line": "الفتى المدلل لشركة سيلكوم، قدرة قوية على اتخاذ قرارات من الشركات الأم، ممتازة في توفير عروض غير موجودة لدى غيرها.",
+            "Sky": "ممتازة جداً في خطوط بيليفون وتفعيلاتها.",
+            "Aloha_Direct": "أسعارها منافسة جداً لكن الدعم الفني الخاص بها يُعتبر ضعيفاً."
         }
-        return out.slice(0, 350);
+    }
+};
+
+    // 2. نماذج تدريب واتساب الحقيقية المدمجة مسبقاً من ملفات دردشاتك
+    const DEFAULT_WA_TRAINING = [{"source": "Hani Alsultan.txt", "customer": "هل متوفر شريحة هوت بلاستيك 3 شهور؟ وبكم التجديد؟", "agent": "متوفر بسعر 180 شيكل لـ 3 شهور (جديدة مقصوصة نانو)، وتجديدها الثابت لـ 3 شهور بـ 120 شيكل، ويتوفر توصيل بـ 5 شيكل."}, {"source": "Hani Alsultan.txt", "customer": "الشريحة تفعلت بس فش نت", "agent": "فوت على إعدادات الشبكة > أسماء نقاط الوصول (APN) واضغط على هوت موبايل، ثم اعمل إعادة تشغيل للجوال وانتظر 5-10 دقائق."}, {"source": "Hudaifa.txt", "customer": "جاي الإرسال بس فش نت ومش جاي علامة 4G على شريحة ألوها", "agent": "فوت على الإعدادات > شبكة الهواتف المحمولة > أسماء نقاط الوصول (APN) > اضغط إشارة (+) واكتب الاسم prime والـ APN اكتب prime واعمل حفظ من الثلاث نقاط فوق."}, {"source": "Hudaifa.txt", "customer": "شريحة كود اشتغلت بس مجتش اشارة 4G", "agent": "فعل التجوال الدولي (Data Roaming) من إعدادات الاتصال والشبكة، وإذا طلبت نقطة وصول APN ضيف internet."}, {"source": "Hudaifa.txt", "customer": "إيش أفضل شريحة في الشمال؟ وشو الفرق عن ألوها؟", "agent": "في الشمال بيليفون ورامي ليفي وهوت موبايل ممتازين جداً، وألوها تشتغل على أبراج هوت موبايل وبيليفون معاً وسعرها الشهر 50 شيكل و3 شهور 130 شيكل."}, {"source": "טנא כל בעמ.txt", "customer": "إشارة بدون انترنت على رقم ألوها رغم ضبط الإعدادات", "agent": "الرقم دخل في وضعية تقييد سرعة الإنترنت بسبب الاستهلاك العالي للبيانات (تجاوز الاستخدام العادل 4-5 جيجا يومياً). للأسف الحظر لا يزول والحل الوحيد نقل الرقم لشركة ثانية مثل رامي ليفي أو وي أو هوت موبايل."}, {"source": "OSAMA SALEM-SIM TECH-QUIK LINE.txt", "customer": "ليش التفعيل بطول في رامي ليفي؟ والموقع معلق", "agent": "بوابة رامي ليفي من الشركة الأم تعلق أحياناً (خصوصاً أيام السبت أو أوقات الصيانة)، الخلل عام من المصدر وبمجرد فتح النظام يتفعل الرقم فوراً."}, {"source": "Bashir Store.txt", "customer": "كيف أعرف الشريحة البلاستيكية جديدة مش مستخدمة؟", "agent": "تأكد من النحاسة؛ الشريحة الجديدة (سواء تكت أو نانو مقصوصة) تكون نحاستها تلمع وما عليها أي خدش أو خطين احتكاك من مدخل الجوال."}];
+
+    // 3. قائمة أولية من المشتركين المستخرجين من سجلاتك + الرقم الذي ظهر في لقطة الشاشة، وتندمج مع أي ملف إكسل ترفعه
+    const INITIAL_SUBSCRIBERS = [
+        {
+            "phone": "0547662808",
+            "iccid": "89972010221061986299",
+            "customer_name": "مشترك براند سيم",
+            "agent_name": "أسامة سالم (BRAND SIM)",
+            "company": "Partner (subscribers Report.xlsx)",
+            "package": "פרטנר 500 גיגה 2025 (חבילה רגילה)",
+            "expiry": "08/10/2026 16:15",
+            "status": "فعال"
+        },
+        {
+            "phone": "0534372052",
+            "iccid": "89972070000534372052",
+            "customer_name": "هاني السلطان",
+            "agent_name": "أسامة سالم (BRAND SIM)",
+            "company": "Hot Mobile (هوت موبايل)",
+            "package": "240 جيجا - 3 شهور",
+            "expiry": "05/02/2027",
+            "status": "فعال"
+        },
+        {
+            "phone": "0502724200",
+            "iccid": "89972500000502724200",
+            "customer_name": "حذيفة (عبدالله السيسي)",
+            "agent_name": "أسامة سالم (BRAND SIM)",
+            "company": "Pelephone (بيليفون)",
+            "package": "حزمة شهرية 60 شيكل",
+            "expiry": "04/12/2026",
+            "status": "فعال"
+        },
+        {
+            "phone": "0553356875",
+            "iccid": "89972500000553356875",
+            "customer_name": "حذيفة (محمد أبو القرع)",
+            "agent_name": "أسامة سالم (BRAND SIM)",
+            "company": "Aloha (ألوها)",
+            "package": "ألوها شهر 50 شيكل",
+            "expiry": "25/11/2026",
+            "status": "فعال"
+        },
+        {
+            "phone": "0535342217",
+            "iccid": "8997207105047075418",
+            "customer_name": "زبون بيت لاهيا",
+            "agent_name": "بشير الأشقر (SIM TECH)",
+            "company": "Hot Mobile (ليان)",
+            "package": "600 جيجا (200 جيجا لكل شهر - 3 شهور)",
+            "expiry": "21/01/2027",
+            "status": "فعال"
+        },
+        {
+            "phone": "0523465439",
+            "iccid": "89972020000523465439",
+            "customer_name": "أسعد كتكت (0595742118)",
+            "agent_name": "بشير الأشقر (SIM TECH)",
+            "company": "Cellcom eSIM (سلكوم)",
+            "package": "300 جيجا شريحة إلكترونية",
+            "expiry": "22/11/2026",
+            "status": "فعال"
+        },
+        {
+            "phone": "0532598201",
+            "iccid": "8997207105041713790",
+            "customer_name": "زبون طرف بشير",
+            "agent_name": "بشير الأشقر (SIM TECH)",
+            "company": "Hot Mobile (سكاي)",
+            "package": "حزمة شهرية هوت موبايل",
+            "expiry": "27/11/2026",
+            "status": "فعال"
+        },
+        {
+            "phone": "0532595419",
+            "iccid": "8997207105041713832",
+            "customer_name": "زبون طرف بشير",
+            "agent_name": "بشير الأشقر (SIM TECH)",
+            "company": "Hot Mobile (سكاي)",
+            "package": "حزمة شهرية هوت موبايل",
+            "expiry": "28/11/2026",
+            "status": "فعال"
+        },
+        {
+            "phone": "0503937629",
+            "iccid": "8997250000093318505",
+            "customer_name": "زبون طرف بشير",
+            "agent_name": "بشير الأشقر (SIM TECH)",
+            "company": "Pelephone (بيليفون)",
+            "package": "300 جيجا بيليفون",
+            "expiry": "29/11/2026",
+            "status": "فعال"
+        },
+        {
+            "phone": "0553343616",
+            "iccid": "89972500000553343616",
+            "customer_name": "زبون طرف بشير",
+            "agent_name": "بشير الأشقر (SIM TECH)",
+            "company": "Aloha (ألوها 3 شهور)",
+            "package": "ألوها 3 شهور",
+            "expiry": "29/01/2027",
+            "status": "تقييد سرعة (استخدام عادل)"
+        },
+        {
+            "phone": "0504746409",
+            "iccid": "8997250200089630653",
+            "customer_name": "زبون طرف بشير",
+            "agent_name": "بشير الأشقر (SIM TECH)",
+            "company": "Pelephone (بيليفون)",
+            "package": "حزمة شهرية بيليفون",
+            "expiry": "01/12/2026",
+            "status": "فعال"
+        },
+        {
+            "phone": "0555039030",
+            "iccid": "89972500000555039030",
+            "customer_name": "زبون تيك توك (طرف بشير)",
+            "agent_name": "بشير الأشقر (SIM TECH)",
+            "company": "Pelephone / Sky",
+            "package": "حزمة شهرية",
+            "expiry": "02/12/2026",
+            "status": "فعال"
+        },
+        {
+            "phone": "0554687435",
+            "iccid": "89972500000554687435",
+            "customer_name": "زبون رامي ليفي",
+            "agent_name": "بشير الأشقر (SIM TECH - كويك لاين)",
+            "company": "Rami Levy (رامي ليفي)",
+            "package": "3 شهور رامي ليفي",
+            "expiry": "03/02/2027",
+            "status": "فعال"
+        }
+    ];
+
+    let activeKnowledgeBase = DEFAULT_KNOWLEDGE_BASE;
+    let subscribersMap = {}; // مفهرس بالرقم وبالسيريال ICCID لسرعة البحث ومنع تكرار البيانات
+    let waTrainingSamples = [];
+
+    // دالة توحيد صيغة رقم الهاتف (05XXXXXXXX)
+    function normalizePhone(raw) {
+        if (!raw) return "";
+        let d = String(raw).replace(/[^0-9]/g, '');
+        if (d.length >= 18) return d; // ICCID
+        if (d.startsWith("00972") || d.startsWith("00970")) d = "0" + d.substring(5);
+        else if ((d.startsWith("972") || d.startsWith("970")) && d.length >= 11) d = "0" + d.substring(3);
+        else if (d.length === 9 && d.startsWith("5")) d = "0" + d;
+        return d;
     }
 
-    function parseUniversalDate(dateStr) {
-        if (!dateStr || typeof dateStr !== 'string') return null;
-        const clean = dateStr.trim().split(' ')[0];
+    // تحميل كافة البيانات المحفوظة دون مسح أي قديم
+    function initAllData() {
+        // 1. تحميل قاعدة المعرفة
+        try {
+            if (window.AndroidBridge && window.AndroidBridge.getSystemKnowledgeBase) {
+                const rawKb = window.AndroidBridge.getSystemKnowledgeBase();
+                if (rawKb && rawKb.trim().length > 10) activeKnowledgeBase = JSON.parse(rawKb);
+            } else {
+                const savedKb = localStorage.getItem('brand_sim_knowledge_v2');
+                if (savedKb) activeKnowledgeBase = JSON.parse(savedKb);
+            }
+        } catch (e) { activeKnowledgeBase = DEFAULT_KNOWLEDGE_BASE; }
+
+        // 2. تحميل المشتركين المدمجين
+        subscribersMap = {};
+        INITIAL_SUBSCRIBERS.forEach(s => upsertSubscriberInMemory(s));
+
+        try {
+            let rawSubs = "[]";
+            if (window.AndroidBridge && window.AndroidBridge.getSubscribersJson) {
+                rawSubs = window.AndroidBridge.getSubscribersJson();
+            }
+            if ((!rawSubs || rawSubs === "[]") && localStorage.getItem('brand_sim_subscribers_v2')) {
+                rawSubs = localStorage.getItem('brand_sim_subscribers_v2');
+            }
+            if (rawSubs && rawSubs.length > 2) {
+                const parsedSubs = JSON.parse(rawSubs);
+                if (Array.isArray(parsedSubs)) {
+                    parsedSubs.forEach(s => upsertSubscriberInMemory(s));
+                }
+            }
+        } catch (e) {}
+
+        // 3. تحميل نماذج تدريب واتساب
+        waTrainingSamples = [...DEFAULT_WA_TRAINING];
+        try {
+            let rawWa = "[]";
+            if (window.AndroidBridge && window.AndroidBridge.getWaTrainingJson) {
+                rawWa = window.AndroidBridge.getWaTrainingJson();
+            }
+            if ((!rawWa || rawWa === "[]") && localStorage.getItem('brand_sim_wa_samples_v2')) {
+                rawWa = localStorage.getItem('brand_sim_wa_samples_v2');
+            }
+            if (rawWa && rawWa.length > 2) {
+                const parsedWa = JSON.parse(rawWa);
+                if (Array.isArray(parsedWa) && parsedWa.length > 0) {
+                    waTrainingSamples = parsedWa;
+                }
+            }
+        } catch (e) {}
+
+        updateCountersUi();
+    }
+
+    function upsertSubscriberInMemory(sub) {
+        if (!sub) return;
+        const phone = normalizePhone(sub.phone || sub.msisdn || sub.number || sub['رقم الهاتف'] || sub['الرقم'] || sub['رقم الشريحة'] || '');
+        const iccid = String(sub.iccid || sub.serial || sub.sim || sub['السيريال'] || sub['الرقم التسلسلي'] || '').replace(/[^0-9]/g, '');
+        if (!phone && !iccid) return;
+
+        const key = phone || iccid;
+        const existing = subscribersMap[key] || {};
+
+        const record = {
+            phone: phone || existing.phone || 'غير متوفر',
+            iccid: iccid || existing.iccid || 'غير متوفر',
+            customer_name: sub.customer_name || sub.customer || sub.name || sub['اسم الزبون'] || sub['الزبون'] || sub['الاسم'] || existing.customer_name || 'مشترك براند سيم',
+            agent_name: sub.agent_name || sub.agent || sub.dealer || sub['اسم الوكيل'] || sub['الوكيل'] || sub['المندوب'] || existing.agent_name || 'أسامة سالم (BRAND SIM)',
+            company: sub.company || sub.provider || sub.network || sub['الشركة'] || sub['المزود'] || existing.company || 'BRAND SIM',
+            package: sub.package || sub.plan || sub['الحزمة'] || sub['الباقة'] || existing.package || 'حزمة إنترنت فعالة',
+            expiry: sub.expiry || sub.end_date || sub['تاريخ الانتهاء'] || sub['الانتهاء'] || existing.expiry || 'غير محدد',
+            status: sub.status || sub['الحالة'] || existing.status || 'فعال'
+        };
+
+        if (phone) subscribersMap[phone] = record;
+        if (iccid && iccid.length >= 10) subscribersMap['ICCID_' + iccid] = record;
+    }
+
+    function persistSubscribers() {
+        const uniqueList = [];
+        const seen = new Set();
+        Object.keys(subscribersMap).forEach(k => {
+            if (!k.startsWith('ICCID_')) {
+                const item = subscribersMap[k];
+                const id = (item.phone || '') + '_' + (item.iccid || '');
+                if (!seen.has(id)) {
+                    seen.add(id);
+                    uniqueList.push(item);
+                }
+            }
+        });
+        const str = JSON.stringify(uniqueList);
+        try { localStorage.setItem('brand_sim_subscribers_v2', str); } catch (e) {}
+        try {
+            if (window.AndroidBridge && window.AndroidBridge.saveSubscribersJson) {
+                window.AndroidBridge.saveSubscribersJson(str);
+            }
+        } catch (e) {}
+        updateCountersUi();
+    }
+
+    function findSubscriber(query) {
+        if (!query) return null;
+        const clean = String(query).replace(/[^0-9]/g, '');
         if (!clean) return null;
-        // Check YYYY-MM-DD
-        let m = clean.match(/^(\d{4})[\-\/](\d{1,2})[\-\/](\d{1,2})$/);
-        if (m) {
-            return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]), 23, 59, 59);
-        }
-        // Check DD/MM/YYYY or DD-MM-YYYY
-        m = clean.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
-        if (m) {
-            return new Date(Number(m[3]), Number(m[2]) - 1, Number(m[1]), 23, 59, 59);
+
+        const normPhone = normalizePhone(clean);
+        if (subscribersMap[normPhone]) return subscribersMap[normPhone];
+        if (subscribersMap['ICCID_' + clean]) return subscribersMap['ICCID_' + clean];
+
+        // بحث جزئي في حال أدخل آخر 11 رقم من السيريال (كما يفعل الوكلاء 105047075418)
+        for (const k in subscribersMap) {
+            const item = subscribersMap[k];
+            if (!item) continue;
+            if (item.iccid && clean.length >= 8 && (item.iccid.endsWith(clean) || item.iccid.includes(clean))) {
+                return item;
+            }
+            if (item.phone && normPhone.length >= 9 && item.phone === normPhone) {
+                return item;
+            }
         }
         return null;
     }
 
-    function isSubscriberExpired(sub) {
-        if (!sub) return false;
-        if (sub.is_active === false) return true;
-        const st = String(sub.status || '').trim();
-        if (st && (st.includes('مفصول') || st.includes('معلق') || st.includes('ניתוק'))) {
-            return true;
-        }
-        const dt = parseUniversalDate(sub.end_date_iso || sub.end_date);
-        if (dt && dt.getTime() < Date.now()) {
-            return true;
-        }
-        return false;
-    }
-
-    // =========================================================================
-    // 3. إدارة فترات الانتظار (Cooldown) والعداد التنازلي المطابق لـ web-refresh.html
-    // =========================================================================
-    function stopCountdownTimer() {
-        if (countdownInterval) {
-            clearInterval(countdownInterval);
-            countdownInterval = null;
-        }
-        activeCooldownPhone = null;
-    }
-
-    function getCooldownRecords() {
-        let records = Object.assign({}, memoryCooldowns);
-        try {
-            if (window.name && window.name.indexOf("BSIM:") === 0) {
-                Object.assign(records, JSON.parse(window.name.slice(5)));
-            }
-        } catch (e) {}
-        try {
-            const sData = sessionStorage.getItem(STORAGE_KEY);
-            if (sData) Object.assign(records, JSON.parse(sData));
-        } catch (e) {}
-        try {
-            const lData = localStorage.getItem(STORAGE_KEY);
-            if (lData) Object.assign(records, JSON.parse(lData));
-        } catch (e) {}
-        return records;
-    }
-
-    function persistCooldownRecords(records) {
-        const now = Date.now();
-        for (const num in records) {
-            if (now - Number(records[num]) >= COOLDOWN_MS) {
-                delete records[num];
-                delete memoryCooldowns[num];
-            } else {
-                memoryCooldowns[num] = Number(records[num]);
-            }
-        }
-        const json = JSON.stringify(records);
-        try { window.name = "BSIM:" + json; } catch (e) {}
-        try { sessionStorage.setItem(STORAGE_KEY, json); } catch (e) {}
-        try { localStorage.setItem(STORAGE_KEY, json); } catch (e) {}
-    }
-
-    function getRemainingCooldownMs(phone) {
-        const records = getCooldownRecords();
-        const startTime = Number(records[phone] || 0);
-        let localRem = 0;
-        if (startTime) {
-            const elapsed = Date.now() - startTime;
-            if (elapsed < COOLDOWN_MS) localRem = COOLDOWN_MS - elapsed;
-        }
-        if (window.AndroidBridge && window.AndroidBridge.getSkyCooldownRemainingMs) {
-            try {
-                const nativeRem = Number(window.AndroidBridge.getSkyCooldownRemainingMs(phone) || 0);
-                if (nativeRem > localRem) return nativeRem;
-            } catch (e) {}
-        }
-        return localRem;
-    }
-
-    function saveCooldown(phone, customRemainingMs) {
-        const now = Date.now();
-        const records = getCooldownRecords();
-        const startTime = (typeof customRemainingMs === "number" && customRemainingMs > 0 && customRemainingMs <= COOLDOWN_MS)
-            ? (now - (COOLDOWN_MS - customRemainingMs))
-            : now;
-        records[phone] = startTime;
-        persistCooldownRecords(records);
-        if (window.AndroidBridge && window.AndroidBridge.markSkyRefreshed) {
-            try { window.AndroidBridge.markSkyRefreshed(phone); } catch (e) {}
-        }
-    }
-
-    function formatRemainingText(ms) {
-        const totalSec = Math.max(1, Math.ceil(ms / 1000));
-        const hours = Math.floor(totalSec / 3600);
-        const minutes = Math.floor((totalSec % 3600) / 60);
-        const seconds = totalSec % 60;
-
-        const parts = [];
-        if (hours === 1) parts.push("ساعة واحدة");
-        else if (hours === 2) parts.push("ساعتين");
-        else if (hours > 2) parts.push(hours + " ساعات");
-
-        if (minutes === 1) parts.push("دقيقة واحدة");
-        else if (minutes === 2) parts.push("دقيقتين");
-        else if (minutes >= 3 && minutes <= 10) parts.push(minutes + " دقائق");
-        else if (minutes > 10) parts.push(minutes + " دقيقة");
-
-        if (hours === 0 && seconds > 0) {
-            if (seconds === 1) parts.push("ثانية واحدة");
-            else if (seconds === 2) parts.push("ثانيتين");
-            else if (seconds >= 3 && seconds <= 10) parts.push(seconds + " ثوانٍ");
-            else parts.push(seconds + " ثانية");
-        }
-        return parts.join(" و ") || (seconds + " ثانية");
-    }
-
-    function formatDigitalClock(ms) {
-        const totalSec = Math.max(0, Math.ceil(ms / 1000));
-        const h = String(Math.floor(totalSec / 3600)).padStart(2, "0");
-        const m = String(Math.floor((totalSec % 3600) / 60)).padStart(2, "0");
-        const s = String(totalSec % 60).padStart(2, "0");
-        return h + ":" + m + ":" + s;
-    }
-
-    function isCooldownServerResponse(data) {
-        if (!data) return false;
-        if (data.cooldown === true || data.isCooldown === true) return true;
-        const msg = String(data.msg || data.rawMsg || "");
-        return /قمت بتحديث.*مسبق|قمت بتحديث.*قبل|المحاولة.*بعد.*ساع|بعد\s*3\s*ساعات|لتكرار الطلب|3\s*שעות|חמש שעות|רעננת.*לאחרונה|נסה.*בעוד/i.test(msg);
-    }
-
-    function extractServerRemainingMs(data) {
-        if (!data) return 0;
-        const msFields = [data.remainingMs, data.cooldownMs, data.timeLeftMs, data.waitMs, data.leftMs];
-        for (let i = 0; i < msFields.length; i++) {
-            if (Number(msFields[i]) > 0) return Number(msFields[i]);
-        }
-        const secFields = [data.remainingSeconds, data.retryAfter, data.secondsLeft, data.waitSeconds, data.leftSeconds];
-        for (let i = 0; i < secFields.length; i++) {
-            if (Number(secFields[i]) > 0) return Number(secFields[i]) * 1000;
-        }
-        const minFields = [data.remainingMinutes, data.minutesLeft, data.waitMinutes, data.leftMinutes];
-        for (let i = 0; i < minFields.length; i++) {
-            if (Number(minFields[i]) > 0) return Number(minFields[i]) * 60 * 1000;
-        }
-        const expFields = [data.expiresAt, data.cooldownUntil, data.unlockAt, data.nextAllowedAt];
-        for (let i = 0; i < expFields.length; i++) {
-            if (Number(expFields[i]) > Date.now()) return Number(expFields[i]) - Date.now();
-        }
-        const lastFields = [data.lastRefresh, data.lastUpdated, data.timestamp];
-        for (let i = 0; i < lastFields.length; i++) {
-            if (Number(lastFields[i]) > 0 && (Date.now() - Number(lastFields[i]) < COOLDOWN_MS)) {
-                return COOLDOWN_MS - (Date.now() - Number(lastFields[i]));
-            }
-        }
-        const msg = String(data.msg || data.rawMsg || "");
-        const clockMatch = msg.match(/(\d{1,2}):(\d{2})(?::(\d{2}))?/);
-        if (clockMatch) {
-            const h = Number(clockMatch[1] || 0);
-            const m = Number(clockMatch[2] || 0);
-            const s = Number(clockMatch[3] || 0);
-            return ((h * 3600) + (m * 60) + s) * 1000;
-        }
-        const minMatch = msg.match(/(\d+)\s*(?:دقيقة|دقائق|דקות)/);
-        if (minMatch) {
-            let totalMin = Number(minMatch[1]);
-            if (/ساعتين|שעתיים/.test(msg)) totalMin += 120;
-            else if (/ساعة|שעה/.test(msg)) totalMin += 60;
-            return totalMin * 60 * 1000;
-        }
-        return 0;
-    }
-
-    function showCooldownMessageUi(phone) {
-        stopCountdownTimer();
-        activeCooldownPhone = phone;
-        const box = document.getElementById('messageBox');
-        if (!box) return;
-
-        const renderTick = function() {
-            const remainingMs = getRemainingCooldownMs(phone);
-            const t = STANDARD_MESSAGES.ar;
-
-            if (remainingMs <= 0) {
-                stopCountdownTimer();
-                window.showMessage("success", t.cooldownReady);
-                return;
-            }
-
-            box.className = "warning";
-            box.innerHTML = "";
-            const textDiv = document.createElement("div");
-            textDiv.textContent = "⏳ " + t.cooldownPrefix + formatRemainingText(remainingMs);
-
-            const badge = document.createElement("div");
-            badge.className = "cooldown-timer-badge";
-            badge.textContent = "⏱️ " + formatDigitalClock(remainingMs);
-
-            box.appendChild(textDiv);
-            box.appendChild(badge);
-            box.style.display = "block";
-        };
-
-        renderTick();
-        countdownInterval = setInterval(renderTick, 1000);
-    }
-
-    // =========================================================================
-    // 4. إدارة قاعدة المعرفة ودمج ملفات الإكسل و customers.json
-    // =========================================================================
-    function deepMergeObjects(target, source) {
-        if (!target || typeof target !== 'object') target = {};
-        if (!source || typeof source !== 'object') return target;
-        const out = Object.assign({}, target);
-        Object.keys(source).forEach(key => {
-            if (key === 'subscribers' || key === 'customers' || key === 'whatsapp_training_examples') return;
-            const sVal = source[key];
-            const tVal = out[key];
-            if (sVal && typeof sVal === 'object' && !Array.isArray(sVal) && tVal && typeof tVal === 'object' && !Array.isArray(tVal)) {
-                out[key] = deepMergeObjects(tVal, sVal);
-            } else if (sVal !== undefined && sVal !== null && sVal !== '') {
-                out[key] = sVal;
-            }
+    function getUniqueSubscribersCount() {
+        let count = 0;
+        Object.keys(subscribersMap).forEach(k => {
+            if (!k.startsWith('ICCID_')) count++;
         });
-        return out;
-    }
-
-    function mergeSubscriberLists(oldList, newList) {
-        const map = new Map();
-        const processList = (list) => {
-            if (!Array.isArray(list)) return;
-            list.forEach(item => {
-                if (!item || typeof item !== 'object') return;
-                const phone = normalizePhoneFormat(item.phone || item['رقم الهاتف'] || item['الاشتراك'] || item['טלפון'] || item.mobile || '');
-                let iccid = cleanDigitsOnly(item.iccid || item['رقم الشريحة'] || item['SIM#'] || item.serial || item.sim || '');
-                if (iccid.length < 10) iccid = '';
-                if (!phone && !iccid) return;
-                const cleanItem = Object.assign({}, item, { phone, iccid });
-                const key = phone ? ('PHONE_' + phone) : ('ICCID_' + iccid);
-                if (map.has(key)) {
-                    const existing = map.get(key);
-                    Object.keys(cleanItem).forEach(k => {
-                        const v = cleanItem[k];
-                        if (v !== undefined && v !== null && String(v).trim() !== '' && String(v).toLowerCase() !== 'nan') {
-                            existing[k] = v;
-                        }
-                    });
-                } else {
-                    map.set(key, cleanItem);
-                }
-            });
-        };
-        processList(oldList);
-        processList(newList);
-        return Array.from(map.values());
-    }
-
-    function mergeWhatsappExamples(oldEx, newEx) {
-        const map = new Map();
-        const addList = (arr) => {
-            if (!Array.isArray(arr)) return;
-            arr.forEach(ex => {
-                if (!ex || !ex.customer_query || !ex.ideal_reply) return;
-                const k = String(ex.customer_query).trim().slice(0, 80);
-                map.set(k, {
-                    customer_query: String(ex.customer_query).trim(),
-                    ideal_reply: String(ex.ideal_reply).trim()
-                });
-            });
-        };
-        addList(oldEx);
-        addList(newEx);
-        return Array.from(map.values());
-    }
-
-    function mergeFullKnowledgeData(baseData, incomingData) {
-        let merged = deepMergeObjects(DEFAULT_KNOWLEDGE_BASE, baseData || {});
-        let subs = mergeSubscriberLists(DEFAULT_KNOWLEDGE_BASE.subscribers || [], (baseData && (baseData.subscribers || baseData.customers)) || []);
-        let waEx = mergeWhatsappExamples(DEFAULT_KNOWLEDGE_BASE.whatsapp_training_examples || [], (baseData && baseData.whatsapp_training_examples) || []);
-
-        if (incomingData) {
-            if (Array.isArray(incomingData)) {
-                subs = mergeSubscriberLists(subs, incomingData);
-            } else if (typeof incomingData === 'object') {
-                merged = deepMergeObjects(merged, incomingData);
-                const inSubs = incomingData.subscribers || incomingData.customers || [];
-                subs = mergeSubscriberLists(subs, inSubs);
-                if (incomingData.whatsapp_training_examples) {
-                    waEx = mergeWhatsappExamples(waEx, incomingData.whatsapp_training_examples);
-                }
-            }
-        }
-        merged.subscribers = subs;
-        merged.whatsapp_training_examples = waEx;
-        return merged;
+        return count;
     }
 
     function updateCountersUi() {
-        const badge = document.getElementById('subsCountBadge');
-        if (badge && activeKnowledgeBase && Array.isArray(activeKnowledgeBase.subscribers)) {
-            badge.innerText = 'مشتركين: ' + activeKnowledgeBase.subscribers.length;
-        }
-        const waBadge = document.getElementById('waTrainCountBadge');
-        if (waBadge && activeKnowledgeBase && Array.isArray(activeKnowledgeBase.whatsapp_training_examples)) {
-            waBadge.innerText = 'نماذج واتساب: ' + activeKnowledgeBase.whatsapp_training_examples.length;
-        }
+        const subBadge = document.getElementById('subscribersCountBadge');
+        if (subBadge) subBadge.innerText = 'مشتركين: ' + getUniqueSubscribersCount();
+
+        const waBadge = document.getElementById('waSamplesCountBadge');
+        if (waBadge) waBadge.innerText = 'نماذج واتساب: ' + waTrainingSamples.length;
     }
 
-    async function loadSystemKnowledge() {
-        try {
-            let merged = JSON.parse(JSON.stringify(DEFAULT_KNOWLEDGE_BASE));
-            const localSaved = localStorage.getItem('brand_sim_knowledge_v3');
-            if (localSaved) {
-                try { merged = mergeFullKnowledgeData(merged, JSON.parse(localSaved)); } catch (e) {}
+    // بناء بطاقة تفاصيل الرقم شاملة (اسم الزبون + اسم الوكيل) الخاصة بنسخة المدير
+    function formatSubscriberCard(sub, extraNote) {
+        let isExpired = false;
+        if (sub.expiry) {
+            const m = String(sub.expiry).match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
+            if (m) {
+                const d = parseInt(m[1], 10);
+                const mo = parseInt(m[2], 10) - 1;
+                const y = parseInt(m[3], 10);
+                const expDate = new Date(y, mo, d, 23, 59, 59);
+                if (expDate < new Date()) isExpired = true;
             }
-            if (window.AndroidBridge && window.AndroidBridge.getSystemKnowledgeBase) {
-                const raw = window.AndroidBridge.getSystemKnowledgeBase();
-                if (raw && raw.trim().length > 10) {
-                    try { merged = mergeFullKnowledgeData(merged, JSON.parse(raw)); } catch (e) {}
+        }
+
+        let card = `📊 تفاصيل اشتراك الرقم: ${sub.phone}\n`
+            + `👤 اسم الزبون: ${sub.customer_name || 'غير محدد'}\n`
+            + `🏢 اسم الوكيل: ${sub.agent_name || 'أسامة سالم (BRAND SIM)'}\n`
+            + `📦 الشركة: ${sub.company}\n`
+            + `💎 الحزمة: ${sub.package}\n`
+            + `📅 تاريخ الانتهاء: ${sub.expiry}\n`
+            + `📌 الحالة: ${sub.status || 'فعال'}\n`
+            + `💳 السيريال: ${sub.iccid}`;
+
+        if (isExpired) {
+            card += `\n⚠️ تنبيه: الرقم منتهي اشتراكه، الرجاء التواصل مع الوكيل (${sub.agent_name}) من أجل التجديد.`;
+        }
+        if (extraNote) {
+            card += `\n${extraNote}`;
+        }
+        return card;
+    }
+
+    // التحقق الصارم: هل الرقم تابع لمنظومة براند سيم؟
+    function isRegisteredBrandSimNumber(query) {
+        return findSubscriber(query) !== null;
+    }
+
+    // 1. زر: تحديث ذكي تلقائي للشريحة الآن
+    function handleSmartRefreshClick() {
+        const val = (document.getElementById('phoneInput').value || '').trim();
+        if (!val) {
+            window.showMessage('warning', '⚠️ يرجى إدخال رقم الشريحة أو السيريال أولاً.');
+            return;
+        }
+        window.executeSmsAutoRefresh(val, 'WEB', 'refresh', val, 'المدير');
+    }
+
+    // 2. زر: فحص ICCID
+    function handleIccidLookupClick() {
+        const val = (document.getElementById('phoneInput').value || '').trim();
+        if (!val) {
+            window.showMessage('warning', '⚠️ يرجى إدخال السيريال (ICCID) أو رقم الشريحة في الحقل أولاً.');
+            return;
+        }
+        window.executeSmsAutoRefresh(val, 'WEB', 'iccid_lookup', val, 'المدير');
+    }
+
+    // 3. زر: استعلام تفاصيل الحزمة
+    function handlePackageDetailsClick() {
+        const val = (document.getElementById('phoneInput').value || '').trim();
+        if (!val) {
+            window.showMessage('warning', '⚠️ يرجى إدخال رقم الشريحة أو السيريال للاستعلام.');
+            return;
+        }
+        window.executeSmsAutoRefresh(val, 'WEB', 'details', val, 'المدير');
+    }
+
+    // الدالة المركزية للتحديث والاستعلام وفحص السيريال (مع حظر الأرقام خارج براند سيم!)
+    window.executeSmsAutoRefresh = function(phoneOrIccid, sender, mode, rawBody, senderTitle) {
+        const sub = findSubscriber(phoneOrIccid);
+        const cleanDigits = String(phoneOrIccid || '').replace(/[^0-9]/g, '');
+
+        // شرط الحماية الصارم: منع تحديث أو خدمة أي رقم خارج براند سيم
+        if (!sub) {
+            const rejectNotOurs = `⛔ عذراً، الرقم أو السيريال (${cleanDigits}) غير مسجل في منظومة براند سيم (BRAND SIM) ولا يُسمح بتحديثه.`;
+            window.showMessage('error', rejectNotOurs);
+            window.logAiAgent(`🚫 تم رفض رقم خارج منظومة براند سيم: ${cleanDigits}`);
+            if (window.AndroidBridge && sender && sender !== 'WEB') {
+                window.AndroidBridge.sendSmsReply(sender, rejectNotOurs);
+            }
+            return;
+        }
+
+        const targetPhone = sub.phone;
+
+        if (mode === 'iccid_lookup' || mode === 'details') {
+            const cardMsg = formatSubscriberCard(sub);
+            window.showMessage('details-card', cardMsg);
+            if (window.AndroidBridge && sender && sender !== 'WEB') {
+                window.AndroidBridge.sendSmsReply(sender, cardMsg);
+            }
+            return;
+        }
+
+        // في حالة طلب تحديث (refresh / weak_net) لرقم مسجل في براند سيم:
+        // نعرض أولاً بطاقة الزبون والوكيل أمامك، ثم نطلق التحديث الفعلي
+        const refreshingCard = formatSubscriberCard(sub, "⏳ جاري تحديث وتنشيط الشريحة في السيرفر الآن...");
+        window.showMessage('details-card', refreshingCard);
+
+        if (window.AndroidBridge && window.AndroidBridge.getSkyCooldownRemainingMs) {
+            const rem = window.AndroidBridge.getSkyCooldownRemainingMs(targetPhone);
+            if (rem > 0) {
+                const rejectMsg = window.AndroidBridge.getSkyCooldownRejectMsg(targetPhone);
+                const fullCooldownMsg = formatSubscriberCard(sub, rejectMsg);
+                window.showMessage('warning', fullCooldownMsg);
+                if (sender && sender !== 'WEB') {
+                    window.AndroidBridge.sendSmsReply(sender, rejectMsg);
+                }
+                return;
+            }
+        }
+
+        if (window.AndroidBridge && window.AndroidBridge.autoRefreshSkyWithMode) {
+            window.AndroidBridge.autoRefreshSkyWithMode(targetPhone, sender === 'WEB' ? '' : sender, mode || 'refresh');
+        }
+    };
+
+    // دمج ملفات الإكسل (xlsx/csv) و JSON للمشتركين بدون مسح القديم
+    async function handleSubscribersFilesSelected(files) {
+        if (!files || files.length === 0) return;
+        let addedCount = 0;
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const name = file.name;
+            try {
+                if (name.endsWith('.json')) {
+                    const txt = await file.text();
+                    const parsed = JSON.parse(txt);
+                    if (Array.isArray(parsed)) {
+                        parsed.forEach(item => { upsertSubscriberInMemory(item); addedCount++; });
+                    } else if (parsed.subscribers && Array.isArray(parsed.subscribers)) {
+                        parsed.subscribers.forEach(item => { upsertSubscriberInMemory(item); addedCount++; });
+                    } else if (parsed.brand_sim_system) {
+                        activeKnowledgeBase = parsed;
+                        localStorage.setItem('brand_sim_knowledge_v2', JSON.stringify(parsed));
+                        if (window.AndroidBridge && window.AndroidBridge.saveSystemKnowledgeBase) {
+                            window.AndroidBridge.saveSystemKnowledgeBase(JSON.stringify(parsed));
+                        }
+                    }
+                } else if (typeof XLSX !== 'undefined') {
+                    const buf = await file.arrayBuffer();
+                    const wb = XLSX.read(buf, { type: 'array' });
+                    wb.SheetNames.forEach(sheetName => {
+                        const sheet = wb.Sheets[sheetName];
+                        const rows = XLSX.utils.sheet_to_json(sheet, { defval: "" });
+                        rows.forEach(r => {
+                            const mapped = extractSubscriberFromRow(r, name);
+                            if (mapped) {
+                                upsertSubscriberInMemory(mapped);
+                                addedCount++;
+                            }
+                        });
+                    });
+                }
+            } catch (err) {
+                window.logAiAgent(`⚠️ خطأ أثناء قراءة الملف ${name}: ${err.message}`);
+            }
+        }
+
+        persistSubscribers();
+        window.showMessage('success', `✅ تم دمج الملفات بنجاح! إجمالي المشتركين المسجلين الآن: ${getUniqueSubscribersCount()} مشترك.`);
+    }
+
+    function extractSubscriberFromRow(row, sourceFileName) {
+        let phone = "", iccid = "", customer = "", agent = "", company = "", pkg = "", expiry = "", status = "فعال";
+        for (const key of Object.keys(row)) {
+            const k = key.toLowerCase().trim();
+            const val = String(row[key] || '').trim();
+            if (!val) continue;
+
+            if (!phone && (k.includes('phone') || k.includes('msisdn') || k.includes('mobile') || k.includes('رقم') || k.includes('هاتف') || k.includes('شريحة') || k.includes('خط') || k.includes('מספר'))) {
+                const p = normalizePhone(val);
+                if (p.length >= 9 && p.length <= 12) phone = p;
+            }
+            if (!iccid && (k.includes('iccid') || k.includes('sim') || k.includes('serial') || k.includes('سيريال') || k.includes('تسلسلي') || val.startsWith('89972'))) {
+                const ic = val.replace(/[^0-9]/g, '');
+                if (ic.length >= 14) iccid = ic;
+            }
+            if (!customer && (k.includes('customer') || k.includes('client') || k.includes('زبون') || k.includes('عميل') || k.includes('مشترك') || k.includes('اسم') || k.includes('לקוח'))) {
+                customer = val;
+            }
+            if (!agent && (k.includes('agent') || k.includes('dealer') || k.includes('reseller') || k.includes('وكيل') || k.includes('مندوب') || k.includes('نقطة') || k.includes('סוכן'))) {
+                agent = val;
+            }
+            if (!company && (k.includes('company') || k.includes('network') || k.includes('operator') || k.includes('شركة') || k.includes('شبكة') || k.includes('مزود'))) {
+                company = val;
+            }
+            if (!pkg && (k.includes('package') || k.includes('plan') || k.includes('bundle') || k.includes('حزمة') || k.includes('باقة') || k.includes('חבילה'))) {
+                pkg = val;
+            }
+            if (!expiry && (k.includes('exp') || k.includes('end') || k.includes('date') || k.includes('انتهاء') || k.includes('تاريخ') || k.includes('صلاحية') || k.includes('תוקף'))) {
+                expiry = val;
+            }
+            if (k.includes('status') || k.includes('state') || k.includes('حالة') || k.includes('סטטוס')) {
+                status = val;
+            }
+        }
+
+        // التقاط تلقائي إذا كانت الأعمدة بدون عناوين قياسية
+        if (!phone || !iccid) {
+            for (const key of Object.keys(row)) {
+                const val = String(row[key] || '').trim();
+                const digits = val.replace(/[^0-9]/g, '');
+                if (!iccid && digits.startsWith('89972') && digits.length >= 16) iccid = digits;
+                else if (!phone && /^0?5\d{8}$/.test(digits)) phone = normalizePhone(digits);
+            }
+        }
+
+        if (!phone && !iccid) return null;
+        return {
+            phone: phone,
+            iccid: iccid,
+            customer_name: customer || 'مشترك براند سيم',
+            agent_name: agent || 'أسامة سالم (BRAND SIM)',
+            company: company ? `${company} (${sourceFileName})` : sourceFileName,
+            package: pkg || 'حزمة إنترنت',
+            expiry: expiry || 'غير محدد',
+            status: status || 'فعال'
+        };
+    }
+
+    // حل مشكلة رفع ملف محادثة (.txt) وتحليله للتدريب
+    async function handleWaFileSelected(files) {
+        if (!files || files.length === 0) return;
+        const area = document.getElementById('waTrainingTextarea');
+        const statusEl = document.getElementById('waFileStatusText');
+        let combinedText = area.value ? (area.value + "\n") : "";
+
+        for (let i = 0; i < files.length; i++) {
+            try {
+                const text = await files[i].text();
+                combinedText += text + "\n";
+            } catch (e) {}
+        }
+        area.value = combinedText;
+        if (statusEl) {
+            statusEl.style.display = 'block';
+            statusEl.innerText = `✅ تم قراءة الملف (${files[0].name}) بنجاح! جاري التحليل والإضافة للتدريب تلقائياً...`;
+        }
+        // تحليل وحفظ تلقائي فور اختيار الملف حتى لا يحتاج المستخدم للضغط مرتين
+        analyzeAndSaveWaTraining();
+    }
+
+    function analyzeAndSaveWaTraining() {
+        const area = document.getElementById('waTrainingTextarea');
+        const statusEl = document.getElementById('waFileStatusText');
+        const rawText = (area ? area.value : '').trim();
+
+        if (!rawText) {
+            if (statusEl) {
+                statusEl.style.display = 'block';
+                statusEl.style.color = '#fbbf24';
+                statusEl.innerText = '⚠️ يرجى لصق نص محادثة في الصندوق أعلاه أو الضغط على زر (رفع ملف محادثة .txt) أولاً.';
+            }
+            return;
+        }
+
+        const lines = rawText.split(/\r?\n/);
+        let lastCustomerMsg = "";
+        let extractedCount = 0;
+
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i].trim();
+            if (!line || line.includes('مشفرة تماماً') || line.includes('تم استبعاد الوسائط')) continue;
+
+            // تحليل صيغة واتساب: تاريخ - المرسل: الرسالة
+            const parts = line.split(' - ');
+            const contentPart = parts.length > 1 ? parts.slice(1).join(' - ') : line;
+            const colonIdx = contentPart.indexOf(':');
+
+            if (colonIdx > 0) {
+                const senderName = contentPart.substring(0, colonIdx).trim();
+                const msgBody = contentPart.substring(colonIdx + 1).trim();
+                if (msgBody.length < 2) continue;
+
+                const isOsama = senderName.includes('أسامة') || senderName.includes('أُسَامَة') || senderName.includes('Official Business') || senderName.includes('BRAND SIM');
+                if (isOsama) {
+                    if (lastCustomerMsg && msgBody.length >= 3) {
+                        waTrainingSamples.push({
+                            source: "تدريب مضاف",
+                            customer: lastCustomerMsg,
+                            agent: msgBody
+                        });
+                        extractedCount++;
+                        lastCustomerMsg = "";
+                    }
+                } else {
+                    lastCustomerMsg = msgBody;
                 }
             }
-            if (!merged.subscribers || merged.subscribers.length === 0) {
-                try {
-                    const res = await fetch('customers.json');
-                    if (res.ok) {
-                        const fileData = await res.json();
-                        merged = mergeFullKnowledgeData(merged, fileData);
-                    }
-                } catch (e) {}
-            }
-            activeKnowledgeBase = merged;
-            try { localStorage.setItem('brand_sim_knowledge_v3', JSON.stringify(activeKnowledgeBase)); } catch (e) {}
-        } catch (e) {
-            activeKnowledgeBase = JSON.parse(JSON.stringify(DEFAULT_KNOWLEDGE_BASE));
         }
-        updateCountersUi();
-    }
 
-    function persistMergedKnowledge(newPartialData) {
-        activeKnowledgeBase = mergeFullKnowledgeData(activeKnowledgeBase, newPartialData);
-        const jsonStr = JSON.stringify(activeKnowledgeBase);
-        try { localStorage.setItem('brand_sim_knowledge_v3', jsonStr); } catch (e) {}
+        // إذا كان النص عبارة عن ملاحظات أو قواعد مباشرة وليس بصيغة محادثة واتساب، نحفظه كقاعدة تدريب مباشرة!
+        if (extractedCount === 0 && rawText.length >= 5) {
+            waTrainingSamples.push({
+                source: "ملاحظة تدريب مباشرة",
+                customer: "توجيه عام للدعم والمبيعات",
+                agent: rawText.substring(0, 600)
+            });
+            extractedCount = 1;
+        }
+
+        // حفظ آخر 80 نموذج تدريب لضمان سرعة وأداء Gemini
+        if (waTrainingSamples.length > 80) {
+            waTrainingSamples = waTrainingSamples.slice(waTrainingSamples.length - 80);
+        }
+
+        const savedStr = JSON.stringify(waTrainingSamples);
+        try { localStorage.setItem('brand_sim_wa_samples_v2', savedStr); } catch (e) {}
         try {
-            if (window.AndroidBridge && window.AndroidBridge.saveSystemKnowledgeBase) {
-                window.AndroidBridge.saveSystemKnowledgeBase(jsonStr);
-            }
-            if (window.AndroidBridge && window.AndroidBridge.saveCustomPricesJson) {
-                window.AndroidBridge.saveCustomPricesJson(jsonStr);
+            if (window.AndroidBridge && window.AndroidBridge.saveWaTrainingJson) {
+                window.AndroidBridge.saveWaTrainingJson(savedStr);
             }
         } catch (e) {}
+
         updateCountersUi();
+        if (area) area.value = '';
+        if (statusEl) {
+            statusEl.style.display = 'block';
+            statusEl.style.color = '#4ade80';
+            statusEl.innerText = `✅ تم استخلاص وإضافة (${extractedCount}) نموذج حوار جديد لتدريب Gemini بنجاح! (الإجمالي: ${waTrainingSamples.length})`;
+        }
+        window.logAiAgent(`🧠 تم تدريب الذكاء الاصطناعي بـ ${extractedCount} حوار جديد (إجمالي النماذج: ${waTrainingSamples.length})`);
     }
 
-    function findSubscriberByIccid(rawIccid) {
-        const target = cleanDigitsOnly(rawIccid);
-        if (!target || target.length < 10) return null;
-        const subs = (activeKnowledgeBase && activeKnowledgeBase.subscribers) || [];
-        for (let i = 0; i < subs.length; i++) {
-            const sIccid = cleanDigitsOnly(subs[i].iccid);
-            if (sIccid && sIccid === target) return subs[i];
-        }
-        const targetCore = target.length >= 18 ? target.slice(0, 18) : target;
-        for (let i = 0; i < subs.length; i++) {
-            const sIccid = cleanDigitsOnly(subs[i].iccid);
-            if (!sIccid || sIccid.length < 15) continue;
-            if (sIccid.includes(target) || target.includes(sIccid) || sIccid.slice(0, 18) === targetCore) {
-                return subs[i];
-            }
-        }
-        return null;
-    }
-
-    function findSubscriberByPhone(rawPhone) {
-        const target = normalizePhoneFormat(rawPhone);
-        if (!target || target.length < 9) return null;
-        const subs = (activeKnowledgeBase && activeKnowledgeBase.subscribers) || [];
-        for (let i = 0; i < subs.length; i++) {
-            const sPhone = normalizePhoneFormat(subs[i].phone);
-            if (sPhone && sPhone === target) return subs[i];
-        }
-        return null;
-    }
-
-    function parseSpreadsheetRowsUniversal(rows, fileName) {
-        const result = [];
-        if (!Array.isArray(rows) || rows.length === 0) return result;
-        let headerRowIdx = -1;
-        let colMap = null;
-
-        for (let r = 0; r < Math.min(rows.length, 5); r++) {
-            const rowStr = (rows[r] || []).map(x => String(x || '').trim()).join(' | ');
-            if (rowStr.includes('رقم الهاتف') && rowStr.includes('رقم الشريحة')) {
-                headerRowIdx = r;
-                if (rowStr.includes('تاريخ الصلاحية')) {
-                    colMap = { type: 'Areen', phone: 1, iccid: 0, pkg: 2, end_date: 3 };
-                } else {
-                    colMap = { type: 'Sky', phone: 1, customer: 2, iccid: 3, status: 4, company: 5, end_date: 6, pkg: 8, agent: 0 };
-                }
-                break;
-            } else if (rowStr.includes('SIM#') || rowStr.includes('טלפון')) {
-                headerRowIdx = r;
-                colMap = { type: 'QuickLine', iccid: 1, customer: 3, phone: 5, status: 6, company: 8, pkg: 9, agent: 10, end_date: 11, start_date: 13 };
-                break;
-            } else if (rowStr.includes('الاشتراك') && rowStr.includes('رقم الشريحة')) {
-                headerRowIdx = r;
-                colMap = { type: 'Layan', phone: 0, iccid: 1, company: 2, pkg: 3, customer: 4, agent: 5, start_date: 6, end_date: 7, status: 9 };
-                break;
-            } else if (rowStr.includes('الاشتراك') && rowStr.includes('نوع الباقة')) {
-                headerRowIdx = r;
-                colMap = { type: 'Ayloul', phone: 0, iccid: 1, pkg: 2, end_date: 3 };
-                break;
-            }
-        }
-
-        for (let r = (headerRowIdx >= 0 ? headerRowIdx + 1 : 0); r < rows.length; r++) {
-            const row = rows[r];
-            if (!Array.isArray(row) || row.length < 2) continue;
-
-            if (colMap) {
-                const p = normalizePhoneFormat(row[colMap.phone]);
-                let iccid = cleanDigitsOnly(row[colMap.iccid]);
-                if (iccid.length < 10) iccid = '';
-                if (!p && !iccid) continue;
-                let st = colMap.status !== undefined ? String(row[colMap.status] || 'فعال').trim() : 'فعال';
-                if (st.includes('פעיל') || st === 'مفعل') st = 'فعال';
-                else if (st.includes('ניתוק קבוע')) st = 'مفصول نهائي';
-
-                const endRaw = colMap.end_date !== undefined ? String(row[colMap.end_date] || '').trim() : '';
-                const dtEnd = parseUniversalDate(endRaw);
-                const endIso = dtEnd ? dtEnd.toISOString().slice(0, 10) : '';
-
-                result.push({
-                    phone: p,
-                    iccid: iccid,
-                    company: colMap.company !== undefined ? String(row[colMap.company] || '').trim() : '',
-                    package: colMap.pkg !== undefined ? String(row[colMap.pkg] || '').trim() : '',
-                    customer: p,
-                    agent: colMap.agent !== undefined ? String(row[colMap.agent] || '').trim() : 'وكيل براند سيم',
-                    start_date: colMap.start_date !== undefined ? String(row[colMap.start_date] || '').trim() : '',
-                    end_date: endRaw,
-                    end_date_iso: endIso,
-                    status: st,
-                    is_active: st === 'فعال' && (!dtEnd || dtEnd.getTime() >= Date.now()),
-                    provider: colMap.type
-                });
-                continue;
-            }
-
-            let foundPhone = '';
-            let foundIccid = '';
-            for (let c = 0; c < row.length; c++) {
-                const cellStr = String(row[c] || '').trim();
-                if (!cellStr) continue;
-                const d = cleanDigitsOnly(cellStr);
-                if (!foundIccid && ((d.startsWith('89') && d.length >= 16) || (d.length >= 18 && d.length <= 22))) {
-                    foundIccid = d;
-                } else if (!foundPhone) {
-                    const p = normalizePhoneFormat(cellStr);
-                    if (p.match(/^05\d{8}$/)) foundPhone = p;
-                }
-            }
-            if (foundPhone || foundIccid) {
-                result.push({
-                    phone: foundPhone,
-                    iccid: foundIccid,
-                    company: String(row[2] || row[5] || row[8] || '').trim(),
-                    package: String(row[3] || row[8] || row[9] || '').trim(),
-                    customer: foundPhone,
-                    end_date: String(row[6] || row[7] || row[11] || '').trim(),
-                    status: 'فعال',
-                    is_active: true,
-                    provider: fileName || 'Imported'
-                });
-            }
-        }
-        return result;
-    }
-
-    function handleFilesMergeUpload(event) {
-        const files = event.target.files;
-        if (!files || !files.length) return;
-        Array.from(files).forEach(file => {
-            const name = file.name.toLowerCase();
-            if (name.endsWith('.json')) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    try {
-                        const parsed = JSON.parse(e.target.result);
-                        persistMergedKnowledge(parsed);
-                        window.showMessage('success', `✅ تم دمج وتحديث ملف (${file.name}) بنجاح دون حذف أي بيانات سابقة! إجمالي المشتركين الآن: ${activeKnowledgeBase.subscribers.length}`);
-                    } catch (err) {
-                        window.showMessage('error', `⚠️ خطأ في قراءة ملف JSON (${file.name}).`);
-                    }
-                };
-                reader.readAsText(file, 'UTF-8');
-            } else if (name.endsWith('.txt')) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const count = parseAndStoreWhatsappChatText(e.target.result);
-                    window.showMessage('success', `✅ تم استخراج ودمج ${count} نموذج حوار تدريبي من ملف محادثة واتساب (${file.name})!`);
-                };
-                reader.readAsText(file, 'UTF-8');
+    // محرك الرد الهجين: يدمج (فحص الرقم + القواعد التقنية + Gemini API المباشر عبر المتصفح والجافا)
+    async function askGeminiHybrid(userMessage, senderTitle) {
+        // فحص إذا كانت الرسالة تحتوي على رقم هاتف أو سيريال لنزود Gemini ببيانات الزبون والوكيل الحقيقية
+        let subscriberContext = "";
+        const numMatch = String(userMessage).match(/(?:89\d{15,20}|0?5\d{8})/);
+        if (numMatch) {
+            const sub = findSubscriber(numMatch[0]);
+            if (sub) {
+                subscriberContext = `بيانات الرقم في نظام براند سيم: الزبون=${sub.customer_name}، الوكيل=${sub.agent_name}، الشركة=${sub.company}، الحزمة=${sub.package}، الانتهاء=${sub.expiry}، الحالة=${sub.status}.`;
             } else {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    try {
-                        const data = new Uint8Array(e.target.result);
-                        const workbook = XLSX.read(data, { type: 'array' });
-                        let extracted = [];
-                        workbook.SheetNames.forEach(sheetName => {
-                            const sheet = workbook.Sheets[sheetName];
-                            const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' });
-                            extracted = extracted.concat(parseSpreadsheetRowsUniversal(rows, file.name));
-                        });
-                        if (extracted.length > 0) {
-                            persistMergedKnowledge({ subscribers: extracted });
-                            window.showMessage('success', `✅ تم سحب ودمج ${extracted.length} اشتراك من ملف (${file.name}) بنجاح! إجمالي المشتركين المحفوظين: ${activeKnowledgeBase.subscribers.length}`);
-                        } else {
-                            window.showMessage('warning', `⚠️ لم يتم العثور على أرقام هواتف أو سيريال في الملف (${file.name}).`);
+                subscriberContext = `تنبيه هام: الرقم ${numMatch[0]} غير مسجل في منظومة براند سيم (BRAND SIM) ولا يُسمح بتحديثه.`;
+            }
+        }
+
+        // اختيار أحدث 10 نماذج تدريب لإرسالها مع الطلب دون إبطاء الاتصال
+        const recentSamples = waTrainingSamples.slice(-10);
+
+        const prompt = `أنت موظف الدعم الفني والمبيعات الذكي لمنظومة (BRAND SIM 🌟) بإدارة أسامة سالم.
+تحدث باللهجة الفلسطينية المحترمة والعملية بنفس أسلوب أسامة سالم في النماذج التالية:
+${JSON.stringify(recentSamples)}
+
+قاعدة المعرفة والأسعار وحلول المشاكل التقنية المعتمدة:
+${JSON.stringify(activeKnowledgeBase)}
+
+${subscriberContext ? ("معلومات الرقم المذكور: " + subscriberContext) : ""}
+
+المرسل: ${senderTitle || 'زبون'}
+رسالة الزبون: "${userMessage}"
+اكتب رداً مباشراً ومفيداً ومختصراً:`;
+
+        // المحاولة 1: الاتصال المباشر عبر Fetch من المتصفح (سريع جداً ولا يتجمد)
+        let apiKey = "";
+        try {
+            if (window.AndroidBridge && window.AndroidBridge.getGeminiApiKey) {
+                apiKey = window.AndroidBridge.getGeminiApiKey();
+            }
+        } catch (e) {}
+        if (!apiKey) apiKey = localStorage.getItem('brand_sim_gemini_key') || "";
+
+        if (apiKey && apiKey.trim().length > 10) {
+            const models = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash"];
+            for (const m of models) {
+                try {
+                    const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${apiKey.trim()}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            contents: [{ parts: [{ text: prompt }] }],
+                            generationConfig: { temperature: 0.25, maxOutputTokens: 600 }
+                        })
+                    });
+                    if (resp.ok) {
+                        const data = await resp.json();
+                        const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+                        if (text && text.trim().length > 2) {
+                            return text.trim();
                         }
-                    } catch (err) {
-                        window.showMessage('error', `⚠️ تعذر قراءة ملف الإكسل (${file.name}).`);
                     }
-                };
-                reader.readAsArrayBuffer(file);
-            }
-        });
-        event.target.value = '';
-    }
-
-    function parseAndStoreWhatsappChatText(rawText) {
-        if (!rawText || !rawText.trim()) return 0;
-        const lines = rawText.split(/\r?\n/);
-        const messages = [];
-        const waRegex = /^(?:\[?\d{1,4}[\/\-\.]\d{1,2}[\/\-\.]\d{1,4}[،,]?\s+\d{1,2}:\d{2}(?::\d{2})?(?:\s*[APMapmصم]{1,2})?\]?\s*[\-–]?\s*)?([^:]{2,35}):\s*(.+)$/;
-
-        lines.forEach(line => {
-            const trimmed = line.trim();
-            if (!trimmed || trimmed.includes('الرسائل والمكالمات مشفرة') || trimmed.includes('end-to-end encrypted') || trimmed.includes('<تم استبعاد الوسائط>') || trimmed.includes('<Media omitted>')) return;
-            const m = trimmed.match(waRegex);
-            if (m) {
-                const speaker = m[1].trim();
-                const text = m[2].trim();
-                const isAgent = /اسامه|أسامة|اسامة|سالم|براند|brand|دعم|الادارة|الإدارة|أنت|you/i.test(speaker);
-                messages.push({ isAgent, text });
-            } else if (messages.length > 0) {
-                messages[messages.length - 1].text += ' ' + trimmed;
-            }
-        });
-
-        const extractedPairs = [];
-        let lastCustomerMsg = '';
-        for (let i = 0; i < messages.length; i++) {
-            if (!messages[i].isAgent) {
-                lastCustomerMsg = lastCustomerMsg ? (lastCustomerMsg + ' | ' + messages[i].text) : messages[i].text;
-            } else if (messages[i].isAgent && lastCustomerMsg) {
-                extractedPairs.push({
-                    customer_query: lastCustomerMsg.slice(0, 220),
-                    ideal_reply: messages[i].text.slice(0, 350)
-                });
-                lastCustomerMsg = '';
+                } catch (err) {}
             }
         }
 
-        if (extractedPairs.length === 0 && rawText.trim().length > 10) {
-            extractedPairs.push({
-                customer_query: "توجيه وتغذية راجعة من محادثات واتساب سابقة",
-                ideal_reply: rawText.trim().slice(0, 600)
-            });
+        // المحاولة 2: عبر جسر الجافا في الأندرويد (askGeminiNative)
+        try {
+            if (window.AndroidBridge && window.AndroidBridge.askGeminiNative) {
+                const nativeReply = window.AndroidBridge.askGeminiNative(prompt);
+                if (nativeReply && nativeReply.trim().length > 2) {
+                    return nativeReply.trim();
+                }
+            }
+        } catch (e) {}
+
+        // المحاولة 3: محرك القواعد التقنية والمبيعات الفوري (يعمل حتى لو لا يوجد إنترنت أو انتهت حصة API)
+        return buildSmartOfflineReply(userMessage, subscriberContext);
+    }
+
+    function buildSmartOfflineReply(rawText, subscriberContext) {
+        const t = (rawText || '').toLowerCase();
+        if (subscriberContext) {
+            return subscriberContext;
         }
-
-        if (extractedPairs.length > 0) {
-            persistMergedKnowledge({ whatsapp_training_examples: extractedPairs });
+        if (t.includes('فش نت') || t.includes('ما في نت') || t.includes('بدون انترنت') || t.includes('إشارة بدون') || t.includes('apn') || t.includes('اعدادات')) {
+            if (t.includes('الوها') || t.includes('ألوها') || t.includes('موبايل')) {
+                return "لتفعيل الإنترنت على شريحة (ألوها / موبايل):\n1️⃣ ادخل إلى الإعدادات > شبكة الهواتف المحمولة > أسماء نقاط الوصول (APN).\n2️⃣ اضغط (+) واكتب الاسم: prime والـ APN: prime (أو apn.x2one.com).\n3️⃣ احفظ الإعدادات وفعّل التجوال الدولي وأعد تشغيل الجوال. 🌟";
+            }
+            return "لحل مشكلة الإرسال بدون إنترنت:\n1️⃣ فعّل (التجوال الدولي) من إعدادات الشبكة.\n2️⃣ لشرائح ألوها وموبايل أضف نقطة وصول APN باسم prime، ولشرائح هوت موبايل اختر نقطة Hot Mobile.\n3️⃣ أعد تشغيل الجوال وانتظر 5 دقائق. 🌟";
         }
-        return extractedPairs.length;
-    }
-
-    function handleWhatsappChatUpload(event) {
-        const files = event.target.files;
-        if (!files || !files.length) return;
-        Array.from(files).forEach(file => {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const added = parseAndStoreWhatsappChatText(e.target.result);
-                closeModals();
-                window.showMessage('success', `✅ تم تحليل ملف محادثة واتساب (${file.name}) واستخراج ${added} نموذج رد لتدريب Gemini بنجاح!`);
-            };
-            reader.readAsText(file, 'UTF-8');
-        });
-        event.target.value = '';
-    }
-
-    function openWhatsappTrainingModal() {
-        document.getElementById('waTrainingModal').style.display = 'flex';
-    }
-
-    function processAndSaveWhatsappTraining() {
-        const raw = document.getElementById('waRawChatTextarea').value;
-        if (!raw || !raw.trim()) {
-            alert('⚠️ يرجى لصق نص محادثة واتساب أولاً أو اختيار ملف (.txt).');
-            return;
+        if (t.includes('4g') || t.includes('تجوال') || t.includes('كود')) {
+            return "لظهور إشارة 4G وتفعيل النت على شرائح الكود أو eSIM: يرجى تفعيل خيار (التجوال الدولي / Data Roaming) من إعدادات الشبكة، وإذا لزم الأمر إضافة APN باسم internet. 🌟";
         }
-        const added = parseAndStoreWhatsappChatText(raw);
-        document.getElementById('waRawChatTextarea').value = '';
-        closeModals();
-        window.showMessage('success', `✅ تم حفظ ودمج ${added} نموذج محادثة واتساب في ذاكرة Gemini بنجاح!`);
+        if (t.includes('تقييد') || t.includes('بطيء') || t.includes('استخدام عادل')) {
+            return "في حال دخول الرقم في وضعية (تقييد سرعة الإنترنت) بسبب تجاوز الاستخدام العادل (4-5 جيجا يومياً في ألوها/موبايل)، للأسف الحظر لا يزول برمجياً والحل الوحيد هو نقل الرقم لشركة أخرى (رامي ليفي أو وي أو هوت موبايل). 🌟";
+        }
+        if (t.includes('ايسم') || t.includes('ايسيم') || t.includes('esim') || t.includes('الكترونية') || t.includes('باركود')) {
+            return "متوفر شرائح إلكترونية (eSIM / باركود) لكل الشبكات (عرض 40 شيكل، بدون عرض 60 شيكل).\n⚠️ ملاحظة: الـ eSIM تحتاج جهاز يدعمها مثل آيفون أو سامسونج ألترا. شو نوع جهازك؟ 🌟";
+        }
+        if (t.includes('هوت') || t.includes('اسعار') || t.includes('بكم') || t.includes('سعر')) {
+            return "أسعار وعروض براند سيم 🌟:\n• هوت موبايل بلاستيك 3 شهور: جديد 180 شيكل | تجديد 3 شهور 120 شيكل.\n• ألوها / موبايل: شهر 50 شيكل | 3 شهور 130 شيكل.\n• بارتنر / بيليفون كود: عرض 40 شيكل | بدون عرض 60 شيكل.\nللحجز المباشر: https://brand-sim.com/";
+        }
+        return "أهلاً بك في مركز دعم براند سيم (BRAND SIM) 🌟\nيرجى إرسال رقم الشريحة (05XXXXXXXX) أو السيريال (ICCID) أو تفاصيل استفسارك لنخدمك فوراً.";
     }
 
-    function testGeminiSupportNow() {
-        const q = (document.getElementById('testAiInput').value || '').trim();
-        const resBox = document.getElementById('aiTestResultBox');
+    // زر اختبار Gemini المباشر داخل التطبيق
+    async function testGeminiNow() {
+        const inp = document.getElementById('testAiInput');
+        const box = document.getElementById('aiTestResultBox');
+        const btn = document.getElementById('testAiBtn');
+        const q = (inp ? inp.value : '').trim();
+
         if (!q) {
-            resBox.style.display = 'block';
-            resBox.innerText = '⚠️ اكتب سؤال زبون في الحقل أولاً لتجربة رد Gemini الذكي.';
+            box.style.display = 'block';
+            box.innerText = '⚠️ اكتب سؤالاً في الحقل أعلاه أولاً لتجربة رد Gemini.';
             return;
         }
-        resBox.style.display = 'block';
-        resBox.innerText = '⏳ جاري توليد رد الدعم الذكي عبر Gemini AI...';
-        window.executeAiCustomerSupport('WEB', q, 'تجربة محاكي الواجهة');
+
+        btn.innerText = '⏳ جاري التوليد من Gemini AI...';
+        box.style.display = 'block';
+        box.innerText = '⏳ جاري تحليل السؤال وتوليد الرد...';
+
+        const reply = await askGeminiHybrid(q, 'تجربة المدير');
+        btn.innerText = '✨ اختبار رد Gemini الذكي الآن';
+        box.innerText = `🤖 رد النظام الذكي:\n${reply}`;
+        window.logAiAgent(`✨ تجربة Gemini: "${q}" -> تم الرد بنجاح.`);
     }
 
-    function handleGearClick(e) {
-        if (e) e.stopPropagation();
-        if (window.AndroidBridge && window.AndroidBridge.openSettingsMenu) {
-            window.AndroidBridge.openSettingsMenu();
-            return;
+    // الدالة التي يستدعيها RefreshService للرد التلقائي على الزبائن عبر واتساب وتيليجرام ومسنجر
+    window.executeAiCustomerSupport = async function(sender, rawBody, senderTitle) {
+        window.logAiAgent(`💬 رسالة واردة من (${senderTitle || sender}): ${rawBody}`);
+        const reply = await askGeminiHybrid(rawBody, senderTitle);
+        if (reply && window.AndroidBridge && window.AndroidBridge.sendSmsReply) {
+            window.logAiAgent(`✅ تم الرد على (${senderTitle || sender}): ${reply}`);
+            window.AndroidBridge.sendSmsReply(sender, reply);
         }
-        const menu = document.getElementById('webDropdownMenu');
-        if (menu) menu.classList.toggle('open');
-    }
+    };
 
-    document.addEventListener('click', function(e) {
-        const menu = document.getElementById('webDropdownMenu');
-        if (menu && menu.classList.contains('open')) {
-            menu.classList.remove('open');
-        }
-    });
-
-    function toggleChannelFromWeb(ch) {
-        if (window.AndroidBridge && window.AndroidBridge.openChannelsDialog) {
-            window.AndroidBridge.openChannelsDialog();
-        }
-    }
-
-    function checkSaturdayBanner() {
-        const today = new Date().getDay();
-        const banner = document.getElementById('shabbatBanner');
-        if (today === 6 && banner) {
-            banner.style.display = 'block';
-        }
-    }
-
-    // =========================================================================
-    // 5. عرض الرسائل الحقيقية دون تزييف أو التفاف (مطابق لـ web-refresh.html)
-    // =========================================================================
+    // عرض الرسائل في الواجهة
     window.showMessage = function(type, msg) {
-        stopCountdownTimer();
         const box = document.getElementById('messageBox');
         if (!box) return;
-        const finalMsg = cleanPortalResponseText(msg || '');
-
-        box.className = type === 'success' ? 'success' : (type === 'warning' ? 'warning' : 'error');
-        box.innerText = finalMsg;
+        box.className = type || 'warning';
+        box.innerText = msg || '';
         box.style.display = 'block';
-
-        const testResBox = document.getElementById('aiTestResultBox');
-        if (testResBox && testResBox.style.display === 'block') {
-            testResBox.innerText = finalMsg;
-        }
-        window.logAiAgent("📢 نتيجة: " + finalMsg.replace(/\n/g, ' '));
+        window.logAiAgent("📢 " + String(msg || '').replace(/\n/g, ' | '));
     };
 
     window.logAiAgent = function(text) {
         const container = document.getElementById('aiLogsContainer');
         if (!container) return;
-        const now = new Date();
-        const timeStr = now.toTimeString().split(' ')[0];
+        const timeStr = new Date().toTimeString().split(' ')[0];
         const div = document.createElement('div');
         div.className = 'log-entry';
         div.innerHTML = `<span class="log-time">[${timeStr}]</span> ${text}`;
@@ -1557,8 +1286,113 @@
     };
 
     function clearLogs() {
-        const container = document.getElementById('aiLogsContainer');
-        if (container) container.innerHTML = '';
+        const c = document.getElementById('aiLogsContainer');
+        if (c) c.innerHTML = '';
+    }
+
+    // النوافذ والإعدادات
+    function openMainSettingsModal() {
+        document.getElementById('mainSettingsModal').style.display = 'flex';
+    }
+    function openWaTrainingModal() {
+        document.getElementById('waFileStatusText').style.display = 'none';
+        document.getElementById('waTrainingModal').style.display = 'flex';
+    }
+    function openAddSubscriberModal() {
+        document.getElementById('addSubModal').style.display = 'flex';
+    }
+    function saveManualSubscriber() {
+        const sub = {
+            phone: document.getElementById('subPhoneInp').value,
+            iccid: document.getElementById('subIccidInp').value,
+            customer_name: document.getElementById('subCustomerInp').value,
+            agent_name: document.getElementById('subAgentInp').value,
+            company: document.getElementById('subCompanyInp').value,
+            package: document.getElementById('subPkgInp').value,
+            expiry: document.getElementById('subExpInp').value,
+            status: 'فعال'
+        };
+        if (!sub.phone && !sub.iccid) {
+            alert('يرجى إدخال رقم الشريحة أو السيريال على الأقل.');
+            return;
+        }
+        upsertSubscriberInMemory(sub);
+        persistSubscribers();
+        closeAllModals();
+        window.showMessage('details-card', formatSubscriberCard(findSubscriber(sub.phone || sub.iccid), "✅ تم حفظ وتحديث بيانات المشترك بنجاح!"));
+    }
+
+    function openGeminiKeyModal() {
+        const inp = document.getElementById('geminiKeyInput');
+        if (window.AndroidBridge && window.AndroidBridge.getGeminiApiKey) {
+            inp.value = window.AndroidBridge.getGeminiApiKey();
+        } else {
+            inp.value = localStorage.getItem('brand_sim_gemini_key') || '';
+        }
+        document.getElementById('geminiKeyModal').style.display = 'flex';
+    }
+    function saveGeminiKeyFromModal() {
+        const val = (document.getElementById('geminiKeyInput').value || '').trim();
+        if (val) {
+            localStorage.setItem('brand_sim_gemini_key', val);
+            if (window.AndroidBridge && window.AndroidBridge.setGeminiApiKey) {
+                window.AndroidBridge.setGeminiApiKey(val);
+            }
+        }
+        closeAllModals();
+        window.showMessage('success', '✅ تم حفظ وتحديث مفتاح Gemini API بنجاح!');
+    }
+
+    function openNativeChannelsDialog() {
+        if (window.AndroidBridge && window.AndroidBridge.openChannelsDialog) {
+            window.AndroidBridge.openChannelsDialog();
+        }
+    }
+    function openNativeReplyChannelsDialog() {
+        if (window.AndroidBridge && window.AndroidBridge.openReplyChannelsDialog) {
+            window.AndroidBridge.openReplyChannelsDialog();
+        }
+    }
+
+    window.openBlacklistModal = function() {
+        const area = document.getElementById('blacklistTextarea');
+        if (window.AndroidBridge && window.AndroidBridge.getBlacklist) {
+            area.value = window.AndroidBridge.getBlacklist();
+        } else {
+            area.value = "كويك لاين\nرامز";
+        }
+        document.getElementById('blacklistModal').style.display = 'flex';
+    };
+    function saveBlacklistFromModal() {
+        const val = document.getElementById('blacklistTextarea').value;
+        if (window.AndroidBridge && window.AndroidBridge.saveBlacklistData) {
+            window.AndroidBridge.saveBlacklistData(val);
+        }
+        closeAllModals();
+        window.showMessage('success', '✅ تم حفظ قائمة الاستثناءات بنجاح!');
+    }
+
+    window.openPricesModal = function() {
+        document.getElementById('knowledgeTextarea').value = JSON.stringify(activeKnowledgeBase, null, 2);
+        document.getElementById('pricesModal').style.display = 'flex';
+    };
+    function saveKnowledgeFromModal() {
+        try {
+            const parsed = JSON.parse(document.getElementById('knowledgeTextarea').value);
+            activeKnowledgeBase = parsed;
+            localStorage.setItem('brand_sim_knowledge_v2', JSON.stringify(parsed));
+            if (window.AndroidBridge && window.AndroidBridge.saveSystemKnowledgeBase) {
+                window.AndroidBridge.saveSystemKnowledgeBase(JSON.stringify(parsed));
+            }
+            closeAllModals();
+            window.showMessage('success', '✅ تم حفظ قاعدة بيانات المعرفة والأسعار بنجاح!');
+        } catch (e) {
+            alert('⚠️ صيغة JSON غير صحيحة، تأكد من الأقواس والفواصل.');
+        }
+    }
+
+    function closeAllModals() {
+        document.querySelectorAll('.modal-overlay').forEach(el => el.style.display = 'none');
     }
 
     window.syncAiStatusUi = function() {
@@ -1570,469 +1404,23 @@
                 enabled = window.AndroidBridge.isAiAgentEnabled();
             }
         } catch (e) {}
-        if (enabled) {
-            badge.className = 'status-badge';
-            badge.innerText = '🤖 الدعم الذكي: نشط';
-        } else {
-            badge.className = 'status-badge off';
-            badge.innerText = '⛔ الدعم الذكي: متوقف';
-        }
+        badge.innerText = enabled ? '🤖 نشط' : '⛔ متوقف';
     };
 
-    function toggleAiAgent() {
+    function toggleAiAgentStatus() {
         try {
             if (window.AndroidBridge && window.AndroidBridge.isAiAgentEnabled) {
-                const current = window.AndroidBridge.isAiAgentEnabled();
-                window.AndroidBridge.setAiAgentEnabled(!current);
+                const cur = window.AndroidBridge.isAiAgentEnabled();
+                window.AndroidBridge.setAiAgentEnabled(!cur);
                 window.syncAiStatusUi();
             }
         } catch (e) {}
     }
 
-    function sendFinalReplyToCustomer(sender, type, message) {
-        const finalClean = cleanPortalResponseText(message);
-        if (window.AndroidBridge && sender && sender !== 'WEB') {
-            window.AndroidBridge.sendSmsReply(sender, finalClean);
-        } else {
-            window.showMessage(type, finalClean);
-        }
-    }
-
-    // =========================================================================
-    // 6. مسار التحديث الموحد عبر GATEWAY_API_URL ثم بوابة المزود الحقيقية
-    // =========================================================================
-    async function executeUnifiedRefreshFlow(cleanPhone, sender, mode, matchedSub) {
-        const t = STANDARD_MESSAGES.ar;
-
-        // 1. التحقق من صيغة الرقم (10 أرقام يبدأ بـ 05)
-        if (!/^05\d{8}$/.test(cleanPhone)) {
-            sendFinalReplyToCustomer(sender, 'warning', t.invalidPhone);
-            return;
-        }
-
-        // 2. التحقق من صلاحية الاشتراك في حال كان الرقم موجوداً ومنتهي الصلاحية في القاعدة
-        if (matchedSub && isSubscriberExpired(matchedSub)) {
-            sendFinalReplyToCustomer(sender, 'warning', t.expiredSub);
-            return;
-        }
-
-        // 3. التحقق من فترة الانتظار (Cooldown) قبل إرسال الطلب
-        const remCooldown = getRemainingCooldownMs(cleanPhone);
-        if (remCooldown > 0) {
-            const cdMsg = t.cooldownPrefix + formatRemainingText(remCooldown);
-            if (sender && sender !== 'WEB' && window.AndroidBridge) {
-                window.AndroidBridge.sendSmsReply(sender, cdMsg);
-            } else {
-                showCooldownMessageUi(cleanPhone);
-            }
-            window.logAiAgent(`⏳ رفض تكرار التحديث للرقم ${cleanPhone} — المتبقي: ${formatRemainingText(remCooldown)}`);
-            return;
-        }
-
-        if (!sender || sender === 'WEB') {
-            window.showMessage('warning', `⏳ جاري فحص وتحديث الرقم ${cleanPhone} عبر بوابة الشركة...`);
-        }
-
-        // 4. الاتصال المباشر ببوابة براند سيم الموحدة (GATEWAY_API_URL) كما في web-refresh.html
-        try {
-            const gatewayUrl = (activeKnowledgeBase.brand_sim_system &&
-                                activeKnowledgeBase.brand_sim_system.metadata &&
-                                activeKnowledgeBase.brand_sim_system.metadata.gateway_api_url) || GATEWAY_API_URL;
-
-            const res = await fetch(gatewayUrl, {
-                method: "POST",
-                headers: { "Content-Type": "text/plain;charset=utf-8" },
-                body: JSON.stringify({
-                    phone: cleanPhone,
-                    lang: "ar",
-                    hp: "",
-                    ts: Date.now()
-                }),
-                redirect: "follow"
-            });
-
-            const data = await res.json();
-
-            if (isCooldownServerResponse(data)) {
-                const serverMs = extractServerRemainingMs(data);
-                saveCooldown(cleanPhone, serverMs > 0 ? serverMs : COOLDOWN_MS);
-                const actualRem = getRemainingCooldownMs(cleanPhone);
-                const cdReply = t.cooldownPrefix + formatRemainingText(actualRem);
-                if (sender && sender !== 'WEB' && window.AndroidBridge) {
-                    window.AndroidBridge.sendSmsReply(sender, cdReply);
-                } else {
-                    showCooldownMessageUi(cleanPhone);
-                }
-                return;
-            }
-
-            if (data && data.ok) {
-                saveCooldown(cleanPhone, Number(data.cooldownMs) > 0 ? Number(data.cooldownMs) : COOLDOWN_MS);
-                const rawSuccess = data.msg ? cleanPortalResponseText(data.msg) : t.defaultSuccess;
-                const outMsg = mode === 'weak_net' ? ("تم تحديث الانترنت\n" + rawSuccess) : rawSuccess;
-                sendFinalReplyToCustomer(sender, 'success', outMsg);
-                return;
-            }
-
-            if (data && data.msg) {
-                const serverErrorMsg = cleanPortalResponseText(data.msg);
-                // إذا كان الرقم مسجلاً لدينا في ملفات الإكسل لمزود محدد وفشل على البوابة العامة، نوجهه لبوابة المزود في الأندرويد
-                if (matchedSub && matchedSub.provider && window.AndroidBridge && window.AndroidBridge.autoRefreshByProvider) {
-                    window.logAiAgent(`🔄 تحويل التحديث لبوابة المزود المباشرة (${matchedSub.provider}) للرقم ${cleanPhone}`);
-                    window.AndroidBridge.autoRefreshByProvider(cleanPhone, sender === 'WEB' ? '' : sender, mode || 'refresh', matchedSub.provider);
-                    return;
-                }
-                sendFinalReplyToCustomer(sender, (data && data.type) ? data.type : 'warning', serverErrorMsg);
-                return;
-            }
-        } catch (err) {
-            window.logAiAgent(`⚠️ تعذر الاتصال بالبوابة السحابية، جاري التحويل لبوابة المزود المباشرة للرقم ${cleanPhone}`);
-        }
-
-        // 5. خطة الطوارئ (Fallback): التوجيه حسب المزود الفعلي عبر AndroidBridge
-        if (window.AndroidBridge) {
-            if (!matchedSub) {
-                sendFinalReplyToCustomer(sender, 'warning', t.notAuthorized);
-                return;
-            }
-            const targetProvider = matchedSub.provider || 'Sky';
-            if (window.AndroidBridge.autoRefreshByProvider) {
-                window.AndroidBridge.autoRefreshByProvider(cleanPhone, sender === 'WEB' ? '' : sender, mode || 'refresh', targetProvider);
-            } else if (String(targetProvider).toLowerCase().includes('layan') && window.AndroidBridge.autoRefreshLayanWithMode) {
-                window.AndroidBridge.autoRefreshLayanWithMode(cleanPhone, sender === 'WEB' ? '' : sender, mode || 'refresh');
-            } else if (window.AndroidBridge.autoRefreshSkyWithMode) {
-                window.AndroidBridge.autoRefreshSkyWithMode(cleanPhone, sender === 'WEB' ? '' : sender, mode || 'refresh');
-            }
-        } else {
-            sendFinalReplyToCustomer(sender, 'error', t.defaultError);
-        }
-    }
-
-    function triggerManualRefresh(mode) {
-        const val = (document.getElementById('phoneInput').value || '').trim();
-        if (!val) {
-            window.showMessage('warning', '⚠️ يرجى إدخال رقم الشريحة أو السيريال أولاً.');
-            return;
-        }
-        const cleanDigits = cleanDigitsOnly(val);
-        if (mode === 'iccid_lookup' || cleanDigits.length >= 16) {
-            window.executeSmsAutoRefresh(cleanDigits, 'WEB', 'iccid_lookup', val, 'فحص سيريال يدوي');
-        } else if (mode === 'details') {
-            window.executeSmsAutoRefresh(cleanDigits, 'WEB', 'details', val, 'استعلام يدوي');
-        } else {
-            window.executeSmsAutoRefresh(cleanDigits, 'WEB', 'refresh', val, 'تحديث ذكي يدوي');
-        }
-    }
-
-    window.executeSmsAutoRefresh = async function(phone, sender, mode, rawBody, senderTitle) {
-        await loadSystemKnowledge();
-        const rawDigits = cleanDigitsOnly(phone);
-        window.logAiAgent(`🔄 معالجة طلب (${mode}) للهدف: ${rawDigits} | المرسل: ${senderTitle || sender}`);
-
-        // 1. معالجة فحص السيريال (ICCID)
-        if (mode === 'iccid_lookup' || rawDigits.length >= 16) {
-            const sub = findSubscriberByIccid(rawDigits);
-            if (sub && sub.phone) {
-                const compLabel = sub.company_ar || sub.company || '';
-                const pkgInfo = sub.package ? `📦 الباقة: ${sub.package} (${compLabel})\n` : '';
-                const expInfo = sub.end_date ? `📅 تاريخ الانتهاء: ${sub.end_date}\n` : '';
-                const statusInfo = sub.status ? `📌 الحالة: ${sub.status}\n` : '';
-                const provInfo = sub.provider ? `🏢 المزود: ${sub.provider}\n` : '';
-                const msg = `✅ رقم الشريحة المرتبط بالسيريال (${rawDigits}) هو:\n📞 ${sub.phone}\n${pkgInfo}${expInfo}${statusInfo}${provInfo}🌟 مركز الدعم لـ BRAND SIM`;
-                sendFinalReplyToCustomer(sender, 'success', msg);
-                return;
-            }
-
-            let simType = "شريحة براند سيم";
-            if (rawDigits.startsWith("8997207")) simType = "هوت موبايل (Hot Mobile)";
-            else if (rawDigits.startsWith("8997250")) simType = "بيليفون / رامي ليفي (Pelephone)";
-            else if (rawDigits.startsWith("8997202")) simType = "سيلكوم (Cellcom)";
-            else if (rawDigits.startsWith("8997201")) simType = "بارتنر (Partner)";
-            else if (rawDigits.startsWith("8997209") || rawDigits.startsWith("8997212")) simType = "ويكوم (We4G)";
-            else if (rawDigits.startsWith("8997219")) simType = "موبايل 019 (ألوها)";
-
-            const notFoundMsg = `⚠️ عذراً، رقم السيريال (${rawDigits}) غير مسجل حالياً في قاعدة بيانات براند سيم (${simType}).\nيرجى التأكد من الرقم أو التواصل مع المندوب.`;
-            sendFinalReplyToCustomer(sender, 'warning', notFoundMsg);
-            return;
-        }
-
-        const cleanPhone = normalizePhoneFormat(rawDigits);
-        const matchedSub = findSubscriberByPhone(cleanPhone);
-
-        // 2. معالجة استعلام تفاصيل الحزمة
-        if (mode === 'details') {
-            if (matchedSub) {
-                const iccidLine = matchedSub.iccid ? `💳 السيريال: ${matchedSub.iccid}\n` : '';
-                const compLabel = matchedSub.company_ar || matchedSub.company || 'براند سيم';
-                const expiredNotice = isSubscriberExpired(matchedSub) ? `\n⚠️ تنبيه: ${STANDARD_MESSAGES.ar.expiredSub}` : '';
-                const msg = `📊 تفاصيل اشتراك الرقم: ${matchedSub.phone}\n🏢 الشركة: ${compLabel} (${matchedSub.provider || ''})\n📦 الحزمة: ${matchedSub.package || 'فعالة'}\n📅 تاريخ الانتهاء: ${matchedSub.end_date || 'متاح'}\n📌 الحالة: ${matchedSub.status || 'فعال'}\n${iccidLine}🌟 مركز الدعم لـ BRAND SIM${expiredNotice}`;
-                sendFinalReplyToCustomer(sender, isSubscriberExpired(matchedSub) ? 'warning' : 'success', msg);
-                return;
-            }
-
-            sendFinalReplyToCustomer(sender, 'warning', STANDARD_MESSAGES.ar.notAuthorized);
-            return;
-        }
-
-        // 3. معالجة التحديث والتنشيط الفوري
-        await executeUnifiedRefreshFlow(cleanPhone, sender, mode, matchedSub);
-    };
-
-    // =========================================================================
-    // 7. موظف الدعم الذكي (Gemini AI) والرد التقني السريع
-    // =========================================================================
-    function buildRuleBasedSupportReply(rawText) {
-        const t = (rawText || '').toLowerCase();
-        if ((t.includes('فش نت') || t.includes('ما في نت') || t.includes('بدون نت') || t.includes('بدون انترنت') || t.includes('إشارة بدون') || t.includes('اعدادات') || t.includes('apn') || t.includes('نقطة وصول')) && !t.includes('تقييد')) {
-            if (t.includes('الوها') || t.includes('ألوها') || t.includes('aloha') || t.includes('موبايل') || t.includes('019')) {
-                return `🌐 لتفعيل الإنترنت على شريحة (ألوها / موبايل 019):\n1️⃣ ادخل إلى الإعدادات > شبكات الهواتف > أسماء نقاط الوصول (APN).\n2️⃣ اضغط إضافة (+) واكتب:\n• الاسم (Name): prime\n• نقطة الوصول (APN): prime\n(أو APN بديل: apn.x2one.com)\n3️⃣ احفظ الإعدادات وفعّل التجوال الدولي ثم أعد تشغيل الجوال. 🌟`;
-            }
-            return `🛠️ لحل مشكلة وجود إرسال بدون إنترنت أو غياب إشارة 4G:\n1️⃣ فعّل خيار (التجوال الدولي / Data Roaming) من إعدادات الشبكة.\n2️⃣ تأكد من نقطة الوصول (APN):\n- لشرائح ألوها وموبايل: الاسم prime و APN هو prime\n- لشرائح هوت موبايل: اختر نقطة Hot Mobile\n- للشرائح الأخرى أو الكود: APN هو internet\n3️⃣ أعد تشغيل الجهاز بعد الحفظ. 🌟`;
-        }
-        if (t.includes('4g') || t.includes('تجوال') || (t.includes('كود') && t.includes('نت'))) {
-            return `📶 لظهور إشارة 4G وتفعيل الإنترنت على شرائح الكود أو eSIM:\nيرجى الدخول إلى إعدادات الهاتف > شبكة الهواتف المحمولة > وتفعيل خيار (التجوال الدولي / Data Roaming). 🌟`;
-        }
-        return "";
-    }
-
-    window.executeAiCustomerSupport = async function(sender, rawBody, senderTitle) {
-        await loadSystemKnowledge();
-        window.logAiAgent(`💬 استفسار وارد من (${senderTitle || sender}): ${rawBody}`);
-
-        const fastRuleReply = buildRuleBasedSupportReply(rawBody);
-        const rulesOnlyKb = Object.assign({}, activeKnowledgeBase);
-        delete rulesOnlyKb.subscribers;
-        const waExamples = (activeKnowledgeBase.whatsapp_training_examples || []).slice(-25);
-
-        const systemPrompt = `أنت موظف الدعم الفني والمبيعات الذكي لمنظومة (BRAND SIM 🌟) بإدارة أسامة سالم.
-رد باللهجة الفلسطينية المحترمة والودودة وبشكل مختصر ومباشر وعملي جداً كأنك إنسان حقيقي وليس روبوت.
-التزم بالردود القياسية المعتمدة في حال السؤال عن رقم غير مسجل أو منتهي الصلاحية.
-اعتمد على قاعدة المعرفة التالية:
-${JSON.stringify(rulesOnlyKb.brand_sim_system || {})}
-
-نماذج من محادثات واتساب سابقة:
-${JSON.stringify(waExamples)}
-
-اسم المرسل: ${senderTitle || 'زبوننا الكريم'}
-رسالة الزبون: ${rawBody}
-الرد المقترح:`;
-
-        if (window.AndroidBridge && window.AndroidBridge.askGeminiAndReplyAsync) {
-            window.AndroidBridge.askGeminiAndReplyAsync(systemPrompt, sender, senderTitle || '', fastRuleReply || '');
-            return;
-        }
-
-        setTimeout(() => {
-            try {
-                if (window.AndroidBridge && window.AndroidBridge.askGeminiNative) {
-                    const aiReply = window.AndroidBridge.askGeminiNative(systemPrompt);
-                    const finalReply = (aiReply && aiReply.trim().length > 3) ? aiReply.trim() : fastRuleReply;
-                    if (finalReply) {
-                        window.logAiAgent(`✅ رد الدعم الذكي إلى (${senderTitle}): ${finalReply}`);
-                        if (sender === 'WEB') {
-                            window.showMessage('success', finalReply);
-                            const tBox = document.getElementById('aiTestResultBox');
-                            if (tBox) {
-                                tBox.style.display = 'block';
-                                tBox.innerText = "🤖 رد Gemini الذكي:\n\n" + finalReply;
-                            }
-                        } else {
-                            window.AndroidBridge.sendSmsReply(sender, finalReply);
-                        }
-                        return;
-                    }
-                }
-            } catch (e) {}
-
-            if (fastRuleReply) {
-                window.logAiAgent(`⚡ رد تقني مباشر إلى (${senderTitle}): ${fastRuleReply}`);
-                if (sender === 'WEB') {
-                    window.showMessage('success', fastRuleReply);
-                    const tBox = document.getElementById('aiTestResultBox');
-                    if (tBox) {
-                        tBox.style.display = 'block';
-                        tBox.innerText = "⚡ رد تقني مباشر:\n\n" + fastRuleReply;
-                    }
-                } else if (window.AndroidBridge) {
-                    window.AndroidBridge.sendSmsReply(sender, fastRuleReply);
-                }
-            }
-        }, 50);
-    };
-
-    // =========================================================================
-    // 8. دوال النوافذ التفاعلية والإعدادات
-    // =========================================================================
-    function openChannelsConfig() {
-        if (window.AndroidBridge && window.AndroidBridge.openChannelsDialog) {
-            window.AndroidBridge.openChannelsDialog();
-        }
-    }
-    function openReplyChannelsConfig() {
-        if (window.AndroidBridge && window.AndroidBridge.openReplyChannelsDialog) {
-            window.AndroidBridge.openReplyChannelsDialog();
-        }
-    }
-    function openApiKeyModal() {
-        if (window.AndroidBridge && window.AndroidBridge.openGeminiApiKeyDialog) {
-            window.AndroidBridge.openGeminiApiKeyDialog();
-        }
-    }
-    window.openBlacklistModal = function() {
-        const modal = document.getElementById('blacklistModal');
-        const area = document.getElementById('blacklistTextarea');
-        if (window.AndroidBridge && window.AndroidBridge.getBlacklist) {
-            area.value = window.AndroidBridge.getBlacklist();
-        } else {
-            area.value = "كويك لاين\nرامز";
-        }
-        modal.style.display = 'flex';
-    };
-    function saveBlacklistFromModal() {
-        const val = document.getElementById('blacklistTextarea').value;
-        if (window.AndroidBridge && window.AndroidBridge.saveBlacklistData) {
-            window.AndroidBridge.saveBlacklistData(val);
-        }
-        closeModals();
-        window.showMessage('success', '✅ تم حفظ قائمة الاستثناءات بنجاح!');
-    }
-
-    window.openPricesModal = async function() {
-        await loadSystemKnowledge();
-        renderInteractivePricesGrid();
-        renderInteractiveSubTable();
-        renderInteractiveTroubleshoot();
-        document.getElementById('knowledgeTextarea').value = JSON.stringify(activeKnowledgeBase, null, 2);
-        document.getElementById('pricesModal').style.display = 'flex';
-    };
-
-    window.switchKnowledgeTab = function(tabId, btn) {
-        document.querySelectorAll('#pricesModal .tab-panel').forEach(p => p.style.display = 'none');
-        document.querySelectorAll('#pricesModal .tab-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById(tabId).style.display = 'block';
-        if (btn) btn.classList.add('active');
-    };
-
-    window.renderInteractivePricesGrid = function() {
-        const grid = document.getElementById('interactivePricesGrid');
-        if (!grid) return;
-        grid.innerHTML = '';
-        const prices = (activeKnowledgeBase.brand_sim_system && activeKnowledgeBase.brand_sim_system.pricing_rules_and_companies_analysis) || {};
-
-        Object.keys(prices).forEach(key => {
-            const item = prices[key];
-            const card = document.createElement('div');
-            card.className = 'company-price-card';
-            card.innerHTML = `
-                <div style="font-weight:bold; color:var(--accent); margin-bottom:4px;">${item.arabic_name || key}</div>
-                <label style="font-size:0.7rem; color:#94a3b8;">الميزات والتغطية:</label>
-                <input type="text" class="input-field" style="padding:6px; font-size:0.75rem; margin-bottom:6px; background:#0f172a; direction:rtl;" id="feat_${key}" value="${item.features || ''}">
-                <label style="font-size:0.7rem; color:#94a3b8;">الأسعار والعروض:</label>
-                <input type="text" class="input-field" style="padding:6px; font-size:0.75rem; margin-bottom:6px; background:#0f172a; direction:rtl;" id="price_${key}" value="${item.pricing_context || ''}">
-                <label style="font-size:0.7rem; color:#94a3b8;">ملاحظات خاصة:</label>
-                <input type="text" class="input-field" style="padding:6px; font-size:0.75rem; background:#0f172a; direction:rtl;" id="notes_${key}" value="${item.notes || ''}">
-            `;
-            grid.appendChild(card);
-        });
-    };
-
-    window.renderInteractiveTroubleshoot = function() {
-        const container = document.getElementById('interactiveTroubleContainer');
-        if (!container) return;
-        container.innerHTML = '';
-        const ts = (activeKnowledgeBase.brand_sim_system && activeKnowledgeBase.brand_sim_system.technical_support) || {};
-        Object.keys(ts).forEach(k => {
-            const item = ts[k];
-            const div = document.createElement('div');
-            div.className = 'company-price-card';
-            const sol = Array.isArray(item.diagnosis_and_solutions) ? item.diagnosis_and_solutions.join(' | ') : (item.solution || '');
-            div.innerHTML = `<div style="font-weight:700; color:var(--accent); font-size:0.84rem; margin-bottom:4px;">🔧 ${item.issue || k}</div>
-                             <div style="font-size:0.78rem; color:#cbd5e1;">${sol}</div>`;
-            container.appendChild(div);
-        });
-    };
-
-    window.saveInteractivePrices = function() {
-        const prices = activeKnowledgeBase.brand_sim_system.pricing_rules_and_companies_analysis;
-        Object.keys(prices).forEach(key => {
-            const f = document.getElementById('feat_' + key);
-            const p = document.getElementById('price_' + key);
-            const n = document.getElementById('notes_' + key);
-            if (f) prices[key].features = f.value;
-            if (p) prices[key].pricing_context = p.value;
-            if (n) prices[key].notes = n.value;
-        });
-        persistMergedKnowledge(activeKnowledgeBase);
-        window.showMessage('success', '✅ تم حفظ تحديثات الأسعار بنجاح!');
-    };
-
-    window.renderInteractiveSubTable = function() {
-        const tbody = document.getElementById('interactiveSubTbody');
-        if (!tbody) return;
-        tbody.innerHTML = '';
-        const q = (document.getElementById('interactiveSubSearch').value || '').trim();
-        const provider = document.getElementById('interactiveProviderFilter').value;
-
-        const subs = activeKnowledgeBase.subscribers || [];
-        let count = 0;
-        for (let i = 0; i < subs.length; i++) {
-            const s = subs[i];
-            if (provider && s.provider !== provider) continue;
-            if (q && !s.phone.includes(q) && !(s.iccid || '').includes(q)) continue;
-
-            const expired = isSubscriberExpired(s);
-            const badgeBg = expired ? 'rgba(239,68,68,0.15)' : 'rgba(34,197,94,0.15)';
-            const badgeColor = expired ? 'var(--danger)' : 'var(--success)';
-
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td style="font-family:monospace; direction:ltr;">${s.phone}</td>
-                <td style="font-family:monospace; direction:ltr; font-size:0.72rem;">${s.iccid || '-'}</td>
-                <td>${s.company_ar || s.company || '-'}</td>
-                <td>${s.package || '-'}</td>
-                <td style="font-family:monospace; direction:ltr; font-size:0.74rem;">${s.end_date || '-'}</td>
-                <td style="color:var(--accent);">${s.provider || '-'}</td>
-                <td><span style="background:${badgeBg}; color:${badgeColor}; padding:2px 8px; border-radius:10px; font-size:0.7rem;">${s.status || 'فعال'}</span></td>
-            `;
-            tbody.appendChild(tr);
-            count++;
-            if (count >= 150) break;
-        }
-    };
-
-    window.downloadKnowledgeFile = function() {
-        const str = JSON.stringify(activeKnowledgeBase, null, 2);
-        const blob = new Blob([str], {type: "application/json;charset=utf-8"});
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = "customers.json";
-        a.click();
-        URL.revokeObjectURL(url);
-    };
-
-    window.saveKnowledgeFromModal = function() {
-        const raw = document.getElementById('knowledgeTextarea').value;
-        try {
-            const parsed = JSON.parse(raw);
-            persistMergedKnowledge(parsed);
-            closeModals();
-            window.showMessage('success', `✅ تم دمج وتحديث قاعدة البيانات بنجاح! (إجمالي المشتركين: ${activeKnowledgeBase.subscribers.length})`);
-        } catch (e) {
-            alert('⚠️ خطأ في صيغة JSON، يرجى التأكد من الفواصل والأقواس.');
-        }
-    };
-
-    window.closeModals = function() {
-        document.getElementById('blacklistModal').style.display = 'none';
-        document.getElementById('pricesModal').style.display = 'none';
-        document.getElementById('waTrainingModal').style.display = 'none';
-    };
-
     window.addEventListener('DOMContentLoaded', () => {
-        loadSystemKnowledge();
-        checkSaturdayBanner();
+        initAllData();
         window.syncAiStatusUi();
+        window.logAiAgent("✅ تم تشغيل منظومة BRAND SIM (نسخة المدير) وتفعيل حماية الأرقام وعرض اسم الزبون والوكيل.");
     });
 </script>
 </body>
