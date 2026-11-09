@@ -32,7 +32,11 @@ jobs:
 
           cp -f AndroidManifest.xml app/src/main/AndroidManifest.xml
           cp -f MainActivity.java app/src/main/java/com/brandsim/refresh/MainActivity.java
-          cp -f refresh.html app/src/main/assets/refresh.html
+          if [ -f "refresh.html" ]; then
+            cp -f refresh.html app/src/main/assets/refresh.html
+          elif [ -f "Refresh.html" ]; then
+            cp -f Refresh.html app/src/main/assets/refresh.html
+          fi
           if [ -f "customers.json" ]; then
             cp -f customers.json app/src/main/assets/customers.json
           fi
@@ -116,13 +120,17 @@ jobs:
           }
           EOF
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
-        with:
-          gradle-version: '8.5'
-
-      - name: Build Debug APK
-        run: gradle assembleDebug
+      - name: Install Gradle 8.5 with Multi-Mirror Retry & Build APK
+        run: |
+          if ! command -v gradle &> /dev/null || ! gradle --version | grep -q "8.5"; then
+            echo "Downloading Gradle 8.5 with automatic retry and mirror fallback..."
+            curl -L --retry 5 --retry-delay 3 --retry-all-errors -f -o /tmp/gradle-8.5-bin.zip https://services.gradle.org/distributions/gradle-8.5-bin.zip || \
+            curl -L --retry 5 --retry-delay 3 --retry-all-errors -f -o /tmp/gradle-8.5-bin.zip https://downloads.gradle-dn.com/distributions/gradle-8.5-bin.zip || \
+            curl -L --retry 5 --retry-delay 3 --retry-all-errors -f -o /tmp/gradle-8.5-bin.zip https://mirrors.cloud.tencent.com/gradle/gradle-8.5-bin.zip
+            sudo unzip -q -d /opt/gradle /tmp/gradle-8.5-bin.zip
+            export PATH="/opt/gradle/gradle-8.5/bin:$PATH"
+          fi
+          gradle assembleDebug --no-daemon
 
       - name: Upload BRAND SIM APK
         uses: actions/upload-artifact@v4
