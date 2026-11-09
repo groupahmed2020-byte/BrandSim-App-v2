@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>التحديث الذكي وفحص السيريال المباشر - BRAND SIM</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #0b131e;
+            color: #ffffff;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+        .main-card {
+            background-color: #131f2e;
+            border: 1px solid #1e354d;
+            border-radius: 18px;
+            width: 100%;
+            max-width: 460px;
+            padding: 22px 18px;
+            position: relative;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+        }
+        .settings-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background-color: #162a3d;
+            border: 2px solid #2874a6;
+            color: #d0d7de;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .settings-btn:active {
+            transform: scale(0.92);
+        }
+        .header-title {
+            color: #38bdf8;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 8px;
+            margin-bottom: 14px;
+        }
+        /* لوحة إحصائيات المشتركين التفاعلية */
+        .stats-container {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+        .stat-badge {
+            padding: 5px 11px;
+            border-radius: 20px;
+            font-size: 12.5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.1s;
+            user-select: none;
+        }
+        .stat-badge:active {
+            transform: scale(0.95);
+        }
+        .stat-total {
+            background: #162a3d;
+            color: #38bdf8;
+            border: 1px solid #0284c7;
+        }
+        .stat-active {
+            background: #063e2e;
+            color: #34d399;
+            border: 1px solid #059669;
+        }
+        .stat-expiring {
+            background: #5c300c;
+            color: #fbbf24;
+            border: 1px solid #d97706;
+        }
+        .stat-expired {
+            background: #5f1919;
+            color: #f87171;
+            border: 1px solid #dc2626;
+        }
+        .input-label {
+            color: #94a3b8;
+            font-size: 14px;
+            text-align: center;
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        .search-input {
+            width: 100%;
+            background-color: #090e17;
+            border: 1px solid #1e293b;
+            border-radius: 12px;
+            padding: 14px;
+            color: #ffffff;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .search-input:focus {
+            border-color: #38bdf8;
+        }
+        .btn-refresh {
+            width: 100%;
+            background: linear-gradient(135deg, #0284c7, #0369a1);
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+        }
+        .btn-refresh:active {
+            opacity: 0.9;
+        }
+        .action-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+        .btn-iccid {
+            background: linear-gradient(135deg, #16a34a, #15803d);
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            padding: 16px 10px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .btn-query {
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            color: #ffffff;
+            border-radius: 12px;
+            padding: 14px 10px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            text-align: center;
+            line-height: 1.4;
+        }
+        /* صندوق عرض تفاصيل الزبون */
+        .result-box {
+            background-color: #241e14;
+            border: 1px solid #6b4c23;
+            border-radius: 14px;
+            padding: 16px;
+            color: #f1f5f9;
+            font-size: 15px;
+            line-height: 1.9;
+            display: none;
+            word-wrap: break-word;
+        }
+        .result-box.active-show {
+            display: block;
+        }
+        .result-row {
+            margin-bottom: 4px;
+        }
+        .highlight-val {
+            font-weight: bold;
+            color: #ffffff;
+        }
+        .agent-val {
+            font-weight: bold;
+            color: #38bdf8;
+        }
+        .company-val {
+            font-weight: bold;
+            color: #fbbf24;
+        }
+        .warning-box {
+            margin-top: 10px;
+            padding-top: 8px;
+            border-top: 1px dashed #6b4c23;
+            color: #fde047;
+            font-weight: 500;
+        }
+        /* قائمة عرض الأرقام عند الضغط على الفلتر */
+        .list-modal {
+            background-color: #0f172a;
+            border: 1px solid #1e354d;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 15px;
+            max-height: 260px;
+            overflow-y: auto;
+            display: none;
+        }
+        .list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            font-weight: bold;
+            color: #38bdf8;
+            margin-bottom: 8px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #1e293b;
+        }
+        .list-item {
+            padding: 8px;
+            border-bottom: 1px solid #1e293b;
+            font-size: 13.5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+        .list-item:hover {
+            background-color: #1e293b;
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-card">
+    <button class="settings-btn" onclick="reloadAllData()" title="إعادة تحميل قاعدة البيانات">⚙️</button>
+    
+    <div class="header-title">التحديث الذكي وفحص السيريال المباشر</div>
+
+    <!-- عدادات المشتركين التفاعلية (اضغط على أي عداد لعرض القائمة الخاصة به) -->
+    <div class="stats-container">
+        <span id="stat-total" class="stat-badge stat-total" onclick="showFilteredList('all')">مشتركين: 0</span>
+        <span id="stat-active" class="stat-badge stat-active" onclick="showFilteredList('active')">فعال: 0</span>
+        <span id="stat-expiring" class="stat-badge stat-expiring" onclick="showFilteredList('expiring')">يوشك: 0</span>
+        <span id="stat-expired" class="stat-badge stat-expired" onclick="showFilteredList('expired')">منتهي: 0</span>
+    </div>
+
+    <!-- نافذة مصغرة لعرض الأرقام حسب الفلتر المختار -->
+    <div id="filtered-list-box" class="list-modal">
+        <div class="list-header">
+            <span id="list-title">قائمة المشتركين</span>
+            <span style="cursor:pointer; color:#f87171;" onclick="document.getElementById('filtered-list-box').style.display='none'">✖ إغلاق</span>
+        </div>
+        <div id="list-content"></div>
+    </div>
+
+    <div class="input-label">أدخل رقم الشريحة (05XXXXXXXX) أو السيريال (ICCID: 89972...):</div>
+
+    <input type="text" id="searchInput" class="search-input" placeholder="05XXXXXXXX / 89972..." oninput="autoCheckInput(this.value)">
+
+    <button class="btn-refresh" onclick="triggerSmartRefresh()">
+        <span>🔄</span>
+        <span>تحديث ذكي تلقائي للشريحة الآن</span>
+    </button>
+
+    <div class="action-row">
+        <button class="btn-iccid" onclick="checkICCIDOnly()">
+            <span>💳</span>
+            <span>فحص ICCID</span>
+        </button>
+        <button class="btn-query" onclick="queryPackageDetails()">
+            <span>📊</span>
+            <span>استعلام تفاصيل الحزمة</span>
+        </button>
+    </div>
+
+    <!-- صندوق النتيجة المطابق لتصميم التطبيق -->
+    <div id="result-box" class="result-box"></div>
+</div>
+
+<script>
+let allCustomers = [];
+
+// 1. دالة ذكية لاستخراج القيمة الحقيقية مهما كان اسم العمود في ملف customers.json أو الإكسل
+function getField(item, possibleKeys, defaultValue = "") {
+    if (!item || typeof item !== 'object') return defaultValue;
+
+    // بحث مباشر بالأسماء المتوقعة
+    for (let key of possibleKeys) {
+        if (item[key] !== undefined && item[key] !== null) {
+            let val = String(item[key]).trim();
+            if (val !== "" && val !== "undefined" && val !== "null") {
+                return val;
+            }
+        }
+    }
+
+    // بحث مرن يتجاهل المسافات وحالة الأحرف في أسماء الأعمدة
+    const itemKeys = Object.keys(item);
+    for (let pKey of possibleKeys) {
+        let cleanPKey = pKey.toLowerCase().trim();
+        for (let actualKey of itemKeys) {
+            let cleanActual = actualKey.toLowerCase().trim();
+            if (cleanActual === cleanPKey || cleanActual.includes(cleanPKey)) {
+                let val = String(item[actualKey]).trim();
+                if (val !== "" && val !== "undefined" && val !== "null") {
+                    return val;
+                }
+            }
+        }
+    }
+    return defaultValue;
+}
+
+// 2. دالة استخراج وتنظيف اسم الشركة من أسماء ملفات الإكسل
+function extractCleanCompany(customer) {
+    let rawCompany = getField(customer, [
+        'company', 'network', 'provider', 'operator',
+        'الشركة', 'الشبكة', 'شركة الاتصالات', 'المشغل', 'المصدر', 'source', 'sheet', 'file'
+    ], '');
+
+    // إزالة اسم ملف الإكسل مثل (subscribers Report.xlsx) أو أي أقواس إضافية
+    let cleaned = rawCompany
+        .replace(/\(.*?\.xlsx\)/gi, '')
+        .replace(/\(.*?\.csv\)/gi, '')
+        .replace(/subscribers\s*report\.xlsx/gi, '')
+        .replace(/\.xlsx|\.xls|\.csv/gi, '')
+        .replace(/\(\s*\)/g, '')
+        .trim();
+
+    // إذا لم يكن اسم الشركة واضحاً، نستنتجه من اسم الحزمة أو السيريال
+    if (!cleaned || cleaned === "غير محدد") {
+        let pack = getField(customer, ['package', 'plan', 'الحزمة', 'الباقة'], '');
+        if (pack.includes('פרטנר') || pack.toLowerCase().includes('partner') || pack.includes('بارتنر')) return 'Partner (بارتنر)';
+        if (pack.includes('וויקום') || pack.toLowerCase().includes('wecom') || pack.includes('ويكوم')) return 'Wecom (ويكوم)';
+        if (pack.includes('הוט') || pack.toLowerCase().includes('hot') || pack.includes('هوت')) return 'Hot Mobile (هوت موبايل)';
+        if (pack.includes('019')) return '019 Mobile';
+        if (pack.includes('רמי לוי') || pack.includes('رامي ليفي')) return 'Rami Levy (رامي ليفي)';
+        return 'غير محدد';
+    }
+
+    return cleaned;
+}
+
+// 3. دالة استخراج اسم الزبون الحقيقي ومنع الاسم الوهمي إن وجد اسم حقيقي في أي حقل
+function extractRealCustomerName(customer) {
+    let name = getField(customer, [
+        'customer_name', 'customerName', 'client_name', 'full_name', 'subscriber_name', 'user_name', 'name',
+        'اسم الزبون', 'إسم الزبون', 'اسم المشترك', 'إسم المشترك', 'الزبون', 'المشترك', 'الاسم', 'الإسم', 'اسم العميل'
+    ], '');
+
+    // إذا كان الحقل يحتوي على "مشترك براند سيم" ولكن يوجد حقل آخر فيه الاسم الحقيقي أو الملاحظات
+    if (!name || name === 'مشترك براند سيم') {
+        let altName = getField(customer, ['real_name', 'note', 'notes', 'بيان', 'ملاحظات', 'وصف'], '');
+        if (altName && altName !== 'مشترك براند سيم') {
+            return altName;
+        }
+    }
+    return name || 'غير مسجل بالملف';
+}
+
+// 4. دالة استخراج اسم الوكيل التابع له الزبون (مثل: الشهيد مصطفى سالم، باسل علوان، وسام الرضيع...)
+function extractAgentName(customer) {
+    let agent = getField(customer, [
+        'agent', 'agent_name', 'agentName', 'dealer', 'sub_agent', 'reseller', 'distributor', 'seller',
+        'الوكيل', 'اسم الوكيل', 'إسم الوكيل', 'الموزع', 'اسم الموزع', 'البائع', 'الفرع', 'وكيل فرعي', 'تابع لـ', 'الوكيل التابع'
+    ], '');
+
+    return agent || 'أسامة سالم (BRAND SIM)';
+}
+
+// 5. دالة فحص التاريخ وتحديد حالة الرقم (فعال / يوشك على الانتهاء / منتهي)
+function evaluateSubscriptionStatus(dateStr) {
+    if (!dateStr || dateStr === "غير محدد") {
+        return { state: 'unknown', label: 'غير محدد ⚪', daysLeft: null };
+    }
+
+    let expDate = null;
+    // فحص صيغة DD/MM/YYYY أو DD-MM-YYYY مع أو بدون وقت
+    const dmyMatch = String(dateStr).match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
+    // فحص صيغة YYYY-MM-DD
+    const ymdMatch = String(dateStr).match(/(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})/);
+
+    if (dmyMatch) {
+        let day = dmyMatch[1].padStart(2, '0');
+        let month = dmyMatch[2].padStart(2, '0');
+        let year = dmyMatch[3];
+        expDate = new Date(`${year}-${month}-${day}T23:59:59`);
+    } else if (ymdMatch) {
+        let year = ymdMatch[1];
+        let month = ymdMatch[2].padStart(2, '0');
+        let day = ymdMatch[3].padStart(2, '0');
+        expDate = new Date(`${year}-${month}-${day}T23:59:59`);
+    } else {
+        expDate = new Date(dateStr);
+    }
+
+    if (!expDate || isNaN(expDate.getTime())) {
+        return { state: 'unknown', label: 'فعال (تاريخ غير قياسي)', daysLeft: null };
+    }
+
+    const now = new Date();
+    const diffTime = expDate.getTime() - now.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays < 0) {
+        return {
+            state: 'expired',
+            label: `منتهي 🔴 (منذ ${Math.abs(diffDays)} يوم)`,
+            daysLeft: diffDays
+        };
+    } else if (diffDays <= 5) {
+        return {
+            state: 'expiring',
+            label: `يوشك على الانتهاء 🟠 (باقي ${diffDays} أيام)`,
+            daysLeft: diffDays
+        };
+    } else {
+        return {
+            state: 'active',
+            label: `فعال 🟢 (باقي ${diffDays} يوم)`,
+            daysLeft: diffDays
+        };
+    }
+}
+
+// 6. دالة استخراج كافة المشتركين من ملف customers.json بغض النظر عن هيكلية الملف (لحل مشكلة ظهور 13 فقط)
+function flattenCustomersData(rawData) {
+    let extracted = [];
+
+    function traverse(node, parentSheetName = "") {
+        if (!node) return;
+        if (Array.isArray(node)) {
+            node.forEach(item => traverse(item, parentSheetName));
+        } else if (typeof node === 'object') {
+            // التحقق مما إذا كان الكائن يمثل سجل زبون مباشر (يحتوي على رقم أو سيريال أو اسم)
+            const keys = Object.keys(node).map(k => k.toLowerCase());
+            const isCustomerRecord = keys.some(k =>
+                k.includes('phone') || k.includes('number') || k.includes('iccid') ||
+                k.includes('sim') || k.includes('serial') || k.includes('الرقم') ||
+                k.includes('هاتف') || k.includes('سيريال') || k.includes('شريحة') ||
+                k.includes('msisdn') || k.includes('name') || k.includes('الاسم') || k.includes('الزبون')
+            );
+
+            if (isCustomerRecord && !Array.isArray(Object.values(node)[0])) {
+                if (parentSheetName && !node._sourceSheet) {
+                    node._sourceSheet = parentSheetName;
+                }
+                extracted.push(node);
+            } else {
+                // إذا كان الكائن يمثل أقسام أو Sheets متعددة داخل الملف، نقوم بدمجها جميعاً
+                for (let [key, val] of Object.entries(node)) {
+                    traverse(val, key);
+                }
+            }
+        }
+    }
+
+    traverse(rawData);
+    return extracted;
+}
+
+// 7. تحميل جميع الزبائن وتحديث العدادات
+async function loadCustomersDatabase() {
+    try {
+        // مسح أي كاش قديم في المتصفح كان يحجز 13 مشترك فقط
+        localStorage.removeItem('cached_customers');
+        sessionStorage.removeItem('cached_customers');
+
+        const response = await fetch('customers.json?nocache=' + new Date().getTime(), {
+            cache: 'no-store'
+        });
+
+        if (!response.ok) throw new Error("تعذر تحميل ملف customers.json");
+
+        const rawData = await response.json();
+        allCustomers = flattenCustomersData(rawData);
+
+        updateCounters();
+    } catch (err) {
+        console.error("خطأ في تحميل قاعدة البيانات:", err);
+    }
+}
+
+function updateCounters() {
+    let activeCount = 0;
+    let expiringCount = 0;
+    let expiredCount = 0;
+
+    allCustomers.forEach(cust => {
+        const expDate = getField(cust, [
+            'expiry', 'endDate', 'end_date', 'exp_date', 'expiration',
+            'تاريخ الانتهاء', 'تاريخ الإنتهاء', 'الانتهاء', 'نهاية الاشتراك', 'تاريخ الفصل'
+        ], '');
+        const statusObj = evaluateSubscriptionStatus(expDate);
+        cust._computedState = statusObj.state;
+
+        if (statusObj.state === 'active') activeCount++;
+        else if (statusObj.state === 'expiring') expiringCount++;
+        else if (statusObj.state === 'expired') expiredCount++;
+    });
+
+    document.getElementById('stat-total').innerText = `مشتركين: ${allCustomers.length}`;
+    document.getElementById('stat-active').innerText = `فعال: ${activeCount}`;
+    document.getElementById('stat-expiring').innerText = `يوشك: ${expiringCount}`;
+    document.getElementById('stat-expired').innerText = `منتهي: ${expiredCount}`;
+}
+
+// 8. تنظيف الرقم للبحث الدقيق (توحيد صيغة 05X و 9725X)
+function normalizePhone(numStr) {
+    let digits = String(numStr).replace(/\D/g, '');
+    if (digits.startsWith('972') && digits.length >= 11) {
+        digits = '0' + digits.substring(3);
+    }
+    return digits;
+}
+
+// 9. البحث وعرض تفاصيل الحزمة والزبون الحقيقي والوكيل
+function queryPackageDetails() {
+    const rawInput = document.getElementById('searchInput').value.trim();
+    if (!rawInput) {
+        alert("الرجاء إدخال رقم الشريحة أو السيريال أولاً");
+        return;
+    }
+
+    const cleanSearch = normalizePhone(rawInput);
+
+    const foundCustomer = allCustomers.find(cust => {
+        const phone = getField(cust, ['phone', 'number', 'mobile', 'msisdn', 'الرقم', 'رقم الهاتف', 'رقم الشريحة', 'الجوال'], '');
+        const iccid = getField(cust, ['iccid', 'sim', 'serial', 'السيريال', 'رقم السيريال', 'شريحة'], '');
+        const cleanPhone = normalizePhone(phone);
+        const cleanIccid = String(iccid).replace(/\D/g, '');
+
+        return (cleanPhone && (cleanPhone === cleanSearch || cleanPhone.includes(cleanSearch))) ||
+               (cleanIccid && (cleanIccid === cleanSearch || cleanIccid.includes(rawInput.replace(/\D/g, ''))));
+    });
+
+    const resultBox = document.getElementById('result-box');
+    resultBox.classList.add('active-show');
+
+    if (!foundCustomer) {
+        resultBox.innerHTML = `<div style="color:#f87171; text-align:center; font-weight:bold;">❌ الرقم أو السيريال (${rawInput}) غير موجود في ملف customers.json</div>`;
+        return;
+    }
+
+    const phone = getField(foundCustomer, ['phone', 'number', 'mobile', 'msisdn', 'الرقم', 'رقم الهاتف', 'رقم الشريحة'], rawInput);
+    const customerName = extractRealCustomerName(foundCustomer);
+    const agentName = extractAgentName(foundCustomer);
+    const companyName = extractCleanCompany(foundCustomer);
+    const packageName = getField(foundCustomer, ['package', 'plan', 'bundle', 'الحزمة', 'الباقة', 'نوع الحزمة', 'اسم الحزمة'], 'غير محدد');
+    const expDate = getField(foundCustomer, ['expiry', 'endDate', 'end_date', 'تاريخ الانتهاء', 'تاريخ الإنتهاء', 'الانتهاء'], 'غير محدد');
+    const iccid = getField(foundCustomer, ['iccid', 'sim', 'serial', 'السيريال', 'رقم السيريال'], 'غير متوفر');
+
+    const statusInfo = evaluateSubscriptionStatus(expDate);
+
+    let warningHTML = '';
+    if (statusInfo.state === 'expired') {
+        warningHTML = `<div class="warning-box">⚠️ تنبيه: الرقم منتهي اشتراكه، الرجاء التواصل مع الوكيل (${agentName}) من أجل التجديد.</div>`;
+    } else if (statusInfo.state === 'expiring') {
+        warningHTML = `<div class="warning-box">⏳ تنبيه: اشتراك الرقم يوشك على الانتهاء خلال ${statusInfo.daysLeft} أيام، الرجاء التواصل مع الوكيل (${agentName}) للتجديد.</div>`;
+    }
+
+    resultBox.innerHTML = `
+        <div class="result-row">📊 تفاصيل اشتراك الرقم: <span class="highlight-val">${phone}</span></div>
+        <div class="result-row">👤 اسم الزبون: <span class="highlight-val">${customerName}</span></div>
+        <div class="result-row">🏢 اسم الوكيل: <span class="agent-val">${agentName}</span></div>
+        <div class="result-row">📦 الشركة: <span class="company-val">${companyName}</span></div>
+        <div class="result-row">💎 الحزمة: <span class="highlight-val">${packageName}</span></div>
+        <div class="result-row">📅 تاريخ الانتهاء: <span class="highlight-val">${expDate}</span></div>
+        <div class="result-row">📌 الحالة: <span class="highlight-val">${statusInfo.label}</span></div>
+        <div class="result-row">💳 السيريال: <span class="highlight-val">${iccid}</span></div>
+        ${warningHTML}
+    `;
+}
+
+// 10. عرض قائمة منسدلة للأرقام عند الضغط على (فعال / يوشك / منتهي / الكل)
+function showFilteredList(filterType) {
+    const listBox = document.getElementById('filtered-list-box');
+    const listTitle = document.getElementById('list-title');
+    const listContent = document.getElementById('list-content');
+
+    let filtered = [];
+    if (filterType === 'all') {
+        filtered = allCustomers;
+        listTitle.innerText = `جميع المشتركين (${filtered.length})`;
+    } else if (filterType === 'active') {
+        filtered = allCustomers.filter(c => c._computedState === 'active');
+        listTitle.innerText = `الأرقام الفعالة 🟢 (${filtered.length})`;
+    } else if (filterType === 'expiring') {
+        filtered = allCustomers.filter(c => c._computedState === 'expiring');
+        listTitle.innerText = `أرقام توشك على الانتهاء 🟠 (${filtered.length})`;
+    } else if (filterType === 'expired') {
+        filtered = allCustomers.filter(c => c._computedState === 'expired');
+        listTitle.innerText = `الأرقام المنتهية 🔴 (${filtered.length})`;
+    }
+
+    if (filtered.length === 0) {
+        listContent.innerHTML = `<div style="padding:10px; text-align:center; color:#94a3b8;">لا توجد أرقام ضمن هذا التصنيف</div>`;
+    } else {
+        listContent.innerHTML = filtered.slice(0, 150).map(cust => {
+            const p = getField(cust, ['phone', 'number', 'mobile', 'الرقم', 'رقم الهاتف'], 'بدون رقم');
+            const n = extractRealCustomerName(cust);
+            const a = extractAgentName(cust);
+            return `<div class="list-item" onclick="selectCustomerFromList('${p}')">
+                        <span><b>${p}</b> - ${n}</span>
+                        <span style="color:#38bdf8; font-size:12px;">${a}</span>
+                    </div>`;
+        }).join('');
+    }
+
+    listBox.style.display = 'block';
+}
+
+function selectCustomerFromList(phoneVal) {
+    document.getElementById('searchInput').value = phoneVal;
+    document.getElementById('filtered-list-box').style.display = 'none';
+    queryPackageDetails();
+}
+
+function autoCheckInput(val) {
+    const clean = val.replace(/\D/g, '');
+    if (clean.length === 10 || clean.length >= 18) {
+        queryPackageDetails();
+    }
+}
+
+function checkICCIDOnly() {
+    queryPackageDetails();
+}
+
+function triggerSmartRefresh() {
+    queryPackageDetails();
+    // إذا كان لديك ربط مع جافا أندرويد (Android WebView Interface) أو Cloudflare Worker يتم استدعاؤه هنا
+    if (window.Android && typeof window.Android.refreshSim === 'function') {
+        window.Android.refreshSim(document.getElementById('searchInput').value.trim());
+    }
+}
+
+function reloadAllData() {
+    loadCustomersDatabase();
+}
+
+window.addEventListener('DOMContentLoaded', loadCustomersDatabase);
+</script>
+
+</body>
+</html>
