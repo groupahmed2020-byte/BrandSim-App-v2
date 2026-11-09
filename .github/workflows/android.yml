@@ -56,7 +56,11 @@ jobs:
           cp -f ic_launcher.png app/src/main/res/mipmap-xxhdpi/ic_launcher.png
           cp -f ic_launcher.png app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
 
-      - name: Generate Gradle Configs
+      - name: Restore Permanent Signing Keystore
+        run: |
+          echo "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" | base64 -d > app/brandsim_permanent.jks
+
+      - name: Generate Gradle Configs with Fixed Signature & Auto VersionCode
         run: |
           cat << 'EOF' > gradle.properties
           org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8
@@ -70,7 +74,9 @@ jobs:
           include ':app'
           EOF
 
-          cat << 'EOF' > app/build.gradle
+          VERSION_CODE=$((100 + ${{ github.run_number }}))
+
+          cat << EOF > app/build.gradle
           plugins { id 'com.android.application' version '8.2.0' }
           android {
               namespace 'com.brandsim.refresh'
@@ -79,8 +85,25 @@ jobs:
                   applicationId "com.brandsim.refresh"
                   minSdk 23
                   targetSdk 34
-                  versionCode 8
-                  versionName "1.7"
+                  versionCode ${VERSION_CODE}
+                  versionName "2.${{ github.run_number }}"
+              }
+              signingConfigs {
+                  permanentConfig {
+                      storeFile file("brandsim_permanent.jks")
+                      storePassword "brandsim123456"
+                      keyAlias "brandsim_key"
+                      keyPassword "brandsim123456"
+                  }
+              }
+              buildTypes {
+                  debug {
+                      signingConfig signingConfigs.permanentConfig
+                  }
+                  release {
+                      signingConfig signingConfigs.permanentConfig
+                      minifyEnabled false
+                  }
               }
               compileOptions {
                   sourceCompatibility JavaVersion.VERSION_17
@@ -94,7 +117,7 @@ jobs:
           EOF
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v3
         with:
           gradle-version: '8.5'
 
@@ -106,4 +129,3 @@ jobs:
         with:
           name: BRAND-SIM-APK
           path: app/build/outputs/apk/debug/app-debug.apk
-          
